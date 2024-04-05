@@ -1,0 +1,79 @@
+name: os
+build: name:root
+stages:
+  - type: org.osbuild.kernel-cmdline
+    options:
+      root_fs_uuid: 6e4ff95f-f662-45ee-a82a-bdf44a2d0b75
+      kernel_opts: ro no_timer_check console=ttyS0,115200n8 biosdevname=0 net.ifnames=0
+  - otk.ext.osbuild.depsolve:
+    architecture:
+      otk.var: architecture
+    module_platform_id:
+      otk.var: module_platform_id
+    repositories:
+      otk.var: repositories
+    gpgkeys:
+      otk.var: gpgkeys
+    exclude:
+      docs: true
+    packages:
+      otk.var: packages.tree
+  - type: org.osbuild.fix-bls
+    options:
+      prefix: ''
+  - otk.osbuild.customization.locale:
+    type: org.osbuild.locale
+    options:
+      language: en_US
+  - otk.osbuild.customization.hostname:
+    type: org.osbuild.hostname
+    options:
+      hostname: localhost.localdomain
+  - otk.osbuild.customization.timezone:
+    type: org.osbuild.timezone
+    options:
+      zone: UTC
+  - type: org.osbuild.fstab
+    options:
+      filesystems:
+        - uuid: 6e4ff95f-f662-45ee-a82a-bdf44a2d0b75
+          vfs_type: ext4
+          path: /
+          options: defaults
+        - uuid: 0194fdc2-fa2f-4cc0-81d3-ff12045b73c8
+          vfs_type: ext4
+          path: /boot
+          options: defaults
+        - uuid: 7B77-95E7
+          vfs_type: vfat
+          path: /boot/efi
+          options: defaults,uid=0,gid=0,umask=077,shortname=winnt
+          passno: 2
+  - type: org.osbuild.grub2
+    options:
+      root_fs_uuid: 6e4ff95f-f662-45ee-a82a-bdf44a2d0b75
+      boot_fs_uuid: 0194fdc2-fa2f-4cc0-81d3-ff12045b73c8
+      kernel_opts: ro no_timer_check console=ttyS0,115200n8 biosdevname=0 net.ifnames=0
+      legacy: i386-pc
+      uefi:
+        vendor: fedora
+        unified: true
+      saved_entry:
+        otk.var:
+          concat:
+            - "ffffffffffffffffffffffffffffffff-"
+            - kernel_version
+      write_cmdline: false
+      config:
+        default: saved
+  - type: org.osbuild.systemd
+    options:
+      enabled_services:
+        - cloud-init.service
+        - cloud-config.service
+        - cloud-final.service
+        - cloud-init-local.service
+      default_target: multi-user.target
+  - type: org.osbuild.selinux
+    options:
+      file_contexts: etc/selinux/targeted/contexts/files/file_contexts

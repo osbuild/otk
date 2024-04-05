@@ -1,0 +1,22 @@
+name: root
+source-epoch: 1659397331
+stages:
+  - otk.ext.osbuild.depsolve:
+    architecture:
+      otk.var: architecture
+    module_platform_id:
+      otk.var: module_platform_id
+    repositories:
+      otk.var: repositories
+    gpgkeys:
+      otk.var: gpgkeys
+    exclude:
+      docs: true
+    packages:
+      otk.var: packages.root
+  - name: org.osbuild.selinux
+    options:
+      file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+      labels:
+        /usr/bin/cp: system_u:object_r:install_exec_t:s0
+        /usr/bin/tar: system_u:object_r:install_exec_t:s0

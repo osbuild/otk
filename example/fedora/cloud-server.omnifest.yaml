@@ -1,0 +1,19 @@
+otk.def.arg:
+  - version
+  - architecture
+
+otk.def.var:
+  packages:
+    otk.inc: packages/root.omnifest.yaml
+
+otk.inf.osbuild-composer:
+  pipelines:
+    build:
+      - root
+  export:
+    - iso
+
+target.osbuild:
+  pipelines:
+    - otk.inc: pipeline/root.omnifest.yaml
+    - otk.inc: pipeline/tree.omnifest.yaml

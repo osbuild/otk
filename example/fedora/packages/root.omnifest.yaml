@@ -1,0 +1,12 @@
+otk.merge:
+  - include:
+     - @core
+    exclude:
+     - @core
+  - otk.inc:
+      path:
+        otk.var: 
+          concat:
+            - "version"
+            - version
+            - "/root.omnifest.yaml"
