@@ -1,19 +1,37 @@
 otk.def.arg:
   - version
   - architecture
+  - boot_mode
 
+# output resolved vars?
 otk.def.var:
   packages:
     otk.inc: packages/root.omnifest.yaml
+  otk.inc:
+    otk.var:
+      concat:
+        - "defaults"
+        - architecture
+        - version
+        - "defaults.yml"
+  partitions:
+    ...
 
+# output info files?
 otk.inf.osbuild-composer:
+  boot_mode:
+    mtk.var: boot_mode
   pipelines:
     build:
       - root
   export:
     - iso
 
+otk.inf.*
+
 target.osbuild:
   pipelines:
     - otk.inc: pipeline/root.omnifest.yaml
     - otk.inc: pipeline/tree.omnifest.yaml
+    - otk.inc: pipeline/customize.omnifest.yaml
+    - otk.inc: pipeline/image.omnifest.yaml

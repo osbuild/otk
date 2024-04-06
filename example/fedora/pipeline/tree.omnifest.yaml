@@ -1,4 +1,4 @@
-name: os
+name: tree
 build: name:root
 stages:
   - type: org.osbuild.kernel-cmdline
@@ -18,18 +18,30 @@ stages:
       docs: true
     packages:
       otk.var: packages.tree
+    exports:
+      - packages.something
   - type: org.osbuild.fix-bls
     options:
       prefix: ''
-  - otk.osbuild.customization.locale:
-    type: org.osbuild.locale
-    options:
-      language: en_US
+  - otk.osbuild.customization.locale:  # <--
+    scope: os
+    default:
+      - type: org.osbuild.locale
+        options:
+          language: 
+            mtk.var: language
+    defined:
+      - type: org.osbuild.locale
+        options:
+          language:
+            mtk.var: this.language  # ???
   - otk.osbuild.customization.hostname:
+    scope: os 
     type: org.osbuild.hostname
     options:
       hostname: localhost.localdomain
   - otk.osbuild.customization.timezone:
+    scope: tree
     type: org.osbuild.timezone
     options:
       zone: UTC
@@ -62,7 +74,7 @@ stages:
         otk.var:
           concat:
             - "ffffffffffffffffffffffffffffffff-"
-            - kernel_version
+            - packages.something.kernel-core.version
       write_cmdline: false
       config:
         default: saved
@@ -74,6 +86,4 @@ stages:
         - cloud-final.service
         - cloud-init-local.service
       default_target: multi-user.target
-  - type: org.osbuild.selinux
-    options:
-      file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+  - mtk.inc: snippets/selinux.yaml

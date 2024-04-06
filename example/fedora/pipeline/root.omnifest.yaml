@@ -1,7 +1,7 @@
 name: root
 source-epoch: 1659397331
 stages:
-  - otk.ext.osbuild.depsolve:
+  - otk.ext.osbuild.dnf-depsolve:
     architecture:
       otk.var: architecture
     module_platform_id:
@@ -14,6 +14,7 @@ stages:
       docs: true
     packages:
       otk.var: packages.root
+  # XXX merge into snippets/selinux.yaml
   - name: org.osbuild.selinux
     options:
       file_contexts: etc/selinux/targeted/contexts/files/file_contexts
