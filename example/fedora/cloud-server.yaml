@@ -1,10 +1,12 @@
-otk.def.arg:
+otk.version: 1
+
+otk.define.argument:
   - version
   - architecture
   - boot_mode
 
 # output resolved vars?
-otk.def.var:
+otk.define.variable:
   packages:
     otk.inc: packages/root.omnifest.yaml
   otk.inc:
@@ -18,7 +20,7 @@ otk.def.var:
     ...
 
 # output info files?
-otk.inf.osbuild-composer:
+otk.meta.osbuild-composer:
   boot_mode:
     mtk.var: boot_mode
   pipelines:
@@ -27,11 +29,21 @@ otk.inf.osbuild-composer:
   export:
     - iso
 
-otk.inf.*
+otk.meta.kiwi:
+  pass: pass
 
-target.osbuild:
+otk.meta.mkosi:
+  pass: pass
+
+otk.target.osbuild:
   pipelines:
     - otk.inc: pipeline/root.omnifest.yaml
     - otk.inc: pipeline/tree.omnifest.yaml
     - otk.inc: pipeline/customize.omnifest.yaml
     - otk.inc: pipeline/image.omnifest.yaml
+
+otk.target.kiwi:
+  pass: pass
+
+otk.target.mkosi:
+  pass: pass
