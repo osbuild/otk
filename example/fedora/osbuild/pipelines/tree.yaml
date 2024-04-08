@@ -17,7 +17,7 @@ stages:
     options:
       prefix: ''
   - otk.customization.locale:
-    scope: tree
+    scope: tree  # XXX docs
     default:
       - type: org.osbuild.locale
         options:
