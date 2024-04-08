@@ -1,6 +1,6 @@
 otk.define:
   repositories:
-  - id: "default"
-    baseurl: "foo"
+  - id: "fedora"
+    metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-$version&arch=$architecture
   gpgkeys:
   - "1234"

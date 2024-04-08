@@ -57,11 +57,7 @@ stages:
       uefi:
         vendor: fedora
         unified: true
-      saved_entry:
-        otk.var:
-          concat:
-            - "ffffffffffffffffffffffffffffffff-"
-            - packages.something.kernel-core.version  # to fix
+      saved_entry: "ffffffffffffffffffffffffffffffff-$packages.something.kernel-core.version"
       write_cmdline: false
       config:
         default: saved

@@ -1,0 +1,7 @@
+mtk.define:
+  file_customization_packages:
+    include:
+      pass
+
+- type: org.osbuild.file
+  ...
