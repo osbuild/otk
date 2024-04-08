@@ -1,1 +1,55 @@
 otk.version: 1
+
+otk.argument:
+  - version
+  - architecture
+
+otk.include:
+  path: repositories/$version.yaml
+
+otk.define:
+  # Packages used by the various pipelines, `root` is the buildroot, `tree` is
+  # the tree that ends up in the image. The buildroot gets used to build the 
+  # other pipelines so it needs the tooling used in those.
+  packages:
+    default:
+      root:
+        include:
+          - @core
+      tree:
+        include:
+          - @core
+          - initial-setup
+          - libxkbdcommon
+          - NetworkManager-wifi
+          - brcmfmac-firmware
+          - realtek-firmware
+          - iwlwifi-mvm-firmware
+  filesystems:
+      raw:
+        root:
+          uuid: 6e4ff95f-f662-45ee-a82a-bdf44a2d0b75
+          vfs_type: ext4
+          path: /
+          options: defaults
+        boot:
+          uuid: 0194fdc2-fa2f-4cc0-81d3-ff12045b73c8
+          vfs_type: ext4
+          path: /boot
+          options: defaults
+        boot-efi:
+          uuid: 7B77-95E7
+          vfs_type: vfat
+          path: /boot/efi
+          options: defaults,uid=0,gid=0,umask=077,shortname=winnt
+          passno: 2
+
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: osbuild/pipelines/root.yaml
+    - otk.include: osbuild/pipelines/tree.yaml
+    - otk.include: osbuild/pipelines/raw.yaml
+
+otk.meta.osbuild-composer:
+  pass

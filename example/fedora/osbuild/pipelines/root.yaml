@@ -1,20 +1,14 @@
 name: root
 source-epoch: 1659397331
 stages:
-  - otk.ext.osbuild.dnf-depsolve:
-    architecture:
-      otk.var: architecture
-    module_platform_id:
-      otk.var: module_platform_id
-    repositories:
-      otk.var: repositories
-    gpgkeys:
-      otk.var: gpgkeys
+  - otk.external.osbuild.depsolve-dnf4:
+    architecture: $architecture
+    module_platform_id: f$version
+    repositories: $repositories
+    gpgkeys: $gpgkeys
     exclude:
       docs: true
-    packages:
-      otk.var: packages.root
-  # XXX merge into snippets/selinux.yaml
+    packages: $packages.default.root
   - name: org.osbuild.selinux
     options:
       file_contexts: etc/selinux/targeted/contexts/files/file_contexts
