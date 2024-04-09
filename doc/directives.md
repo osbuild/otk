@@ -200,9 +200,11 @@ otk.customization.name:
 
 ## otk.target
 
-Various output targets, `otk` knows about `otk.target.osbuild`. By default
-
-`otk compile file.yaml`
+Various output targets. An output is necessary for `otk` to generate any
+outputs. The target is namespaced to a specific application. `otk` tries to
+keep little context but it does need to know what it is outputting for. This
+allows us to scope `otk.external` things to only be allowed within specific
+targets and for those externals to assume certain things will be in the tree.
 
 ```yaml
 otk.target.osbuild:
