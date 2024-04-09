@@ -1,7 +1,0 @@
-[workspace]
-members = [
-    "libotk",
-    "otk",
-    "otk-osbuild",
-    "otk-kiwi", "otk-mkosi",
-]
