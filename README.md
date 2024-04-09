@@ -22,3 +22,9 @@ A list of current problems or things that just aren't that nice yet:
 
 - [ ] How should we structure a distribution, the [fedora](./example/fedora)
       really isn't that pretty yet.
+
+## Principles
+
+- Omnifests are valid YAML, no preprocessing is done on them.
+- No introspection of the tree.
+- No language-specific quirks in the directives (e.g. `eval`).
