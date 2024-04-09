@@ -14,7 +14,7 @@ tree will result in the defined names being hoisted to the global scope.
 
 Double definitions of variables are forbidden and will cause an error when
 detected. It is thus wise to 'namespace' variables by putting them inside an
-object.
+map.
 
 Expects a `map` for its value.
 
@@ -80,7 +80,7 @@ otk.define:
 otk.include: path/$variable.yaml
 ```
 
-The following example is an error as the value of `variable` is a list, which
+The following example is an error as the value of `variable` is a `seq`, which
 is not allowed inside a string format.
 
 ```yaml
@@ -128,7 +128,7 @@ otk.define:
     - 3
     - 4
   c:
-    otk.op.list.join:
+    otk.op.seq.join:
       values:
         - $a
         - $b
