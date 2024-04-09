@@ -16,6 +16,8 @@ Double definitions of variables are forbidden and will cause an error when
 detected. It is thus wise to 'namespace' variables by putting them inside an
 object.
 
+Expects a `map` for its value.
+
 ```yaml
 otk.define:
   packages:
@@ -32,6 +34,8 @@ otk.define:
 Define arguments that **MUST** be passed on the command line to `otk` with
 `otk compile -A`.
 
+Expects a `seq` for its value.
+
 ```yaml
 otk.argument:
   - version
@@ -42,6 +46,9 @@ otk.argument:
 
 Use a previously defined variable.
 
+The short form expects a `str` for its value, the long form expects a `map` for
+its value.
+
 ```yaml
 otk.define:
   variable: "foo"
@@ -50,7 +57,7 @@ otk.include:
   otk.variable: variable
 ```
 
-It is also possible to use a sugared form of `otk.variable`. For any string
+It is also possible to use a sugared form of `otk.variable`. For any `str` 
 value that starts with `$` the value is replaced with the value as defined
 in the `otk.define` block.
 
@@ -61,7 +68,7 @@ otk.define:
 otk.include: $variable
 ```
 
-If a `$` appears later in a string value then its string value as it appears
+If a `$` appears later in a `str` value then its string value as it appears
 in `otk.define` is replaced into the string. Note that using the sugared form
 in this form requires the value to be a string in the `otk.define`.
 
@@ -93,6 +100,9 @@ contents of the file.
 
 Note that cyclical includes are forbidden and will cause an error.
 
+The short form expects a `str` for its value, the long form expects a `map` for
+its value.
+
 ```yaml
 otk.include: file.yaml
 ```
@@ -101,10 +111,13 @@ otk.include: file.yaml
 
 Perform various operations on variables.
 
-### otk.op.list.join
+### otk.op.seq.join
 
-Join two or more variables of type list together, trying to join other types will
-cause an error.
+Join two or more variables of type sequence together, trying to join other types
+will cause an error.
+
+Expects a `map` for its value that contains a `values` key with a value of type
+`seq`
 
 ```yaml
 otk.define:
@@ -121,11 +134,13 @@ otk.define:
         - $b
 ```
 
-### otk.op.hash.join
+### otk.op.map.join
 
-Join two or more variables of type object together. Trying to merge other
-types will cause an error. Duplicate keys in the objects considered an
-error.
+Join two or more variables of type map together. Trying to merge other types
+will cause an error. Duplicate keys in the maps are considered an error.
+
+Expects a `map` for its value that contains a `values` key with a value of type
+`seq`
 
 ```yaml
 otk.define:
@@ -144,6 +159,8 @@ otk.define:
 
 Under the `otk.meta` namespace any data can be stored that other applications
 need to use from an omnifest.
+
+Expects a `map` for its value.
 
 ```yaml
 otk.meta.osbuild-composer:
@@ -165,6 +182,9 @@ Customizations are conditional blocks that receive separate input through
 `otk compile -Cname=data`, a customization is considered to be active when it
 is passed data. If a customization is passed multiple times then the `defined`
 block is replaced multiple times, once for each data input.
+
+Expects a `map` for its value which contains a `defined` key. The `default` key
+is optional. The values of `default` and `defined` can be of any type.
 
 ```yaml
 otk.customization.name:
@@ -201,9 +221,15 @@ the directive with on stdout.
 
 ### otk.external.osbuild.depsolve-dnf4
 
+Expects a `map` as its value.
+
 ### otk.external.osbuild.depsolve-dnf5
 
+Expects a `map` as its value.
+
 ### otk.external.osbuild.embed-file
+
+Expects a `map` as its value.
 
 ---
 
