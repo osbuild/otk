@@ -16,36 +16,24 @@ stages:
   - type: org.osbuild.fix-bls
     options:
       prefix: ''
-  - otk.customization.locale:
-    scope: tree  # XXX docs
-    default:
-      - type: org.osbuild.locale
-        options:
-          language: en_US
-    defined:
-      - type: org.osbuild.locale
-        options:
-          language: $this.language
-  - otk.customization.hostname:
-    scope: tree
-    default:
-      - type: org.osbuild.hostname
-        options:
-          hostname: localhost.localdomain
-    defined:
-      - type: org.osbuild.hostname
-        options:
-          hostname: $this.hostname
-  - otk.customization.timezone:
-    scope: tree
-    default:
-      - type: org.osbuild.timezone
-        options:
-          zone: UTC
-    defined:
-      - type: org.osbuild.timezone
-        options:
-          zone: $this.timezone
+  - type: org.osbuild.locale
+      options:
+        language:
+          otk.customization.locale:
+            default: en_US
+            defined: $this.langauge
+  - type: org.osbuild.hostname
+    options:
+      hostname:
+        otk.customization.hostname:
+          default: localhost.localdomain
+          defined: $this.hostname
+  - type: org.osbuild.timezone
+    options:
+      zone:
+        otk.customization.timezone:
+          default: UTC
+          defined: $this.timezone
   - type: org.osbuild.fstab
     options: $filesystems.raw
   - type: org.osbuild.grub2
