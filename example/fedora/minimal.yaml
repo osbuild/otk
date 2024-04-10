@@ -1,9 +1,5 @@
 otk.version: 1
 
-otk.argument:
-  - version
-  - architecture
-
 otk.include:
   path: repositories/${version}.yaml
 

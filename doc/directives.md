@@ -29,19 +29,6 @@ otk.define:
   boot_mode: uefi
 ```
 
-## otk.argument
-
-Define arguments that **MUST** be passed on the command line to `otk` with
-`otk compile -A`.
-
-Expects a `seq` for its value.
-
-```yaml
-otk.argument:
-  - version
-  - architecture
-```
-
 ## Usage of `${}`
 
 Use a previously defined variable. String values can be used inside other

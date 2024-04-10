@@ -1,0 +1,6 @@
+otk.define:
+  version: 39
+  architecture: amd64
+
+otk.include:
+  path: minimal.yaml
