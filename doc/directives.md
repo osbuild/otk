@@ -42,7 +42,7 @@ otk.argument:
   - architecture
 ```
 
-## Usage of `$`
+## Usage of `${}`
 
 Use a previously defined variable. String values can be used inside other
 string values, non-string values *must* stand on their own.
@@ -51,10 +51,10 @@ string values, non-string values *must* stand on their own.
 otk.define:
   variable: "foo"
 
-otk.include: $variable
+otk.include: ${variable}
 ```
 
-If a `$` appears in a `str` value then its string value as it appears
+If a `${}` appears in a `str` value then its string value as it appears
 in `otk.define` is replaced into the string. Note that using the sugared form
 in this form requires the value to be a string in the `otk.define`. 
 
@@ -63,7 +63,7 @@ in this form requires the value to be a string in the `otk.define`.
 otk.define:
   variable: aarch64
 
-otk.include: path/$variable.yaml
+otk.include: path/${variable}.yaml
 ```
 
 The following example is an error as the value of `variable` is a `seq`, which
@@ -76,10 +76,10 @@ otk.define:
     - 1
     - 2
 
-otk.include: path/$variable.yaml
+otk.include: path/${variable}.yaml
 ```
 
-This is okay because "$variable" is there on it's own so it's unambiguous.
+This is okay because "${variable}" is there on it's own so it's unambiguous.
 ```yaml
 # this is OK
 otk.define:
@@ -88,7 +88,7 @@ otk.define:
     - 2
 
 some:
- thing: $variable
+ thing: ${variable}
 ```
 
 ## otk.include
@@ -128,8 +128,8 @@ otk.define:
   c:
     otk.op.seq.join:
       values:
-        - $a
-        - $b
+        - ${a}
+        - ${b}
 ```
 
 ### otk.op.map.join
@@ -149,8 +149,8 @@ otk.define:
   c:
     otk.op.hash.merge:
       values:
-        - $a
-        - $b
+        - ${a}
+        - ${b}
 ```
 
 ## otk.meta
@@ -191,9 +191,9 @@ otk.customization.name:
       options: none
   defined:
     - type: org.osbuild.stage
-      options: $this.data  # it's not going to be `this`
+      options: ${this.data}  # it's not going to be `this`
     - type: org.osbuild.stage
-      options: $this.data  # it's not going to be `this`
+      options: ${this.data}  # it's not going to be `this`
 ```
 
 ## otk.target.<consumer>
