@@ -42,24 +42,10 @@ otk.argument:
   - architecture
 ```
 
-## otk.variable
+## Usage of `$`
 
-Use a previously defined variable.
-
-The short form expects a `str` for its value, the long form expects a `map` for
-its value.
-
-```yaml
-otk.define:
-  variable: "foo"
-
-otk.include:
-  otk.variable: variable
-```
-
-It is also possible to use a sugared form of `otk.variable`. For any `str` 
-value that starts with `$` the value is replaced with the value as defined
-in the `otk.define` block.
+Use a previously defined variable. String values can be used inside other
+string values, non-string values *must* stand on their own.
 
 ```yaml
 otk.define:
@@ -68,9 +54,9 @@ otk.define:
 otk.include: $variable
 ```
 
-If a `$` appears later in a `str` value then its string value as it appears
+If a `$` appears in a `str` value then its string value as it appears
 in `otk.define` is replaced into the string. Note that using the sugared form
-in this form requires the value to be a string in the `otk.define`.
+in this form requires the value to be a string in the `otk.define`. 
 
 ```yaml
 # this is OK
@@ -91,6 +77,18 @@ otk.define:
     - 2
 
 otk.include: path/$variable.yaml
+```
+
+This is okay because "$variable" is there on it's own so it's unambiguous.
+```yaml
+# this is OK
+otk.define:
+  variable:
+    - 1
+    - 2
+
+some:
+ thing: $variable
 ```
 
 ## otk.include
