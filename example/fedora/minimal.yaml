@@ -5,7 +5,7 @@ otk.argument:
   - architecture
 
 otk.include:
-  path: repositories/$version.yaml
+  path: repositories/${version}.yaml
 
 otk.define:
   # Packages used by the various pipelines, `root` is the buildroot, `tree` is
@@ -50,7 +50,7 @@ otk.define:
             options: defaults,uid=0,gid=0,umask=077,shortname=winnt
             passno: 2
         defined:
-          otk.external.osbuild.filesystem: $this
+          otk.external.osbuild.filesystem: ${this}
 
 
 otk.target.osbuild:
