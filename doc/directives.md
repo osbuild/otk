@@ -198,13 +198,19 @@ otk.customization.name:
       options: $this.data  # it's not going to be `this`
 ```
 
-## otk.target
+## otk.target.<consumer>
 
-Various output targets. An output is necessary for `otk` to generate any
-outputs. The target is namespaced to a specific application. `otk` tries to
-keep little context but it does need to know what it is outputting for. This
-allows us to scope `otk.external` things to only be allowed within specific
-targets and for those externals to assume certain things will be in the tree.
+Only act on this sub-tree if producing output for the specified consumer.
+Anything specific to the pipelines of e.g. osbuild would be put under:
+`otk.target.osbuild`. This allows the otk file to generate valid osbuild
+json manifest as well as future targets like kiwi.
+
+An output is necessary for `otk` to generate any outputs. The target
+is namespaced to a specific application. `otk` tries to keep little
+context but it does need to know what it is outputting for. This
+allows us to scope `otk.external` things to only be allowed within
+specific targets and for those externals to assume certain things will
+be in the tree.
 
 ```yaml
 otk.target.osbuild:
