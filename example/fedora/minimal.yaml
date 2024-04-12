@@ -26,9 +26,9 @@ otk.define:
               - brcmfmac-firmware
               - realtek-firmware
               - iwlwifi-mvm-firmware
-            otk.customization.simon:
-              defined:
-                - somepackage
+          otk.customization.simon:
+            defined:
+              - somepackage
   filesystems:
     raw:
       otk.customization.filesystem:
