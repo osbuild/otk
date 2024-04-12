@@ -1,6 +1,6 @@
 otk.define:
   repositories:
-  - id: "default"
-    baseurl: "foo"
+    - id: "default"
+      baseurl: "foo"
   gpgkeys:
-  - "1234"
+    - "1234"
