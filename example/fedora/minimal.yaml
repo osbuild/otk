@@ -9,17 +9,17 @@ otk.include:
 
 otk.define:
   # Packages used by the various pipelines, `root` is the buildroot, `tree` is
-  # the tree that ends up in the image. The buildroot gets used to build the 
+  # the tree that ends up in the image. The buildroot gets used to build the
   # other pipelines so it needs the tooling used in those.
   packages:
     default:
       root:
         include:
-          - @core
+          - "@core"
       tree:
         include:
           otk.op.list.join:
-            - - @core
+            - - "@core"
               - initial-setup
               - libxkbdcommon
               - NetworkManager-wifi
