@@ -12,9 +12,10 @@ other parts of the omnifest.
 Variable scope is global, an `otk.define` directive anywhere in the omnifest
 tree will result in the defined names being hoisted to the global scope.
 
-Double definitions of variables are forbidden and will cause an error when
-detected. It is thus wise to 'namespace' variables by putting them inside an
-map.
+Redefinitions of variables are forbidden and will cause an error when detected.
+A redefinition of a variable is assigning a value different from the value it
+is currently holding. It is thus wise to 'namespace' variables by putting them
+inside a map.
 
 Expects a `map` for its value.
 
@@ -117,6 +118,8 @@ otk.define:
       values:
         - ${a}
         - ${b}
+        - - 5
+          - 6
 ```
 
 ### otk.op.map.join
@@ -134,7 +137,7 @@ otk.define:
   b:
     b: 2
   c:
-    otk.op.hash.merge:
+    otk.op.map.merge:
       values:
         - ${a}
         - ${b}

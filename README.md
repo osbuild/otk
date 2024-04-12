@@ -14,7 +14,7 @@ There is documentation about the [format](./doc/format.md) and the available
 
 ## Examples
 
-Read the [examples](./example).
+Read the [examples](./example) to see what omnifests look like.
 
 ## Problem(s)
 
