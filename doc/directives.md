@@ -48,10 +48,8 @@ Use a previously defined variable. String values can be used inside other
 string values, non-string values *must* stand on their own.
 
 ```yaml
-otk.define:
-  variable: "foo"
-
 otk.include: ${variable}
+otk.include: path/${variable}.yml
 ```
 
 If a `${}` appears in a `str` value then its string value as it appears
