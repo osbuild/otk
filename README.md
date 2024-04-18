@@ -1,11 +1,25 @@
 # Omnifest Toolkit
 
+**THIS IS A PROOF OF CONCEPT REPOSITORY**
+
 This is the "Omnifest Toolkit", also known as `otk`. A YAML transpiler to
 take omnifest inputs and translate them into [osbuild](https://osbuild.org)
 manifests.
 
 We are still sketching out this potential approach to generating manifests and
 thus this repository is very much a work in progress.
+
+## Usage
+
+```
+€ python3 -m venv venv
+€ . venv/bin/activate
+€ pip install -e ".[dev]"
+€ otk flatten example/fedora/minimal-40-x86_64.yaml
+# ...
+
+# See `otk --help` for help.
+```
 
 ## Documentation
 
