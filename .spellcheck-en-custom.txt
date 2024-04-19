@@ -1,0 +1,17 @@
+Omnifest
+omnifest
+omnifests
+otk
+Customizations
+stdin
+stdout
+json
+Redefinitions
+namespace
+namespaced
+YAML
+JSON
+osbuild
+preprocessing
+transpiler
+Pre
