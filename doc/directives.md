@@ -1,7 +1,7 @@
 # Directives
 
 `otk` has various directives that can be used in an omnifest. Generally these
-directives can appear anywhere in the tree unless otherwise specified and they
+directives can appear anywhere in the tree unless otherwise specified (see below) and they
 are replaced with other trees or values as produced by the directive.
 
 ## otk.define
