@@ -12,3 +12,8 @@ repos:
     rev: v1.35.1
     hooks:
       - id: yamllint
+  - repo: https://github.com/schuellerf/pre-commit-pyspelling
+    rev: 0.1.0
+    hooks:
+      - id: pyspelling
+        args: ["--config", ".spellcheck.yml"]
