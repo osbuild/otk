@@ -30,6 +30,11 @@ There is documentation about the [format](./doc/format.md) and the available
 
 Read the [examples](./example) to see what omnifests look like.
 
+## Tests
+
+To run the tests, you have to install the package (see [Usage](#Usage))
+and call `pytest`
+
 ## Problem(s)
 
 A list of current problems or things that just aren't that nice yet:
