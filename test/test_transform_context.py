@@ -6,6 +6,7 @@ from otk.error import (
     TransformVariableTypeError,
     TransformVariableIndexTypeError,
     TransformVariableIndexRangeError,
+    TransformDefineDuplicateError,
 )
 
 
@@ -63,3 +64,19 @@ def test_context_unhappy():
 
     with pytest.raises(TransformVariableIndexRangeError):
         ctx.variable("bar.3")
+
+
+def test_context_duplicate_definition():
+    ctx0 = Context()
+
+    # Redefinition allowed
+    ctx0.define("foo", "bar")
+    ctx0.define("foo", "bar")
+
+    ctx1 = Context(duplicate_definitions_allowed=False)
+
+    # Redefinition NOT allowed
+    ctx1.define("foo", "bar")
+
+    with pytest.raises(TransformDefineDuplicateError):
+        ctx1.define("foo", "bar")
