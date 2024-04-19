@@ -21,6 +21,24 @@ thus this repository is very much a work in progress.
 # See `otk --help` for help.
 ```
 
+## Pre Commit Checks
+
+To check your code for basic problems, we use https://pre-commit.com
+The tool itself will be installed by the `pip` command above (see [Usage](#Usage)) after that you
+should run
+
+```shell
+pre-commit install
+```
+
+After that the system automatically checks upon commit, or you can run it against the whole
+repository including all the tests with:
+
+```
+make test
+```
+
+
 ## Documentation
 
 There is documentation about the [format](./doc/format.md) and the available

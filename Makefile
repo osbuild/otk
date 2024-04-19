@@ -13,3 +13,4 @@ format:
 .PHONY: test
 test:
 	@pytest
+	pre-commit run --all-files
