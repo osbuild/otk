@@ -2,6 +2,7 @@
 
 import logging
 
+from copy import deepcopy
 from typing import Any, Type
 
 from .context import Context
@@ -116,6 +117,8 @@ resolvers: dict[Type, Any] = {
 def resolve(ctx: Context, tree: Any) -> Any:
     """Resolves a (sub)tree of any type into a new tree. Each type has its own
     specific handler to rewrite the tree."""
+
+    tree = deepcopy(tree)
 
     if type(tree) not in resolvers:
         log.fatal("could not look up %r in resolvers", type(tree))
