@@ -23,7 +23,7 @@ stages:
           scope: tree
           default:
             language: en_US
-          defined:
+          if-set:
             language: en_US
   - type: org.osbuild.hostname
     options:
@@ -32,7 +32,7 @@ stages:
           scope: tree
           default:
             hostname: localhost.localdomain
-          defined:
+          if-set:
             language: localhost.localdomain
   - type: org.osbuild.timezone
     options:
@@ -41,7 +41,7 @@ stages:
           scope: tree
           default:
             zone: UTC
-          defined:
+          if-set:
             zone: UTC
   - type: org.osbuild.fstab
     options:
