@@ -20,14 +20,26 @@ log = logging.getLogger(__name__)
 
 
 class Context:
+    duplicate_definitions_allowed: bool
+    duplicate_definitions_warning: bool
+
     _version: int | None
     _path: pathlib.Path
     _variables: dict[str, Any]
 
-    def __init__(self, path: pathlib.Path | None = None) -> None:
+    def __init__(
+        self,
+        path: pathlib.Path | None = None,
+        *,
+        duplicate_definitions_allowed: bool = True,
+        duplicate_definitions_warning: bool = False,
+    ) -> None:
         self._version = None
         self._path = path if path else pathlib.Path(".")
         self._variables = {}
+
+        self.duplicate_definitions_allowed = duplicate_definitions_allowed
+        self.duplicate_definitions_warning = duplicate_definitions_warning
 
     def version(self, v: int) -> None:
         # Set the context version, duplicate definitions with different
@@ -40,12 +52,19 @@ class Context:
         self._version = v
 
     def define(self, name: str, value: Any) -> None:
-        # Since we go through the tree multiple times it's easy to ignore
-        # duplicate definitions as long as they define to the *same* value.
-        if name in self._variables and self._variables[name] != value:
-            raise TransformDefineDuplicateError()
+        if name in self._variables:
+            if not self.duplicate_definitions_allowed:
+                raise TransformDefineDuplicateError()
 
-        self._variables[name] = value
+            if self.duplicate_definitions_warning:
+                log.warn(
+                    "redefinition of %r, previous values was %r and new value is %r",
+                    name,
+                    self._variables[name],
+                    value,
+                )
+        else:
+            self._variables[name] = value
 
     def variable(self, name: str) -> Any:
         parts = name.split(".")
