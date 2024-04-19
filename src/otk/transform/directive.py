@@ -118,13 +118,14 @@ def op_map_merge(ctx: Context, tree: dict[str, Any]) -> Any:
 
 
 @tree.must_be(dict)
-@tree.must_pass(tree.has_keys(["default", "scope", "defined"]))
+@tree.must_pass(tree.has_keys(["scope", "if-set"]))
 def customization(ctx: Context, tree: dict[str, Any], key) -> Any:
     """Apply a customization."""
     log.warning("applying customization %r", key)
 
-    # TODO take in customizations somewhere and use there here
-    return tree["default"]
+    # TODO take in customizations somewhere and use them here, this is
+    # TODO currently just a placeholder.
+    return tree.get("default")
 
 
 @tree.must_be(str)

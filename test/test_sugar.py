@@ -20,7 +20,7 @@ my_var: ${variable}
 
     omnifest_result = resolve(context, omnifest_under_test)
 
-    assert omnifest_result['my_var'] == "foo"
+    assert omnifest_result["my_var"] == "foo"
 
 
 def test_simple_sugar_tree():
@@ -39,7 +39,7 @@ my_var: ${variable}
 
     omnifest_result = resolve(context, omnifest_under_test)
 
-    assert omnifest_result['my_var'] == [1, 2]
+    assert omnifest_result["my_var"] == [1, 2]
 
 
 def test_simple_sugar_tree_fail():
@@ -52,7 +52,7 @@ otk.define:
 
 my_var: my_prefix_${variable}
 """
-    expected_error = 'string sugar resolves to an incorrect type, expected int, float, or str but got %r'
+    expected_error = "string sugar resolves to an incorrect type, expected int, float, or str but got %r"
 
     context = Context()
     omnifest_under_test = Omnifest.from_yaml_bytes(data).to_tree()
