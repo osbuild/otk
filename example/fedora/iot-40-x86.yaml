@@ -2,7 +2,7 @@ otk.version: 1
 
 otk.define:
   version: 40
-  architecture: "aarch64"
+  architecture: "x86_64"
   packages:
     # These packages are used in the buildroot
     root:
@@ -16,7 +16,7 @@ otk.define:
       docs: false
       weak: false
       packages:
-        otk.include: packages/${version}/minimal.yaml
+        otk.include: packages/${version}/iot.yaml
     # Repositories to fetch packages from
     repositories:
       otk.include: repository/${version}/repositories.yaml
@@ -41,4 +41,8 @@ otk.define:
       options: defaults,uid=0,gid=0,umask=077,shortname=winnt
       passno: 2
 
-otk.include: "minimal-common.yaml"
+otk.target.osbuild:
+  pipelines:
+    - otk.include: "osbuild/root.yaml"
+    - otk.include: "osbuild/pipeline/tree.yaml"
+    - otk.include: "osbuild/pipeline/commit.yaml"

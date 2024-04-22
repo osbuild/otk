@@ -29,14 +29,6 @@ otk.define:
         # TODO We can't merge nonexistent vars
         exclude:
           - "nonexistent"
-    todo:
-      packages:
-        include:
-          - "@bar"
-          - "@baz"
-        # TODO We can't merge nonexistent vars
-        exclude:
-          - "nonexistent"
     # Repositories to fetch packages from
     repositories:
       otk.include: repository/${version}.yaml

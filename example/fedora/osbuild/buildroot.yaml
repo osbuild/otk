@@ -9,17 +9,7 @@ stages:
       weak: ${packages.buildroot.weak}
       repositories: ${packages.repositories}
       gpgkeys: ${packages.keys}
-      packages:
-        include:
-          otk.op.seq.merge:
-            values:
-              - ${packages.buildroot.packages.include}
-              - ${packages.todo.packages.include}
-        exclude:
-          otk.op.seq.merge:
-            values:
-              - ${packages.buildroot.packages.exclude}
-              - ${packages.todo.packages.exclude}
+      packages: ${packages.buildroot.packages}
   - type: org.osbuild.selinux
     options:
       file_contexts: etc/selinux/targeted/contexts/files/file_contexts
