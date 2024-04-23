@@ -1,7 +1,7 @@
 import pytest
 
 from otk.parse.document import Omnifest
-from otk.transform.context import Context
+from otk.context import Context
 from otk.transform import resolve
 from otk.error import TransformDirectiveTypeError
 

@@ -11,7 +11,7 @@ import pathlib
 
 from typing import Any
 
-from .context import Context
+from ..context import Context
 from ..parse.document import Omnifest
 from ..error import (
     TransformDirectiveTypeError,
@@ -34,6 +34,8 @@ def define(ctx: Context, tree: Any) -> Any:
 
     for key, value in tree.items():
         ctx.define(key, value)
+
+    return tree
 
 
 @tree.must_be(str)
