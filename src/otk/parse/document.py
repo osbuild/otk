@@ -1,14 +1,12 @@
-import pathlib
 import logging
+import pathlib
+from typing import Any, Self
 
 import yaml
 
-from typing import Self, Any
-
-from ..error import ParseTypeError, ParseVersionError, ParseTargetError
+from ..constant import NAME_VERSION, PREFIX, PREFIX_TARGET
+from ..error import ParseTargetError, ParseTypeError, ParseVersionError
 from ..target import registry as target_registry
-from ..constant import PREFIX, NAME_VERSION, PREFIX_TARGET
-
 
 log = logging.getLogger(__name__)
 

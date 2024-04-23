@@ -5,8 +5,7 @@ import logging
 from typing import Any, Type
 
 from ..context import Context
-from .directive import op, define, include, desugar, customization
-
+from .directive import customization, define, desugar, include, op
 
 log = logging.getLogger(__name__)
 

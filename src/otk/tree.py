@@ -6,13 +6,9 @@ objects used to work with trees."""
 from __future__ import annotations
 
 import functools
-
 from typing import Type
 
-from .error import (
-    TransformDirectiveTypeError,
-    TransformDirectiveArgumentError,
-)
+from .error import TransformDirectiveArgumentError, TransformDirectiveTypeError
 
 
 def must_be(kind: Type):
