@@ -84,17 +84,7 @@ def root(
 def compile(ctx: click.Context, input: str, output: str | None) -> None:
     """Compile a given omnifest into its targets."""
 
-    log.info("Compiling the input file %r to %r", input, output)
-
-
-@root.command()
-@click.argument("input", type=click.Path(exists=True))
-@click.argument("output", type=click.Path(), required=False)
-@click.pass_context
-def flatten(ctx: click.Context, input: str, output: str | None) -> None:
-    """Flatten a given omnifest by performing all includes."""
-
-    log.info("flattening %r to %r", input, output or "STDOUT")
+    log.info("Compiling the input file %r to %r", input, output or "STDOUT")
 
     file = pathlib.Path(input)
     root = file.parent
