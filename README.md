@@ -46,7 +46,7 @@ After this the system automatically checks upon commit, or you can run it agains
 repository including all the tests with:
 
 ```
-make lint
+make test
 ```
 
 ### Tests
