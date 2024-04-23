@@ -117,6 +117,11 @@ def resolve(ctx: Context, tree: Any) -> Any:
     """Resolves a (sub)tree of any type into a new tree. Each type has its own
     specific handler to rewrite the tree."""
 
+    # TODO we want to do deepcopy's but it needs a rethink of how directives
+    # TODO get replaced (especially: `otk.define`).
+
+    # tree = deepcopy(tree)
+
     if type(tree) not in resolvers:
         log.fatal("could not look up %r in resolvers", type(tree))
         raise Exception(type(tree))
@@ -127,6 +132,7 @@ def resolve(ctx: Context, tree: Any) -> Any:
 def stabilize(ctx: Context, tree: Any) -> Any:
     """Continually resolves a tree until it stops changing."""
 
+    # TODO: store on the context
     prev_tree = tree
     step_tree = 0
 

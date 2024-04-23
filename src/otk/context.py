@@ -93,3 +93,12 @@ class Context:
                 )
 
         return value
+
+
+class OSBuildContext(Context):
+    pass
+
+
+registry = {
+    "osbuild": OSBuildContext,
+}
