@@ -2,12 +2,12 @@
 
 **THIS IS A PROOF OF CONCEPT REPOSITORY**
 
+We are still sketching out this potential approach to generating manifests and
+thus this repository is very much a work in progress.
+
 This is the "Omnifest Toolkit", also known as `otk`. A YAML transpiler to
 take omnifest inputs and translate them into [osbuild](https://osbuild.org)
 manifests.
-
-We are still sketching out this potential approach to generating manifests and
-thus this repository is very much a work in progress.
 
 ## Usage
 
@@ -21,7 +21,18 @@ thus this repository is very much a work in progress.
 # See `otk --help` for help.
 ```
 
-## Pre Commit Checks
+## Documentation
+
+There is documentation about the [format](./doc/format.md) and the available
+[directives](./doc/directives.md).
+
+## Examples
+
+Read the [examples](./example) to see what omnifests look like.
+
+## Development
+
+### Pre Commit Checks
 
 To check your code for basic problems, we use https://pre-commit.com
 The tool itself will be installed by the `pip` command above (see [Usage](#Usage)) after that you
@@ -38,17 +49,7 @@ repository including all the tests with:
 make test
 ```
 
-
-## Documentation
-
-There is documentation about the [format](./doc/format.md) and the available
-[directives](./doc/directives.md).
-
-## Examples
-
-Read the [examples](./example) to see what omnifests look like.
-
-## Tests
+### Tests
 
 To run the tests, you have to install the package (see [Usage](#Usage))
 and call `pytest`
