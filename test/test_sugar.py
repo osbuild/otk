@@ -12,6 +12,8 @@ otk.version: 1
 otk.define:
   variable: "foo"
 
+otk.target.osbuild: {}
+
 my_var: ${variable}
 """
 
@@ -31,6 +33,8 @@ otk.define:
     - 1
     - 2
 
+otk.target.osbuild: {}
+
 my_var: ${variable}
 """
 
@@ -49,6 +53,8 @@ otk.define:
   variable:
     - 1
     - 2
+
+otk.target.osbuild: {}
 
 my_var: my_prefix_${variable}
 """

@@ -104,7 +104,8 @@ def flatten(ctx: click.Context, input: str, output: str | None) -> None:
 
     context = Context(root, **ctx.obj["context"])
 
-    tree = Omnifest.from_yaml_path(file).to_tree()
+    omni = Omnifest.from_yaml_path(file)
+    tree = omni.to_tree()
 
     prev_tree = tree
     step_tree = 0
