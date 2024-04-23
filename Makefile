@@ -1,6 +1,7 @@
 .PHONY: lint
 lint:
 	@find . -name '*.yaml' | xargs yamllint
+	@pre-commit run --all-files
 
 .PHONY: type
 type:
@@ -13,4 +14,3 @@ format:
 .PHONY: test
 test:
 	@pytest
-	pre-commit run --all-files
