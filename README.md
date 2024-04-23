@@ -68,3 +68,11 @@ A list of current problems or things that just aren't that nice yet:
 - Omnifests are valid YAML, no preprocessing is done on them.
 - No introspection of the tree.
 - No language-specific quirks in the directives (e.g. `eval`).
+
+## Project
+
+ * **Website**: https://www.osbuild.org
+ * **Bug Tracker**: https://github.com/osbuild/otk/issues
+ * **Matrix**: #image-builder on [fedoraproject.org](https://matrix.to/#/#image-builder:fedoraproject.org)
+ * **Mailing List**: image-builder@redhat.com
+ * **Changelog**: https://github.com/osbuild/otk/releases
