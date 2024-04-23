@@ -34,7 +34,7 @@ Read the [examples](./example) to see what omnifests look like.
 
 ### Pre Commit Checks
 
-To check your code for basic problems, we use https://pre-commit.com
+To check our code for basic problems we use [pre-commit](https://pre-commit.com)
 The tool itself will be installed by the `pip` command above (see [Usage](#Usage)) after that you
 should run
 
@@ -42,11 +42,11 @@ should run
 pre-commit install
 ```
 
-After that the system automatically checks upon commit, or you can run it against the whole
+After this the system automatically checks upon commit, or you can run it against the whole
 repository including all the tests with:
 
 ```
-make test
+make lint
 ```
 
 ### Tests
