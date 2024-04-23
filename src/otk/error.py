@@ -25,6 +25,18 @@ class ParseKeyError(ParseTypeError):
     pass
 
 
+class ParseVersionError(ParseKeyError):
+    """The `otk.version` key is missing from an omnifest."""
+
+    pass
+
+
+class ParseTargetError(ParseError):
+    """An unknown target or no targets were encountered in the omnifest."""
+
+    pass
+
+
 class ParseValueError(ParseTypeError):
     """A required value was missing for a position in the omnifest."""
 

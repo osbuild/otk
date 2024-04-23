@@ -5,7 +5,8 @@ import yaml
 
 from typing import Self, Any
 
-from ..error import ParseTypeError, ParseKeyError
+from ..error import ParseTypeError, ParseVersionError, ParseTargetError
+from ..target import registry as target_registry
 
 
 log = logging.getLogger(__name__)
@@ -66,8 +67,13 @@ class Omnifest:
         # And that dictionary needs to contain certain keys to indicate this
         # being an Omnifest.
         if "otk.version" not in deserialized_data:
-            raise ParseKeyError(
+            raise ParseVersionError(
                 "omnifest must contain a key by the name of `otk.version`"
+            )
+
+        if not any(key.startswith("otk.target.") for key in deserialized_data):
+            raise ParseTargetError(
+                "omnifest must contain at least one key by the name of `otk.target.*`"
             )
 
     def to_tree(self) -> dict[str, Any]:
