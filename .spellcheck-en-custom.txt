@@ -15,3 +15,5 @@ osbuild
 preprocessing
 transpiler
 Pre
+fedoraproject
+Changelog
