@@ -10,7 +10,7 @@ from rich.console import Console
 
 from .help.log import JSONSequenceHandler
 from .parse.document import Omnifest
-from .transform import stabilize
+from .transform import resolve
 from .context import Context
 
 
@@ -97,8 +97,6 @@ def compile(ctx: click.Context, input: str, output: str | None) -> None:
     omni = Omnifest.from_yaml_path(file)
 
     tree = omni.to_tree()
-    tree = stabilize(context, tree)
-
-    log.debug("tree is stable")
+    tree = resolve(context, tree)
 
     print(json.dumps(tree, indent=2))
