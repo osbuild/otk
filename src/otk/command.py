@@ -10,7 +10,7 @@ from rich.console import Console
 
 from .help.log import JSONSequenceHandler
 from .parse.document import Omnifest
-from .transform import resolve
+from .transform import stabilize
 from .transform.context import Context
 
 
@@ -105,23 +105,9 @@ def flatten(ctx: click.Context, input: str, output: str | None) -> None:
     context = Context(root, **ctx.obj["context"])
 
     omni = Omnifest.from_yaml_path(file)
+
     tree = omni.to_tree()
-
-    prev_tree = tree
-    step_tree = 0
-
-    while True:
-        step_tree += 1
-
-        log.debug("resolve cycle %r", step_tree)
-
-        next_tree = resolve(context, prev_tree)
-        if prev_tree == next_tree:
-            break
-
-        prev_tree = next_tree
-
-    tree = next_tree
+    tree = stabilize(context, tree)
 
     log.debug("tree is stable")
 

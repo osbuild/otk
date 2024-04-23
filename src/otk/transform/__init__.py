@@ -122,3 +122,27 @@ def resolve(ctx: Context, tree: Any) -> Any:
         raise Exception(type(tree))
 
     return resolvers[type(tree)](ctx, tree)
+
+
+def stabilize(ctx: Context, tree: Any) -> Any:
+    """Continually resolves a tree until it stops changing."""
+
+    prev_tree = tree
+    step_tree = 0
+
+    while True:
+        step_tree += 1
+
+        log.debug("resolve cycle %r", step_tree)
+
+        next_tree = resolve(ctx, prev_tree)
+        if prev_tree == next_tree:
+            break
+
+        prev_tree = next_tree
+
+    tree = next_tree
+
+    log.debug("tree is stable")
+
+    return tree
