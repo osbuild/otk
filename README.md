@@ -15,7 +15,7 @@ manifests.
 € python3 -m venv venv
 € . venv/bin/activate
 € pip install -e ".[dev]"
-€ otk flatten example/fedora/minimal-40-x86_64.yaml
+€ otk compile example/fedora/minimal-40-x86_64.yaml
 # ...
 
 # See `otk --help` for help.
