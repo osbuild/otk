@@ -4,17 +4,12 @@ from __future__ import annotations
 
 import logging
 import pathlib
-
 from typing import Any
 
-from .error import (
-    TransformVariableLookupError,
-    TransformVariableTypeError,
-    TransformDefineDuplicateError,
-    TransformVariableIndexTypeError,
-    TransformVariableIndexRangeError,
-)
-
+from .error import (TransformDefineDuplicateError,
+                    TransformVariableIndexRangeError,
+                    TransformVariableIndexTypeError,
+                    TransformVariableLookupError, TransformVariableTypeError)
 
 log = logging.getLogger(__name__)
 

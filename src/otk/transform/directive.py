@@ -8,17 +8,12 @@ from __future__ import annotations
 import itertools
 import logging
 import pathlib
-
 from typing import Any
 
-from ..context import Context
-from ..parse.document import Omnifest
-from ..error import (
-    TransformDirectiveTypeError,
-    TransformDirectiveUnknownError,
-)
 from .. import tree
-
+from ..context import Context
+from ..error import TransformDirectiveTypeError, TransformDirectiveUnknownError
+from ..parse.document import Omnifest
 
 log = logging.getLogger(__name__)
 

@@ -1,18 +1,16 @@
-import logging
 import json
+import logging
 import pathlib
 import sys
 
 import click
-
-from rich.logging import RichHandler
 from rich.console import Console
+from rich.logging import RichHandler
 
+from .context import Context
 from .help.log import JSONSequenceHandler
 from .parse.document import Omnifest
 from .transform import resolve
-from .context import Context
-
 
 log = logging.getLogger(__name__)
 
