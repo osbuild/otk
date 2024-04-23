@@ -11,7 +11,7 @@ from rich.console import Console
 from .help.log import JSONSequenceHandler
 from .parse.document import Omnifest
 from .transform import stabilize
-from .transform.context import Context
+from .context import Context
 
 
 log = logging.getLogger(__name__)

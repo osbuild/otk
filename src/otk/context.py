@@ -7,7 +7,7 @@ import pathlib
 
 from typing import Any
 
-from ..error import (
+from .error import (
     TransformVariableLookupError,
     TransformVariableTypeError,
     TransformDefineDuplicateError,

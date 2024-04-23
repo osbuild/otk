@@ -1,6 +1,6 @@
 import pytest
 
-from otk.transform.context import Context
+from otk.context import Context
 from otk.error import (
     TransformVariableLookupError,
     TransformVariableTypeError,

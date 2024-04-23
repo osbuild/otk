@@ -1,7 +1,7 @@
 import pytest
 
 from otk.transform.directive import op_seq_merge, op_map_merge, desugar, define, include
-from otk.transform.context import Context
+from otk.context import Context
 from otk.error import TransformDirectiveTypeError, TransformDirectiveArgumentError
 
 
