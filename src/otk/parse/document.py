@@ -7,6 +7,7 @@ from typing import Self, Any
 
 from ..error import ParseTypeError, ParseVersionError, ParseTargetError
 from ..target import registry as target_registry
+from ..constant import PREFIX, NAME_VERSION, PREFIX_TARGET
 
 
 log = logging.getLogger(__name__)
@@ -66,14 +67,17 @@ class Omnifest:
 
         # And that dictionary needs to contain certain keys to indicate this
         # being an Omnifest.
-        if "otk.version" not in deserialized_data:
+        if NAME_VERSION not in deserialized_data:
             raise ParseVersionError(
-                "omnifest must contain a key by the name of `otk.version`"
+                "omnifest must contain a key by the name of %r" % (NAME_VERSION,)
             )
 
-        if not any(key.startswith("otk.target.") for key in deserialized_data):
+        # Make sure that the omnifest contains targets. Without targets we
+        # can't do much.
+        if not any(key.startswith(PREFIX_TARGET) for key in deserialized_data):
             raise ParseTargetError(
-                "omnifest must contain at least one key by the name of `otk.target.*`"
+                "omnifest must contain at least one key by the name of `%s.*`"
+                % (PREFIX_TARGET,)
             )
 
     def to_tree(self) -> dict[str, Any]:
