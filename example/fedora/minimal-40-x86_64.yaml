@@ -5,7 +5,7 @@ otk.define:
   architecture: "aarch64"
   packages:
     # These packages are used in the buildroot
-    root:
+    buildroot:
       docs: false
       weak: false
       packages:
@@ -65,7 +65,7 @@ otk.define:
 
 otk.target.osbuild:
   pipelines:
-    - otk.include: "osbuild/root.yaml"
+    - otk.include: "osbuild/buildroot.yaml"
     - otk.include: "osbuild/pipeline/tree.yaml"
     - otk.include: "osbuild/pipeline/raw.yaml"
     - otk.include: "osbuild/pipeline/xz.yaml"

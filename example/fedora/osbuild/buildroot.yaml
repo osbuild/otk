@@ -1,24 +1,24 @@
-# `root.yaml` sets up the buildroot for `osbuild`.
-name: root
+# `buildroot.yaml` sets up the buildroot for `osbuild`.
+name: buildroot
 source-epoch: 1659397331
 stages:
   - otk.external.osbuild.depsolve-dnf4:
       architecture: ${architecture}
       module_platform_id: f${version}
-      docs: ${packages.root.docs}
-      weak: ${packages.root.weak}
+      docs: ${packages.buildroot.docs}
+      weak: ${packages.buildroot.weak}
       repositories: ${packages.repositories}
       gpgkeys: ${packages.keys}
       packages:
         include:
           otk.op.seq.merge:
             values:
-              - ${packages.root.packages.include}
+              - ${packages.buildroot.packages.include}
               - ${packages.todo.packages.include}
         exclude:
           otk.op.seq.merge:
             values:
-              - ${packages.root.packages.exclude}
+              - ${packages.buildroot.packages.exclude}
               - ${packages.todo.packages.exclude}
   - type: org.osbuild.selinux
     options:
