@@ -1,17 +1,17 @@
 import pytest
 
-from otk.context import Context
+from otk.context import CommonContext
 from otk.error import (
+    TransformDefineDuplicateError,
+    TransformVariableIndexRangeError,
+    TransformVariableIndexTypeError,
     TransformVariableLookupError,
     TransformVariableTypeError,
-    TransformVariableIndexTypeError,
-    TransformVariableIndexRangeError,
-    TransformDefineDuplicateError,
 )
 
 
 def test_context():
-    ctx = Context()
+    ctx = CommonContext()
     ctx.define("foo", "foo")
 
     assert ctx.variable("foo") == "foo"
@@ -36,7 +36,7 @@ def test_context():
 
 
 def test_context_nonexistent():
-    ctx = Context()
+    ctx = CommonContext()
 
     with pytest.raises(TransformVariableLookupError):
         ctx.variable("foo")
@@ -51,7 +51,7 @@ def test_context_nonexistent():
 
 
 def test_context_unhappy():
-    ctx = Context()
+    ctx = CommonContext()
     ctx.define("foo", "foo")
 
     with pytest.raises(TransformVariableTypeError):
@@ -67,13 +67,13 @@ def test_context_unhappy():
 
 
 def test_context_duplicate_definition():
-    ctx0 = Context()
+    ctx0 = CommonContext()
 
     # Redefinition allowed
     ctx0.define("foo", "bar")
     ctx0.define("foo", "bar")
 
-    ctx1 = Context(duplicate_definitions_allowed=False)
+    ctx1 = CommonContext(duplicate_definitions_allowed=False)
 
     # Redefinition NOT allowed
     ctx1.define("foo", "bar")

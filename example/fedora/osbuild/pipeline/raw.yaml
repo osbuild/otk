@@ -8,7 +8,7 @@ stages:
   #      gpgkeys: ${gpgkeys}
   #      exclude:
   #        docs: true
-  #      packages: ${packages.default.root}
+  #      packages: ${packages.default.tree}
   - type: org.osbuild.selinux
     options:
       file_contexts: etc/selinux/targeted/contexts/files/file_contexts

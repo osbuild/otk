@@ -1,6 +1,7 @@
 .PHONY: lint
 lint:
 	@find . -name '*.yaml' | xargs yamllint
+	@ruff check
 
 .PHONY: type
 type:

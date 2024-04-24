@@ -1,9 +1,9 @@
 import pytest
 
-from otk.parse.document import Omnifest
-from otk.context import Context
-from otk.transform import resolve
+from otk.context import CommonContext
+from otk.document import Omnifest
 from otk.error import TransformDirectiveTypeError
+from otk.transform import resolve
 
 
 def test_simple_sugar():
@@ -17,8 +17,8 @@ otk.target.osbuild: {}
 my_var: ${variable}
 """
 
-    context = Context()
-    omnifest_under_test = Omnifest.from_yaml_bytes(data).to_tree()
+    context = CommonContext()
+    omnifest_under_test = Omnifest.from_yaml_bytes(data).tree
 
     omnifest_result = resolve(context, omnifest_under_test)
 
@@ -38,8 +38,8 @@ otk.target.osbuild: {}
 my_var: ${variable}
 """
 
-    context = Context()
-    omnifest_under_test = Omnifest.from_yaml_bytes(data).to_tree()
+    context = CommonContext()
+    omnifest_under_test = Omnifest.from_yaml_bytes(data).tree
 
     omnifest_result = resolve(context, omnifest_under_test)
 
@@ -60,8 +60,8 @@ my_var: my_prefix_${variable}
 """
     expected_error = "string sugar resolves to an incorrect type, expected int, float, or str but got %r"
 
-    context = Context()
-    omnifest_under_test = Omnifest.from_yaml_bytes(data).to_tree()
+    context = CommonContext()
+    omnifest_under_test = Omnifest.from_yaml_bytes(data).tree
 
     with pytest.raises(TransformDirectiveTypeError, match=expected_error):
         resolve(context, omnifest_under_test)

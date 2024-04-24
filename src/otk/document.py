@@ -1,12 +1,12 @@
 import logging
 import pathlib
+from copy import deepcopy
 from typing import Any, Self
 
 import yaml
 
-from ..constant import NAME_VERSION, PREFIX, PREFIX_TARGET
-from ..error import ParseTargetError, ParseTypeError, ParseVersionError
-from ..target import registry as target_registry
+from .constant import NAME_VERSION, PREFIX_TARGET
+from .error import ParseTargetError, ParseTypeError, ParseVersionError
 
 log = logging.getLogger(__name__)
 
@@ -20,16 +20,14 @@ class Omnifest:
         self._underlying_data = underlying_data
 
     @classmethod
-    def from_yaml_bytes(cls, text: bytes, ensure: bool = True) -> Self:
-        deserialized_data = cls.read(yaml.safe_load(text), ensure)
-
-        if ensure:
-            cls.ensure(deserialized_data)
+    def from_yaml_bytes(cls, text: bytes) -> Self:
+        deserialized_data = cls.read(yaml.safe_load(text))
+        cls.ensure(deserialized_data)
 
         return cls(deserialized_data)
 
     @classmethod
-    def from_yaml_path(cls, path: pathlib.Path, ensure: bool = True) -> Self:
+    def from_yaml_path(cls, path: pathlib.Path) -> Self:
         """Read a YAML file into an Omnifest instance."""
 
         log.debug("reading yaml from path %r", str(path))
@@ -39,22 +37,21 @@ class Omnifest:
         assert path.exists(), "path to exist"
 
         with path.open("rb") as file:
-            return cls.from_yaml_bytes(file.read(), ensure)
+            return cls.from_yaml_bytes(file.read())
 
     @classmethod
-    def read(cls, deserialized_data: Any, ensure: bool = True) -> dict[str, Any]:
+    def read(cls, deserialized_data: Any) -> dict[str, Any]:
         """Take any type returned by a deserializer and ensure that it is
         something that could represent an Omnifest."""
 
-        if ensure:
-            # The top level of the Omnifest needs to be a dictionary
-            if not isinstance(deserialized_data, dict):
-                log.error(
-                    "data did not deserialize to a dictionary: type=%r,data=%r",
-                    type(deserialized_data),
-                    deserialized_data,
-                )
-                raise ParseTypeError("omnifest must deserialize to a dictionary")
+        # The top level of the Omnifest needs to be a dictionary
+        if not isinstance(deserialized_data, dict):
+            log.error(
+                "data did not deserialize to a dictionary: type=%r,data=%r",
+                type(deserialized_data),
+                deserialized_data,
+            )
+            raise ParseTypeError("omnifest must deserialize to a dictionary")
 
         return deserialized_data
 
@@ -78,5 +75,6 @@ class Omnifest:
                 % (PREFIX_TARGET,)
             )
 
-    def to_tree(self) -> dict[str, Any]:
-        return self._underlying_data
+    @property
+    def tree(self) -> dict[str, Any]:
+        return deepcopy(self._underlying_data)

@@ -1,0 +1,8 @@
+type: org.osbuild.timezone
+options:
+  otk.customization.language:
+    scope: tree
+    default:
+      zone: UTC
+    if-set:
+      zone: UTC
