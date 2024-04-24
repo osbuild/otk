@@ -204,7 +204,7 @@ be in the tree.
 ```yaml
 otk.target.osbuild:
   pipelines:
-    - otk.include: pipelines/root.yaml
+    - otk.include: pipelines/buildroot.yaml
     - otk.include: pipelines/tree.yaml
 ```
 
