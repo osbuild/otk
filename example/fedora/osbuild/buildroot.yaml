@@ -4,6 +4,7 @@ source-epoch: 1659397331
 stages:
   - otk.external.osbuild.depsolve-dnf4:
       architecture: ${architecture}
+      releasever: "40"
       module_platform_id: f${version}
       docs: ${packages.buildroot.docs}
       weak: ${packages.buildroot.weak}

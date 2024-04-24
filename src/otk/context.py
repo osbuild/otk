@@ -1,20 +1,37 @@
+"""..."""
+
 # Enables postponed annotations on older snakes (PEP-563)
 # Enables | union syntax for types on older snakes (PEP-604)
 from __future__ import annotations
 
 import logging
 import pathlib
+from abc import ABC, abstractmethod
 from typing import Any
 
-from .error import (TransformDefineDuplicateError,
-                    TransformVariableIndexRangeError,
-                    TransformVariableIndexTypeError,
-                    TransformVariableLookupError, TransformVariableTypeError)
+from .error import (
+    TransformDefineDuplicateError,
+    TransformVariableIndexRangeError,
+    TransformVariableIndexTypeError,
+    TransformVariableLookupError,
+    TransformVariableTypeError,
+)
 
 log = logging.getLogger(__name__)
 
 
-class Context:
+class Context(ABC):
+    @abstractmethod
+    def version(self, v: int) -> None: ...
+
+    @abstractmethod
+    def define(self, name: str, value: Any) -> None: ...
+
+    @abstractmethod
+    def variable(self, name: str) -> Any: ...
+
+
+class CommonContext(Context):
     duplicate_definitions_allowed: bool
     duplicate_definitions_warning: bool
 
@@ -47,6 +64,8 @@ class Context:
         self._version = v
 
     def define(self, name: str, value: Any) -> None:
+        log.debug("defining %r", name)
+
         if name in self._variables:
             if not self.duplicate_definitions_allowed:
                 raise TransformDefineDuplicateError()
@@ -91,7 +110,38 @@ class Context:
 
 
 class OSBuildContext(Context):
-    pass
+    """Composes in a `GenericContext` while providing support for `osbuild`
+    concepts such as sources."""
+
+    sources: dict[str, list[Any]]
+
+    def __init__(self, context: Context) -> None:
+        self.sources = {}
+        self._context = context
+
+    def version(self, v: int) -> None:
+        return self._context.version(v)
+
+    def define(self, name: str, value: Any) -> None:
+        return self._context.define(name, value)
+
+    def variable(self, name: str) -> Any:
+        return self._context.variable(name)
+
+    @property
+    def _path(self):
+        return self._context._path
+
+    def for_external(self):
+        return {
+            "path": str(self._context._path),
+            "variables": self._context._variables,
+            "sources": self.sources,
+        }
+
+    def from_external(self, data: str):
+        self._context._variables = data["variables"]
+        self.sources = data.get("sources", {})
 
 
 registry = {

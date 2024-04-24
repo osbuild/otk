@@ -3,6 +3,7 @@ build: name:root
 stages:
   - otk.external.osbuild.depsolve-dnf4:
       architecture: ${architecture}
+      releasever: "40"
       module_platform_id: f${version}
       repositories: ${packages.repositories}
       gpgkeys: ${packages.keys}
@@ -13,36 +14,6 @@ stages:
     options:
       root_fs_uuid: ${filesystem.root.uuid}
       kernel_opts: ro no_timer_check console=ttyS0,115200n8 biosdevname=0 net.ifnames=0
-  - type: org.osbuild.fix-bls
-    options:
-      prefix: ''
-  - type: org.osbuild.locale
-    options:
-      language:
-        otk.customization.locale:
-          scope: tree
-          default:
-            language: en_US
-          if-set:
-            language: en_US
-  - type: org.osbuild.hostname
-    options:
-      language:
-        otk.customization.hostname:
-          scope: tree
-          default:
-            hostname: localhost.localdomain
-          if-set:
-            language: localhost.localdomain
-  - type: org.osbuild.timezone
-    options:
-      language:
-        otk.customization.language:
-          scope: tree
-          default:
-            zone: UTC
-          if-set:
-            zone: UTC
   - type: org.osbuild.fstab
     options:
       filesystems:
@@ -63,6 +34,8 @@ stages:
       write_cmdline: false
       config:
         default: saved
-  - type: org.osbuild.selinux
-    options:
-      file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+  - otk.include: osbuild/stage/fix-bls.yaml
+  - otk.include: osbuild/stage/locale.yaml
+  - otk.include: osbuild/stage/hostname.yaml
+  - otk.include: osbuild/stage/timezone.yaml
+  - otk.include: osbuild/stage/selinux.yaml

@@ -1,5 +1,5 @@
 """`otk` is primarily a tree transformation tool. This module contains the
-objects used to work with trees."""
+objects used validate tree arguments for functions that deal with trees."""
 
 # Enables postponed annotations on older snakes (PEP-563)
 # Enables | union syntax for types on older snakes (PEP-604)

@@ -1,5 +1,41 @@
-"""Implements the directives, these are named transformations that can be used
-in an omnifest."""
+"""Implements the directives. Directives are named transformations that can be
+used in omnifests to perform actions on the tree.
+
+In the tree directives are always (part of) a dictionary, they can return any
+type back for their value. Directives cannot have sibling keys in their
+dictionary. A directive with sibling keys is an error.
+
+As an example on how this works:
+
+```python
+{
+    "section": {
+        "otk.include": "file.yml"
+    }
+}
+```
+
+Then the entire dictionary will be replaced with the returned value from the
+directive (in this case `file.yml` contains `[1, 2]`):
+
+```python
+{
+    "section": [1, 2]
+}
+
+If a directive is found that has sibling elements:
+
+```python
+{
+    "section": "a",
+    "otk.include": "file.yml",
+}```
+
+It is an error.
+
+Directives are applied through Contexts. Certain directives might only be
+allowed inside (some) subtrees.
+```"""
 
 # Enables postponed annotations on older snakes (PEP-563)
 # Enables | union syntax for types on older snakes (PEP-604)
@@ -10,16 +46,19 @@ import logging
 import pathlib
 from typing import Any
 
-from .. import tree
-from ..context import Context
-from ..error import TransformDirectiveTypeError, TransformDirectiveUnknownError
-from ..parse.document import Omnifest
+import yaml
+
+from . import tree
+from .constant import PREFIX
+from .context import Context
+from .error import TransformDirectiveTypeError, TransformDirectiveUnknownError
 
 log = logging.getLogger(__name__)
 
 
-# The prefix used for directives
-PREFIX = "otk."
+def is_directive(needle: Any) -> bool:
+    """Is a given needle a directive identifier?"""
+    return isinstance(needle, str) and needle.startswith(PREFIX)
 
 
 @tree.must_be(dict)
@@ -49,7 +88,8 @@ def include(ctx: Context, tree: Any) -> Any:
         # TODO, better error type
         raise Exception("otk.include nonexistent file %r" % file)
 
-    return Omnifest.from_yaml_path(file, ensure=False).to_tree()
+    # TODO
+    return yaml.safe_load(file.read_text())
 
 
 def op(ctx: Context, tree: Any, key: str) -> Any:
@@ -118,7 +158,7 @@ def op_map_merge(ctx: Context, tree: dict[str, Any]) -> Any:
 @tree.must_pass(tree.has_keys(["scope", "if-set"]))
 def customization(ctx: Context, tree: dict[str, Any], key) -> Any:
     """Apply a customization."""
-    log.warning("applying customization %r", key)
+    log.debug("applying customization %r", key)
 
     # TODO take in customizations somewhere and use them here, this is
     # TODO currently just a placeholder.

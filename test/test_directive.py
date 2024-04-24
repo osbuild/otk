@@ -1,12 +1,12 @@
 import pytest
 
-from otk.transform.directive import op_seq_merge, op_map_merge, desugar, define, include
-from otk.context import Context
-from otk.error import TransformDirectiveTypeError, TransformDirectiveArgumentError
+from otk.context import CommonContext
+from otk.error import TransformDirectiveArgumentError, TransformDirectiveTypeError
+from otk.directive import define, desugar, include, op_map_merge, op_seq_merge
 
 
 def test_define():
-    ctx = Context()
+    ctx = CommonContext()
 
     define(ctx, {"a": "b", "c": 1})
 
@@ -15,7 +15,7 @@ def test_define():
 
 
 def test_define_unhappy():
-    ctx = Context()
+    ctx = CommonContext()
 
     with pytest.raises(TransformDirectiveTypeError):
         define(ctx, 1)
@@ -25,14 +25,14 @@ def test_define_unhappy():
 
 
 def test_include_unhappy():
-    ctx = Context()
+    ctx = CommonContext()
 
     with pytest.raises(TransformDirectiveTypeError):
         include(ctx, 1)
 
 
 def test_op_seq_merge():
-    ctx = Context()
+    ctx = CommonContext()
 
     l1 = [1, 2, 3]
     l2 = [4, 5, 6]
@@ -43,7 +43,7 @@ def test_op_seq_merge():
 
 
 def test_op_seq_merge_unhappy():
-    ctx = Context()
+    ctx = CommonContext()
 
     with pytest.raises(TransformDirectiveTypeError):
         op_seq_merge(ctx, 1)
@@ -59,7 +59,7 @@ def test_op_seq_merge_unhappy():
 
 
 def test_op_map_merge():
-    ctx = Context()
+    ctx = CommonContext()
 
     d1 = {"foo": "bar"}
     d2 = {"bar": "foo"}
@@ -70,7 +70,7 @@ def test_op_map_merge():
 
 
 def test_op_map_merge_unhappy():
-    ctx = Context()
+    ctx = CommonContext()
 
     with pytest.raises(TransformDirectiveTypeError):
         op_map_merge(ctx, 1)
@@ -86,7 +86,7 @@ def test_op_map_merge_unhappy():
 
 
 def test_desugar():
-    ctx = Context()
+    ctx = CommonContext()
     ctx.define("str", "bar")
     ctx.define("int", 1)
     ctx.define("float", 1.1)
@@ -101,7 +101,7 @@ def test_desugar():
 
 
 def test_desugar_unhappy():
-    ctx = Context()
+    ctx = CommonContext()
     ctx.define("dict", {})
 
     with pytest.raises(TransformDirectiveTypeError):

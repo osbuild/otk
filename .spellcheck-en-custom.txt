@@ -18,3 +18,5 @@ Pre
 pre
 fedoraproject
 Changelog
+entrypoint
+README
