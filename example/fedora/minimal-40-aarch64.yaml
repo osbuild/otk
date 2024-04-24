@@ -2,6 +2,6 @@ otk.version: 1
 
 otk.define:
   version: 40
-  architecture: x86_64
+  architecture: aarch64
 
 otk.include: "minimal-common.yaml"
