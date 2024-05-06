@@ -42,3 +42,10 @@ otk.define:
       passno: 2
 
 otk.include: "minimal-common.yaml"
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: "osbuild/buildroot.yaml"
+    - otk.include: "osbuild/pipeline/tree.yaml"
+    - otk.include: "osbuild/pipeline/raw.yaml"
+    - otk.include: "osbuild/pipeline/xz.yaml"
