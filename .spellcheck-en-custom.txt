@@ -20,3 +20,12 @@ fedoraproject
 Changelog
 entrypoint
 README
+Frontend
+jobqueue
+organise
+organised
+deprecations
+subdirectory
+kickstarts
+koji
+livemediacreator
