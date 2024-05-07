@@ -37,7 +37,7 @@ otk.target.osbuild.tree:
 
 ## `otk.define`
 
-Defines variables that can be used through the `otk.variable` directive in
+Defines variables that can be used through the `${}` directive in
 other parts of the omnifest.
 
 Variable scope is global, an `otk.define` directive anywhere in the omnifest
