@@ -2,7 +2,7 @@
 
 ## osbuild
 
-These directives are only allowed within a [`otk.target.osbuild.<name>`](./directive#otktargetconsumername).
+These directives are only allowed within a [`otk.target.osbuild.<name>`](./01-directive.md#otktargetconsumername).
 
 ### `otk.external.osbuild.depsolve-dnf4`
 
@@ -14,7 +14,7 @@ osbuild manifest as sources.
 Expects a `map` as its value.
 
 `osbuild` directives to write files. **If a stage exists for the type of file
-you want to write: use it.** See the [best practices](../best-practices).
+you want to write: use it.** See the [best practices](../04-best-practices.md).
 
 ### `otk.external.osbuild.file-from-text`
 

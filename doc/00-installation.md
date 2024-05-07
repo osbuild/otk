@@ -17,4 +17,4 @@ To start hacking on `otk` you can:
 
 This will get you an activated Python virtual environment with an editable install of `otk`. You can then run edit source in `src/` and run `otk` as long as your virtual environment is enabled.
 
-You can read more about [contributing](./contributing)
+You can read more about [contributing](./01-contributing.md)

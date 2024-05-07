@@ -1,10 +1,10 @@
 # Directive
 
-In [omnifests](./) directives are sections of the document that get transformed by `otk` into something else.
+In [omnifests](./index.md) directives are sections of the document that get transformed by `otk` into something else.
 
 `otk` has various directives that can be used in an omnifest. Generally these directives can appear anywhere in the tree unless otherwise specified (see below) and they are replaced with other trees or values as produced by the directive.
 
-There are [example omnifests](https://github.com/osbuild/otk/tree/main/example) for various distributions and images in a [source checkout](../installation).
+There are [example omnifests](https://github.com/osbuild/otk/tree/main/example) for various distributions and images in a [source checkout](../00-installation.md).
 
 ## `otk.version`
 
@@ -231,5 +231,5 @@ which processes all non-external directives. After this it processes each
 target in the omnifest with a context specific to the target. In this phase
 the `otk.external` directives are resolved.
 
-Read more about [external directives](./external) in their specific
+Read more about [external directives](./02-external.md) in their specific
 documentation section.
