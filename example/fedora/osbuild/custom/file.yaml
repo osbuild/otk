@@ -1,4 +1,0 @@
-mtk.define:
-  file_customization_packages:
-    include:
-      - example
