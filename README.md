@@ -11,7 +11,7 @@ manifests.
 
 ## Documentation
 
-You can find `otk`'s documentation on [our documentation website](https://osbuild.org/docs/developer-guide/projects/otk). This README contains a small summary of directly useful information.
+You can find `otk`'s documentation in the [/doc](./doc) subdirectory. This README contains a small summary of directly useful information.
 
 ## Usage
 
