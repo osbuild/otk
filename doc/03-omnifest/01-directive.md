@@ -196,26 +196,66 @@ otk.meta.kiwi:
 
 ## `otk.customization`
 
+A `otk.customization` is distinct from a `otk.define` because:
+- End-users will supply them
+- ?
+
 Customizations are conditional blocks that receive separate input through
-`otk compile -Cname=data`, a customization is considered to be active when it
-is passed data. If a customization is passed multiple times then the `defined`
-block is repeated multiple times, once for each input.
-
-Expects a `map` for its value which contains an `if-set` key. The `default` key
-is optional. If a `default` key is not passed and the customization is inactive
-then the customization block is effectively a no-op and will be removed from the
-tree. The values of `default` and `if-set` can be of any type.
-
+a `customization` file `otk compile -C customizations.yaml` that contains a
+map of customization settings in yaml format, e.g.
 ```yaml
-otk.customization.name:
+hostname: "lala"
+
+user:
+  alice:
+    password: "$5$xx$aabbccddeeffgghhiijj"  # notsecret
+    key: "ssh-rsa AAA ... user@email.com"
+    groups: ["wheel"]
+```
+
+In the `otk` files a customization is expected to be a `map` for its
+value which contains an `if-set` key. The `default` key is
+optional. If a `default` key is not passed and the customization is
+inactive then the customization block is effectively a no-op and will
+be removed from the tree. The values of `default` and `if-set` can be
+of any type. In `if-set` the value of the customization can be accessed
+as if it was a `otk.define` defined variable with the same name as the
+customization.
+
+Simple example for a hostname customization:
+```yaml
+otk.customization.hostname:
   default:
-    - type: org.osbuild.stage
-      options: none
+    hostname: "localhost.localdomain"
   if-set:
-    - type: org.osbuild.stage
-      options: ${this.data}  # it's not going to be `this`
-    - type: org.osbuild.stage
-      options: ${this.data}  # it's not going to be `this`
+    hostname: ${hostname}
+```
+and the matching customization file:
+```yaml
+hostname = "lala"
+```
+
+Complex example for a customization could include adding stages but
+we have no use-case for this yet (TBD: do it with users which requires
+a loop because there can be many users):
+```yaml
+otk.customization.somename:
+  default:
+    - type: org.osbuild.stage1
+        options: some-default
+  if-set:
+    - type: org.osbuild.stage1
+      options: ${somename.stage1.data1}
+    - type: org.osbuild.stage2
+      options: ${somename.stage2.data2}
+```
+and the matching customization file:
+```yaml
+somename:
+  stage1:
+    data1: foo
+  stage2:
+    data2: bar
 ```
 
 ## `otk.external`

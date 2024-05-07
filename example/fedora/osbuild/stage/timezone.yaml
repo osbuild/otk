@@ -5,4 +5,4 @@ options:
     default:
       zone: UTC
     if-set:
-      zone: UTC
+      zone: ${timezone}

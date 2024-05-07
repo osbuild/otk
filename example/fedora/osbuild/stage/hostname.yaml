@@ -5,4 +5,4 @@ options:
     default:
       hostname: localhost.localdomain
     if-set:
-      language: localhost.localdomain
+      hostname: ${hostname}
