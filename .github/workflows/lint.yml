@@ -15,5 +15,7 @@ jobs:
         run: sudo apt-get install -y yamllint
       - name: "Clone Repository"
         uses: actions/checkout@v4
+      - name: Install
+        run: pip install ruff
       - name: Run linters
         run: make lint
