@@ -2,7 +2,7 @@ import pytest
 
 from otk.context import CommonContext
 from otk.error import TransformDirectiveArgumentError, TransformDirectiveTypeError
-from otk.directive import define, desugar, include, op_map_merge, op_seq_merge
+from otk.directive import define, desugar, include, op_join
 
 
 def test_define():
@@ -31,7 +31,7 @@ def test_include_unhappy():
         include(ctx, 1)
 
 
-def test_op_seq_merge():
+def test_op_seq_join():
     ctx = CommonContext()
 
     l1 = [1, 2, 3]
@@ -39,26 +39,38 @@ def test_op_seq_merge():
 
     d = {"values": [l1, l2]}
 
-    assert op_seq_merge(ctx, d) == [1, 2, 3, 4, 5, 6]
+    assert op_join(ctx, d) == [1, 2, 3, 4, 5, 6]
 
 
-def test_op_seq_merge_unhappy():
+def test_op_join_unhappy():
     ctx = CommonContext()
 
     with pytest.raises(TransformDirectiveTypeError):
-        op_seq_merge(ctx, 1)
+        op_join(ctx, 1)
 
     with pytest.raises(TransformDirectiveArgumentError):
-        op_seq_merge(ctx, {})
+        op_join(ctx, {})
 
     with pytest.raises(TransformDirectiveTypeError):
-        op_seq_merge(ctx, {"values": 1})
+        op_join(ctx, {"values": 1})
 
     with pytest.raises(TransformDirectiveTypeError):
-        op_seq_merge(ctx, {"values": [1, {2: 3}]})
+        op_join(ctx, {"values": [1, {2: 3}]})
+
+    with pytest.raises(TransformDirectiveTypeError):
+        op_join(ctx, 1)
+
+    with pytest.raises(TransformDirectiveArgumentError):
+        op_join(ctx, {})
+
+    with pytest.raises(TransformDirectiveTypeError):
+        op_join(ctx, {"values": 1})
+
+    with pytest.raises(TransformDirectiveTypeError):
+        op_join(ctx, {"values": [1, {2: 3}]})
 
 
-def test_op_map_merge():
+def test_op_map_join():
     ctx = CommonContext()
 
     d1 = {"foo": "bar"}
@@ -66,23 +78,7 @@ def test_op_map_merge():
 
     d = {"values": [d1, d2]}
 
-    assert op_map_merge(ctx, d) == {"foo": "bar", "bar": "foo"}
-
-
-def test_op_map_merge_unhappy():
-    ctx = CommonContext()
-
-    with pytest.raises(TransformDirectiveTypeError):
-        op_map_merge(ctx, 1)
-
-    with pytest.raises(TransformDirectiveArgumentError):
-        op_map_merge(ctx, {})
-
-    with pytest.raises(TransformDirectiveTypeError):
-        op_map_merge(ctx, {"values": 1})
-
-    with pytest.raises(TransformDirectiveTypeError):
-        op_map_merge(ctx, {"values": [1, {2: 3}]})
+    assert op_join(ctx, d) == {"foo": "bar", "bar": "foo"}
 
 
 def test_desugar():
