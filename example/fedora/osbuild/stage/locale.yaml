@@ -1,7 +1,6 @@
 type: org.osbuild.locale
 options:
   otk.customization.locale:
-    scope: tree
     default:
       language: en_US
     if-set:

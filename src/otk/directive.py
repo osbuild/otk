@@ -155,7 +155,7 @@ def op_map_merge(ctx: Context, tree: dict[str, Any]) -> Any:
 
 
 @tree.must_be(dict)
-@tree.must_pass(tree.has_keys(["scope", "if-set"]))
+@tree.must_pass(tree.has_keys(["if-set"]))
 def customization(ctx: Context, tree: dict[str, Any], key) -> Any:
     """Apply a customization."""
     log.debug("applying customization %r", key)

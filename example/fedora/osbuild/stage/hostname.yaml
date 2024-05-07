@@ -1,7 +1,6 @@
 type: org.osbuild.hostname
 options:
   otk.customization.hostname:
-    scope: tree
     default:
       hostname: localhost.localdomain
     if-set:
