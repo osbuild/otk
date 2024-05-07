@@ -173,27 +173,6 @@ otk.define:
         - ${b}
 ```
 
-## `otk.meta.<name>`
-
-Under the `otk.meta` namespace any data can be stored that other applications
-need to use from an omnifest.
-
-Expects a `map` for its value.
-
-```yaml
-otk.meta.osbuild-composer:
-  boot_mode: uefi
-  export: image
-  pipelines:
-    build:
-      - root
-    system:
-      - tree
-
-otk.meta.kiwi:
-  label: "A Label"
-```
-
 ## `otk.customization`
 
 Customizations are conditional blocks that receive separate input through
