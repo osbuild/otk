@@ -4,19 +4,15 @@
 
 These directives are only allowed within a [`otk.target.osbuild.<name>`](./01-directive.md#otktargetconsumername).
 
-### `otk.external.osbuild.depsolve-dnf4`
+### `otk.external.osbuild.depsolve-dnf{4,5}`
 
 Solves a list of package specifications to RPMs and specifies them in the
 osbuild manifest as sources.
 
-### `otk.external.osbuild.depsolve-dnf5`
-
-Expects a `map` as its value.
+### `otk.external.osbuild.file-from-text`
 
 `osbuild` directives to write files. **If a stage exists for the type of file
 you want to write: use it.** See the [best practices](../04-best-practices.md).
-
-### `otk.external.osbuild.file-from-text`
 
 Write inline text to a file. Creates a source in the manifest and copies that
 source to the destination in the tree.
