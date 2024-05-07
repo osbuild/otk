@@ -127,13 +127,16 @@ otk.include: file.yaml
 
 Perform various operations on variables.
 
-### `otk.op.seq.join`
+### `otk.op.join`
 
-Join two or more variables of type sequence together, trying to join other types
-will cause an error.
+Join two or more variables of type `sequence` or `map` together, trying to
+join other types or mix types will cause an error. Duplicate keys in
+maps are considered an error.
 
 Expects a `map` for its value that contains a `values` key with a value of type
-`seq`
+`seq` or `map`.
+
+Example when using with a `sequence` as input:
 
 ```yaml
 otk.define:
@@ -144,21 +147,15 @@ otk.define:
     - 3
     - 4
   c:
-    otk.op.seq.join:
+    otk.op.join:
       values:
         - ${a}
         - ${b}
-        - - 5
-          - 6
+
+-> Result c: [1, 2, 3, 4]
 ```
 
-### `otk.op.map.join`
-
-Join two or more variables of type map together. Trying to merge other types
-will cause an error. Duplicate keys in the maps are considered an error.
-
-Expects a `map` for its value that contains a `values` key with a value of type
-`seq`
+Example when using with a `map` as input:
 
 ```yaml
 otk.define:
@@ -167,10 +164,15 @@ otk.define:
   b:
     b: 2
   c:
-    otk.op.map.merge:
+    otk.op.join:
       values:
         - ${a}
         - ${b}
+
+-> Result
+  c:
+   a: 1
+   b: 2
 ```
 
 ## `otk.meta.<name>`
