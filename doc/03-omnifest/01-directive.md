@@ -201,21 +201,49 @@ Customizations are conditional blocks that receive separate input through
 is passed data. If a customization is passed multiple times then the `defined`
 block is repeated multiple times, once for each input.
 
-Expects a `map` for its value which contains an `if-set` key. The `default` key
-is optional. If a `default` key is not passed and the customization is inactive
-then the customization block is effectively a no-op and will be removed from the
-tree. The values of `default` and `if-set` can be of any type.
+In the `otk` files a customization is expected to be a `map` for its
+value which contains an `if-set` key. The `default` key is
+optional. If a `default` key is not passed and the customization is
+inactive then the customization block is effectively a no-op and will
+be removed from the tree. The values of `default` and `if-set` can be
+of any type. In `if-set` the value of the customization can be accessed
+as if it was a `otk.define` defined variable with the same name as the
+customization.
 
+Simple example for a hostname customization:
 ```yaml
-otk.customization.name:
+otk.customization.hostname:
   default:
-    - type: org.osbuild.stage
-      options: none
+    hostname: "localhost.localdomain"
   if-set:
-    - type: org.osbuild.stage
-      options: ${this.data}  # it's not going to be `this`
-    - type: org.osbuild.stage
-      options: ${this.data}  # it's not going to be `this`
+    hostname: ${hostname}
+```
+and the matching customization file:
+```yaml
+hostname = "lala"
+```
+
+Customizations typically involve sequences, e.g. when adding users.
+For this there is a `loop` construct:
+```
+otk.customization.user:
+  if-set:
+    # loop could imply "if-set"
+    # loop loops over the customization sequence and yields "item" for each
+    loop:
+      - type: org.osbuild.mkdir
+        options: 
+          - path: /var/home/${item.name}
+      - type: org.osbuild.user
+        options:
+          ${item.name}:
+            # alternative: elminate keys automatically when the value is "None"
+            if-set: ${item.groups}
+              groups: ${item.groups}
+            if-set: ${item.password}
+              password: ${item.password}
+            if-set: ${item.key}
+              key: ${item.key}
 ```
 
 ## `otk.external`
