@@ -228,12 +228,12 @@ For this there is a `loop` construct:
 ```
 otk.customization.user:
   if-set:
-    # loop could imply "if-set"
+    # ensure /var/home on a bootc system
+    - type: org.osbuild.mkdir
+      options:
+        - path: /var/home/
     # loop loops over the customization sequence and yields "item" for each
     loop:
-      - type: org.osbuild.mkdir
-        options: 
-          - path: /var/home/${item.name}
       - type: org.osbuild.user
         options:
           ${item.name}:
