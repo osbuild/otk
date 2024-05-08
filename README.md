@@ -1,6 +1,6 @@
 # Omnifest Toolkit
 
-**THIS IS A PROOF OF CONCEPT REPOSITORY**
+**THIS IS A PROOF OF CONCEPT REPOSITORY. MAIN CAN BE BROKEN AT ANY POINT AND MANY THINGS ARE SUBJECT TO CHANGE. WE'RE DISCUSSING DESIGN IN ISSUES AND PULL REQUESTS**
 
 We are still sketching out this potential approach to generating manifests and
 thus this repository is very much a work in progress.
