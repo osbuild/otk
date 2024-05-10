@@ -5,8 +5,6 @@ import json
 from copy import deepcopy
 
 import click
-from rich.console import Console
-from rich.logging import RichHandler
 
 from .constant import PREFIX_TARGET
 from .context import CommonContext
@@ -59,11 +57,7 @@ def root(
             (
                 JSONSequenceHandler(identifier, stream=sys.stderr)
                 if json
-                else RichHandler(
-                    omit_repeated_times=False,
-                    show_path=False,
-                    console=Console(stderr=True),
-                )
+                else logging.StreamHandler()
             )
         ],
     )
