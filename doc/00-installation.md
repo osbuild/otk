@@ -13,8 +13,10 @@ To start hacking on `otk` you can:
 # ...
 € pip install -e ".[dev]"
 # ...
+€ pre-commit install
+# ...
 ```
 
-This will get you an activated Python virtual environment with an editable install of `otk`. You can then run edit source in `src/` and run `otk` as long as your virtual environment is enabled.
+This will get you an activated Python virtual environment with an editable install of `otk`. You can then run edit source in `src/` and run `otk` as long as your virtual environment is enabled. When you do a `git commit` some verification steps will run locally on the changed files.
 
 You can read more about [contributing](./01-contributing.md)
