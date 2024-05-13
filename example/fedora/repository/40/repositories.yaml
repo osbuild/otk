@@ -1,2 +1,2 @@
 - id: "fedora"
-  metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-${version}&arch=aarch64
+  metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-${version}&arch=${architecture}
