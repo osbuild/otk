@@ -2,7 +2,7 @@ otk.version: 1
 
 otk.define:
   version: 40
-  architecture: "aarch64"
+  architecture: "x86_64"
   isolabel: Fedora-${version}-${architecture}
 
   packages:
