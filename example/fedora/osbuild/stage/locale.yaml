@@ -4,4 +4,4 @@ options:
     default:
       language: en_US
     if-set:
-      language: en_US
+      language: ${locale}
