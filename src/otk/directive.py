@@ -172,7 +172,7 @@ def desugar(ctx: Context, tree: str) -> Any:
     then we replace the values inside the string. This requires the type of
     the variable to be replaced to be either str, int, or float."""
 
-    # TODO use parsimonous instead of this
+    print("ctx", tree)
 
     if tree.startswith("${"):
         name = tree[2 : tree.index("}")]
