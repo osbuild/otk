@@ -44,6 +44,7 @@ from __future__ import annotations
 import itertools
 import logging
 import pathlib
+import re
 from typing import Any, List
 
 import yaml
@@ -172,34 +173,43 @@ def desugar(ctx: Context, tree: str) -> Any:
     then we replace the values inside the string. This requires the type of
     the variable to be replaced to be either str, int, or float."""
 
-    print("ctx", tree)
+    bracket = r"\$\{%s\}"
+    pattern = bracket % r"(?P<name>[a-zA-Z0-9-_\.]+)"
 
-    if tree.startswith("${"):
-        name = tree[2 : tree.index("}")]
-        data = ctx.variable(tree[2 : tree.index("}")])
-        log.debug("desugaring %r as fullstring to %r", name, data)
-        return ctx.variable(tree[2 : tree.index("}")])
+    # If there is a single match and its span is the entire haystack then we
+    # return its value directly.
+    if match := re.fullmatch(pattern, tree):
+        return ctx.variable(match.group("name"))
 
-    if "${" in tree:
-        name = tree[tree.index("${") + 2 : tree.index("}")]
-        head = tree[: tree.index("${")]
-        tail = tree[tree.index("}") + 1 :]
+    # Let's find all matches if there are any. We use `list(re.finditer(...))`
+    # to get a list of match objects instead of `re.findall` which gives a list
+    # of matchgroups.
 
-        data = ctx.variable(name)
+    # If there are multiple matches then we always interpolate strings.
+    if matches := list(re.finditer(pattern, tree)):
+        for match in matches:
+            name = match.group("name")
+            data = ctx.variable(name)
 
-        if isinstance(data, (int, float)):
-            data = str(data)
+            # We now how to turn ints and floats into str's
+            if isinstance(data, (int, float)):
+                data = str(data)
 
-        if not isinstance(data, str):
-            raise TransformDirectiveTypeError(
-                "string sugar resolves to an incorrect type, expected int, float, or str but got %r",
-                data,
-            )
+            # Any other type we do not
+            if not isinstance(data, str):
+                raise TransformDirectiveTypeError(
+                    "string sugar resolves to an incorrect type, expected int, float, or str but got %r",
+                    data,
+                )
 
-        data = head + data + tail
+            # Replace all occurences of this name in the str
 
-        log.debug("desugaring %r as substring to %r", name, data)
+            # NOTE: this means we can recursively replace names, do we want
+            # that?
+            tree = re.sub(bracket % re.escape(name), data, tree)
 
-        return data
+        log.debug("desugaring %r as substring to %r", name, tree)
+
+        return tree
 
     return tree
