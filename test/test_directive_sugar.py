@@ -1,7 +1,6 @@
 import pytest
 
 from otk.context import CommonContext
-from otk.document import Omnifest
 from otk.error import TransformDirectiveTypeError
 from otk.directive import desugar
 
