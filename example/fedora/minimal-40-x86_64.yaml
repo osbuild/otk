@@ -5,47 +5,4 @@ otk.define:
   architecture: "x86_64"
   isolabel: Fedora-${version}-${architecture}
 
-  packages:
-    # Repositories to fetch packages from
-    repositories:
-      otk.include: "repository/${version}/repositories.yaml"
-    # GPG keys to verify packages with
-    keys:
-      otk.include: "repository/${version}/keys.yaml"
-    # These packages are used in the buildroot
-    buildroot:
-      docs: false
-      weak: false
-      packages:
-        otk.include: "packages/${version}/_buildroot.yaml"
-    # These packages are used for the operating system tree which is what ends
-    # up in the outputs.
-    tree:
-      docs: false
-      weak: false
-      packages:
-        otk.include: "packages/${version}/minimal.yaml"
-  filesystem:
-    root:
-      uuid: "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75"
-      vfs_type: "ext4"
-      path: "/"
-      options: "defaults"
-    boot:
-      uuid: "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8"
-      vfs_type: "ext4"
-      path: "/boot"
-      options: "defaults"
-    boot-efi:
-      uuid: "7B77-95E7"
-      vfs_type: "vfat"
-      path: "/boot/efi"
-      options: "defaults,uid=0,gid=0,umask=077,shortname=winnt"
-      passno: 2
-
-otk.target.osbuild:
-  pipelines:
-    - otk.include: "osbuild/buildroot.yaml"
-    - otk.include: "osbuild/pipeline/tree.yaml"
-    - otk.include: "osbuild/pipeline/raw.yaml"
-    - otk.include: "osbuild/pipeline/xz.yaml"
+otk.include.minimal-40-common: "minimal-40-common.yaml"
