@@ -12,11 +12,11 @@ import logging
 from typing import Any, Type
 
 from .constant import (
-    NAME_DEFINE,
-    NAME_INCLUDE,
     NAME_VERSION,
     PREFIX_CUSTOMIZATION,
+    PREFIX_DEFINE,
     PREFIX_OP,
+    PREFIX_INCLUDE,
     PREFIX_TARGET,
 )
 from .context import Context, OSBuildContext
@@ -35,7 +35,7 @@ def resolve_dict(ctx: Context, tree: dict[str, Any]) -> Any:
             # Define, target, and version are done separately, they allow
             # sibling elements thus they return the tree with their key set to their
             # (resolved) value.
-            if key == NAME_DEFINE:
+            if key.startswith(PREFIX_DEFINE):
                 return tree | {"otk.define": resolve(ctx, define(ctx, val))}
             elif key == NAME_VERSION:
                 continue
@@ -46,7 +46,7 @@ def resolve_dict(ctx: Context, tree: dict[str, Any]) -> Any:
             if len(tree) > 1:
                 raise Exception("no siblings!")
 
-            if key == NAME_INCLUDE:
+            if key.startswith(PREFIX_INCLUDE):
                 return resolve(ctx, include(ctx, val))
             elif key.startswith(PREFIX_OP):
                 return resolve(ctx, op(ctx, resolve(ctx, val), key))
