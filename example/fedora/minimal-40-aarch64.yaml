@@ -49,3 +49,12 @@ otk.target.osbuild:
     - otk.include: "osbuild/pipeline/tree.yaml"
     - otk.include: "osbuild/pipeline/raw.yaml"
     - otk.include: "osbuild/pipeline/xz.yaml"
+
+otk.target.osbuild-composer:
+  boot_mode: uefi
+  export: image
+  pipelines:
+    build:
+      - buildroot
+    system:
+      - tree
