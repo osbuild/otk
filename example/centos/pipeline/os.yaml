@@ -1,0 +1,163 @@
+name: os
+build: "name:build"
+
+stages:
+  - type: org.osbuild.kernel-cmdline
+    options:
+      root_fs_uuid: ${filesysteem.root.uuid}
+      # seems consensus is to *not* use jinja2 for now (unless we have a better use-case than
+      # '" ".join(kernle_opts_list)')
+      # TODO: consider a small subset of "filters" inspired by jinja2 "${ kernel_opts_list | join }" ?
+      kernel_opts:
+        otk.op.string.join:  # ??
+        otk.op.join.as_string:
+          delimiter: " "  # call it "seperator"?
+          values:         # maybe "items" ?
+            ${kernel_opts_list}
+  - otk.external.osbuild.depsolve-dnf4:
+    architecture: ${architecture}
+    releasever: ${version}
+    module_platform_id: platform:el${version}
+    docs: ${packages.os.docs}
+    weak: ${packages.os.weak}
+    repositories: ${packages.repositories}
+    gpgkeys: ${packages.keys}
+    packages: ${packages.os.packages}
+  # BLS - Boot Loader Specification
+  - type: org.osbuild.fix-bls
+    options:
+      # its empty if there is a boot partition *and* it's /boot (otherwise /boot if there is no boot
+      # partition) this has to be known by the USER we could also generate it in otk.external based
+      # on $partitiontable
+      prefix: ""
+  # ----- two possible idas how to do customizations:
+  # 1) use a specific directive (otk.customization.*)
+  # 2) use otk.define and conventions (probably stops working once a customization adds multiple stage like openscap
+  # tailoring, users)
+  # ondrej: json schema typing for customizations are (probably) important, let's try to add typing
+  # otk compile -Clanguage=...
+  # or
+  # otk compile -Dcustomization.language=...
+  # otk compile --include="myvars.yaml"
+  - type: org.osbuild.locale
+    options:
+      language:
+        otk.customization.language:
+          if-set: ${customization.language}
+          default: en_US.UTF-8
+  # -----
+  - otk.customization.user:
+    if-set:
+      - type: org.osbuild.user
+      - type: org.osbuild.something
+    default: []
+  # -----
+  - type: org.osbuild.locale
+    options:
+      language: ${customization.language}
+  # -----
+  - type: org.osbuild.keymap
+    options:
+      keymap: ${customization.keymap}
+      x11-keymap:
+        layouts:
+          - ${customization.keymap}
+  - type: org.osbuild.timezone
+    options:
+      zone: ${customization.timezone}
+  - type: org.osbuild.chrony
+    options: ${customization.chrony}
+  - type: org.osbuild.sysconfig
+    options:
+      kernel:
+        update_default: true
+        default_kernel: "kernel"
+      network:
+        networking: true
+        no_zero_conf: true
+      network-scripts:
+        ifcfg:
+          eth0:
+            bootproto: "dhcp"
+            device: "eth0"
+            ipv6init: false   # TODO: ami only? should this be a var?
+            onboot: true
+            peerdns: true
+            type: "Ethernet"
+            userctl: true
+  - type: org.osbuild.systemd-logind
+    options:
+      filename: "00-getty-fixes.conf"
+      config:
+        Login:
+          NAutoVTs: 0
+  - type: org.osbuild.cloud-init
+    options:
+      filename: "00-rhel-default-user.cfg"
+      config:
+        system_info:
+          default_user:
+            name: "${cloud_init_user}"
+  - type: org.osbuild.modprobe
+    options:
+      filename: "blacklist-nouveau.conf"
+      commands:
+        - command: "blacklist"
+          modulename: "nouveau"
+  - type: org.osbuild.modprobe
+    options:
+      filename: "blacklist-amdgpu.conf"
+      commands:
+        - command: "blacklist"
+          modulename: "amdgpu"
+  - type: org.osbuild.dracut.conf
+    options:
+      filename: "sgdisk.conf"
+      config:
+        install_items:
+          - sgdisk
+  - type: org.osbuild.dracut.conf
+    options:
+      filename: ec2.conf
+      config:
+        add_drivers:
+          - nvme
+          - xen-blkfront
+  - type: org.osbuild.systemd.unit
+    options:
+      unit: nm-cloud-setup.service
+      dropin: 10-rh-enable-for-ec2.conf
+      config:
+        Service:
+          Environment:
+            - key: NM_CLOUD_SETUP_EC2
+              value: "yes"
+  - type: org.osbuild.authselect
+    options:
+      profile: sssd
+  - type: org.osbuild.sshd_config
+    options:
+      config:
+        PasswordAuthentication: ${sshd_password_authentication}
+  - otk.external.osbuild.partition-table.gen-fstab-stage:   # expands to "typ: org.osbuild.fstab\n..."
+  - type: org.osbuild.grub2
+    options:
+    root_fs_uuid: ${filesystem.root.uuid}
+    boot_fs_uuid: ${filesystem.boot.uuid}
+    kernel_opts: '{{ " ".join(kernel_opts_list) }}'
+    legacy: i386-pc
+    uefi:
+      vendor: centos
+      unified: true
+    # TODO: expose this somehow from the depsolve (could also be ${depsolve.kernel...})
+    saved_entry: "ffffffffffffffffffffffffffffffff-${kernel-core.version}"
+    write_cmdline: false
+    config:
+      default: saved
+  - type: org.osbuild.systemd
+    options:
+      enabled_services: ${enabled_services}
+      default_target: multi-user.target
+  - type: org.osbuild.selinux
+    options:
+      file_contexts: etc/selinux/targeted/contexts/files/file_contexts

@@ -1,0 +1,20 @@
+otk.version: "1"
+
+otk.define.centos-9-x86_64-qcow2:
+  architecture: "x86_64"
+  version: "9"
+  kernel_opts_list: []
+  sshd_password_authentication: true
+  customization:
+    language: "C.UTF-8"
+    timezone: "America/New_York"
+  enabled_services: []
+  filesystem:
+    # this will expand to "root: ...\nboot: \n"etc (i.e. a real file-systems) and "kernel_opts_list:
+    # [list_item1, list_item2, ..]"
+    # (i.e. define the partition table as a map of root/boot/boot-efi vars)
+    # *and* it needs to undstand customizations (e.g. adding extra parititions somehow, size contraints)
+    otk.external.osbuild.create-partition-table-defines:
+      total_size: 10G
+
+otk.include.centos-9-x86_64: "common/centos-9.yaml"
