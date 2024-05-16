@@ -152,17 +152,6 @@ def _op_map_join(ctx: Context, values: List[dict]) -> Any:
     return result
 
 
-@tree.must_be(dict)
-@tree.must_pass(tree.has_keys(["if-set"]))
-def customization(ctx: Context, tree: dict[str, Any], key) -> Any:
-    """Apply a customization."""
-    log.debug("applying customization %r", key)
-
-    # TODO take in customizations somewhere and use them here, this is
-    # TODO currently just a placeholder.
-    return tree.get("default")
-
-
 @tree.must_be(str)
 def desugar(ctx: Context, tree: str) -> Any:
     """Desugar a string. If the string consists of a single `${name}` value
