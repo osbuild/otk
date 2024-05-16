@@ -196,30 +196,6 @@ otk.meta.kiwi:
   label: "A Label"
 ```
 
-## `otk.customization`
-
-Customizations are conditional blocks that receive separate input through
-`otk compile -Cname=data`, a customization is considered to be active when it
-is passed data. If a customization is passed multiple times then the `defined`
-block is repeated multiple times, once for each input.
-
-Expects a `map` for its value which contains an `if-set` key. The `default` key
-is optional. If a `default` key is not passed and the customization is inactive
-then the customization block is effectively a no-op and will be removed from the
-tree. The values of `default` and `if-set` can be of any type.
-
-```yaml
-otk.customization.name:
-  default:
-    - type: org.osbuild.stage
-      options: none
-  if-set:
-    - type: org.osbuild.stage
-      options: ${this.data}  # it's not going to be `this`
-    - type: org.osbuild.stage
-      options: ${this.data}  # it's not going to be `this`
-```
-
 ## `otk.external`
 
 External directives. Directives starting with `otk.external` are redirected

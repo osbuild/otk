@@ -13,14 +13,13 @@ from typing import Any, Type
 
 from .constant import (
     NAME_VERSION,
-    PREFIX_CUSTOMIZATION,
     PREFIX_DEFINE,
     PREFIX_OP,
     PREFIX_INCLUDE,
     PREFIX_TARGET,
 )
 from .context import Context, OSBuildContext
-from .directive import customization, define, desugar, include, is_directive, op
+from .directive import define, desugar, include, is_directive, op
 from .external import call
 
 log = logging.getLogger(__name__)
@@ -50,8 +49,6 @@ def resolve_dict(ctx: Context, tree: dict[str, Any]) -> Any:
                 return resolve(ctx, include(ctx, val))
             elif key.startswith(PREFIX_OP):
                 return resolve(ctx, op(ctx, resolve(ctx, val), key))
-            elif key.startswith(PREFIX_CUSTOMIZATION):
-                return resolve(ctx, customization(ctx, val, key))
             elif key.startswith("otk.external."):
                 if isinstance(ctx, OSBuildContext):
                     return resolve(ctx, call(ctx, key, resolve(ctx, val)))
