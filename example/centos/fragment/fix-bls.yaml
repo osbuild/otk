@@ -1,0 +1,7 @@
+# BLS - Boot Loader Specification
+- type: org.osbuild.fix-bls
+  options:
+    # its empty if there is a boot partition *and* it's /boot (otherwise /boot if there is no boot
+    # partition) this has to be known by the USER we could also generate it in otk.external based
+    # on $partitiontable
+    prefix: ""

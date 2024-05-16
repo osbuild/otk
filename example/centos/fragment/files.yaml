@@ -1,0 +1,15 @@
+otk.op.loop:
+  item: ${customization.files}
+  foreach:
+    - otk.external.osbuild.embed-file:
+      text: ${item.text}
+      path: ${item.path}
+    - type: org.osbuild.chmod
+      options:
+        path: ${item.path}
+        mode: ${item.mode}
+    - type: org.osbuild.chown
+      options:
+        path: ${item.path}
+        user: ${item.user}
+        group: ${item.group}

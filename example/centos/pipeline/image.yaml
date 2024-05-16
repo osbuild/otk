@@ -3,8 +3,11 @@ build: "name:build"
 
 stages:
   - otk.external.osbuild-partition-table.gen-truncate-stage:
+    from: filesystems
   - otk.external.osbuild.partition-table.gen-sfdisk-stage:
+    from: filesystems
   - otk.external.osbuild.partition-table.gen-mkfs-stages:
+    from: filesystems
   - type: org.osbuild.copy
     options:
       paths:
@@ -12,8 +15,10 @@ stages:
         to: mount://-/
     devices:
       otk.external.osbuild.partition-table.gen-devices:
+      from: filesystems
     mounts:
       otk.external.osbuild.partition-table.gen-mounts:
+      from: filesystems
   # TODO drop this stage conditionally on legacy boot support (or not) [is this our use-case for conditionals?]
   - type: org.osbuild.grub2.inst
     options:

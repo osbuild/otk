@@ -1,0 +1,6 @@
+otk.op.if_set:
+  what: ${customization.locale}
+  then:
+    - type: org.osbuild.locale
+      options:
+        locale: ${customization.locale}

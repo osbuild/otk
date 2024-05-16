@@ -1,0 +1,14 @@
+- type: org.osbuild.grub2
+  options:
+  root_fs_uuid: ${filesystem.root.uuid}
+  boot_fs_uuid: ${filesystem.boot.uuid}
+  kernel_opts: '{{ " ".join(kernel_opts_list) }}'
+  legacy: i386-pc
+  uefi:
+    vendor: centos
+    unified: true
+  # TODO: expose this somehow from the depsolve (could also be ${depsolve.kernel...})
+  saved_entry: "ffffffffffffffffffffffffffffffff-${kernel-core.version}"
+  write_cmdline: false
+  config:
+    default: saved

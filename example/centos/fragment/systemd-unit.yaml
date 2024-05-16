@@ -1,0 +1,9 @@
+- type: org.osbuild.systemd.unit
+  options:
+    unit: nm-cloud-setup.service
+    dropin: 10-rh-enable-for-ec2.conf
+    config:
+      Service:
+        Environment:
+          - key: NM_CLOUD_SETUP_EC2
+            value: "yes"
