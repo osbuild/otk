@@ -1,0 +1,5 @@
+otk.op.if-set:
+  what: customization.user
+  then:
+    - type: org.osbuild.users
+      options: ${customization.user}

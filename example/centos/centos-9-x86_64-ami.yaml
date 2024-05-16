@@ -1,5 +1,9 @@
 otk.version: "1"
 
+otk.define.default:
+  default:
+    language: "en_US.UTF-8"
+
 otk.define.centos-9-x86_64-ami:
   architecture: "x86_64"
   version: "9"

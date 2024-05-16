@@ -1,0 +1,13 @@
+- type: org.osbuild.dracut.conf
+  options:
+    filename: "sgdisk.conf"
+    config:
+      install_items:
+        - sgdisk
+- type: org.osbuild.dracut.conf
+  options:
+    filename: ec2.conf
+    config:
+      add_drivers:
+        - nvme
+        - xen-blkfront

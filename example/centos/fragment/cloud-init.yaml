@@ -1,0 +1,7 @@
+type: org.osbuild.cloud-init
+options:
+  filename: "00-rhel-default-user.cfg"
+  config:
+    system_info:
+      default_user:
+        name: "${cloud_init_user}"

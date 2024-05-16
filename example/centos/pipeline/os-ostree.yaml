@@ -37,10 +37,6 @@ stages:
   - otk.include: fragment/systemd-unit.yaml
   - otk.include: fragment/systemd.yaml
 
-  # Custom bits
-  - otk.include: fragment/directories.yaml
-  - otk.include: fragment/files.yaml
-
   - otk.include: fragment/users.yaml
   - otk.include: fragment/oscap.yaml
 

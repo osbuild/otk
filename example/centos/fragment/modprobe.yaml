@@ -1,0 +1,12 @@
+- type: org.osbuild.modprobe
+  options:
+    filename: "blacklist-nouveau.conf"
+    commands:
+      - command: "blacklist"
+        modulename: "nouveau"
+- type: org.osbuild.modprobe
+  options:
+    filename: "blacklist-amdgpu.conf"
+    commands:
+      - command: "blacklist"
+        modulename: "amdgpu"
