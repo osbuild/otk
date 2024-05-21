@@ -10,7 +10,7 @@ import base64
 import pathlib
 import subprocess
 
-import click
+import argparse
 
 
 def source_add(kind, data):
@@ -44,12 +44,6 @@ def source_add_curl(data, checksum, url):
         data["context"]["sources"]["org.osbuild.curl"]["items"][checksum] = {"url": url}
 
 
-@click.group()
-def root():
-    pass
-
-
-@root.command()
 def depsolve_dnf4():
     data = json.loads(sys.stdin.read())
     tree = data["tree"]
@@ -118,7 +112,6 @@ def depsolve_dnf4():
     )
 
 
-@root.command()
 def file_from_text():
     data = json.loads(sys.stdin.read())
 
@@ -155,7 +148,6 @@ def file_from_text():
     )
 
 
-@root.command()
 def file_from_path():
     data = json.loads(sys.stdin.read())
 
@@ -191,3 +183,15 @@ def file_from_path():
             }
         )
     )
+
+
+def root():
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers()
+
+    (subparsers.add_parser('depsolve_dnf4')).set_defaults(func=depsolve_dnf4)
+    (subparsers.add_parser('file_from_text')).set_defaults(func=file_from_text)
+    (subparsers.add_parser('file_from_path')).set_defaults(func=file_from_path)
+
+    args = parser.parse_args()
+    args.func()
