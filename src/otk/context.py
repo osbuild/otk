@@ -76,8 +76,8 @@ class CommonContext(Context):
                     self._variables[name],
                     value,
                 )
-        else:
-            self._variables[name] = value
+
+        self._variables[name] = value
 
     def variable(self, name: str) -> Any:
         parts = name.split(".")
