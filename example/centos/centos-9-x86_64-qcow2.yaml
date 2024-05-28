@@ -14,7 +14,7 @@ otk.define.centos-9-x86_64-qcow2:
     # [list_item1, list_item2, ..]"
     # (i.e. define the partition table as a map of root/boot/boot-efi vars)
     # *and* it needs to undstand customizations (e.g. adding extra parititions somehow, size contraints)
-    otk.external.osbuild.create-partition-table-defines:
+    otk.external.osbuild.create_partition_table_defines:
       total_size: 10G
 
 otk.include.centos-9-x86_64: "common/centos-9.yaml"

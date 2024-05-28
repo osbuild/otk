@@ -200,7 +200,7 @@ otk.meta.kiwi:
 
 External directives. Directives starting with `otk.external` are redirected
 to `/usr/libexec/otk/`-binaries. For example the directive
-`otk.external.osbuild.depsolve-dnf4` will execute `otk-osbuild depsolve-dnf4`
+`otk.external.osbuild.depsolve_dnf4` will execute `otk-osbuild depsolve_dnf4`
 with the tree under the directive on stdin and expect a new tree to replace
 the directive with on stdout.
 
