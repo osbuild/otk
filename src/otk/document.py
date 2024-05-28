@@ -1,7 +1,7 @@
 import logging
 import pathlib
 from copy import deepcopy
-from typing import Any, Self
+from typing import Any
 
 import yaml
 
@@ -20,14 +20,14 @@ class Omnifest:
         self._underlying_data = underlying_data
 
     @classmethod
-    def from_yaml_bytes(cls, text: bytes) -> Self:
+    def from_yaml_bytes(cls, text: bytes) -> "Omnifest":
         deserialized_data = cls.read(yaml.safe_load(text))
         cls.ensure(deserialized_data)
 
         return cls(deserialized_data)
 
     @classmethod
-    def from_yaml_path(cls, path: pathlib.Path) -> Self:
+    def from_yaml_path(cls, path: pathlib.Path) -> "Omnifest":
         """Read a YAML file into an Omnifest instance."""
 
         log.debug("reading yaml from path %r", str(path))

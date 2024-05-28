@@ -38,7 +38,6 @@ allowed inside (some) subtrees.
 ```"""
 
 # Enables postponed annotations on older snakes (PEP-563)
-# Enables | union syntax for types on older snakes (PEP-604)
 from __future__ import annotations
 
 import itertools
