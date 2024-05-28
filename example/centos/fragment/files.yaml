@@ -1,5 +1,5 @@
 otk.op.loop:
-  item: ${customization.files}
+  item: ${modfication.files}
   foreach:
     - otk.external.osbuild.embed_file:
       text: ${item.text}

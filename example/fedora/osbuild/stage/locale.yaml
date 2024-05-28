@@ -1,6 +1,6 @@
 type: org.osbuild.locale
 options:
-  otk.customization.locale:
+  otk.modfication.locale:
     default:
       language: en_US
     if-set:

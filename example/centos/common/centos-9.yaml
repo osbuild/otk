@@ -1,9 +1,9 @@
 otk.define.common:
   source_epoch: 1715673600
-  # called "customization" by convention but we could/should add policy around it to disallow "user"
-  # customzations outside of "customization.*"
-  # TODO: we probably want a common-common.yaml or customizations.yaml with otk.include
-  customization:
+  # called "modification" by convention but we could/should add policy around it to disallow "user"
+  # modifications outside of "modfication.*"
+  # TODO: we probably want a common-common.yaml or modification.yaml with otk.include
+  modfication:
     keymap: "us"
     chrony:
       servers:
