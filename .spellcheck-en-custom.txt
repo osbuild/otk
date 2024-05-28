@@ -29,3 +29,4 @@ subdirectory
 kickstarts
 koji
 livemediacreator
+untrusted
