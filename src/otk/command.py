@@ -12,6 +12,7 @@ from .context import CommonContext
 from .context import registry as context_registry
 from .document import Omnifest
 from .help.log import JSONSequenceHandler
+from .target import CommonTarget
 from .target import registry as target_registry
 from .transform import resolve
 
@@ -151,8 +152,8 @@ def compile(
 
     kind = name.split(".")[0]
 
-    context = context_registry[kind](ctx)
-    target = target_registry[kind]()
+    context = context_registry.get(kind, CommonContext)(ctx)
+    target = target_registry.get(kind, CommonTarget)()
 
     # This time we resolve with a kind
     tree = resolve(context, tree)
