@@ -30,3 +30,5 @@ kickstarts
 koji
 livemediacreator
 untrusted
+executables
+subtree
