@@ -6,47 +6,38 @@ Returned subtrees are resolved during tree transformation."""
 
 import json
 import logging
+import pathlib
 import subprocess
 import sys
+import os
 from typing import Any
 
-from .context import Context, OSBuildContext
+from .context import Context
+from .constant import PREFIX_EXTERNAL
 
 log = logging.getLogger(__name__)
 
 
 def call(context: Context, directive: str, tree: Any) -> Any:
-    if directive not in registry:
-        log.fatal("unknown external %r", directive)
-
-        # TODO exception
-        sys.exit(1)
-        return
-
-    required_context, executable = registry[directive]
-
-    if not isinstance(context, required_context):
-        log.fatal("external %r with wrong context %r", directive, context)
-
-        # TODO exception
-        sys.exit(1)
-        return
+    exe, args = convert(directive)
+    exe = search(exe)
 
     data = json.dumps(
         {
-            "context": context.for_external(),
             "tree": tree,
         }
     )
 
-    process = subprocess.run(executable, input=data, encoding="utf8", capture_output=True)
+    process = subprocess.run(
+        [exe] + args, input=data, encoding="utf8", capture_output=True
+    )
 
     if process.returncode != 0:
         # TODO exception
         log.error(
             "call: %r %r %r failed: %r, %r",
-            executable,
-            context,
+            exe,
+            args,
             directive,
             process.stdout,
             process.stderr,
@@ -54,30 +45,31 @@ def call(context: Context, directive: str, tree: Any) -> Any:
         sys.exit(1)
         return
 
-    # Otherwise everything is good and we restore
-    data = json.loads(process.stdout)
-
-    context.from_external(data["context"])
-
-    # TODO restore context
     return data["tree"]
 
 
-registry = {
-    "otk.external.osbuild.depsolve_dnf4": (
-        OSBuildContext,
-        ["otk-osbuild", "depsolve_dnf4"],
-    ),
-    "otk.external.osbuild.depsolve_dnf5": (
-        OSBuildContext,
-        ["otk-osbuild", "depsolve_dnf5"],
-    ),
-    "otk.external.osbuild.file_from_text": (
-        OSBuildContext,
-        ["otk-osbuild", "file-from-text"],
-    ),
-    "otk.external.osbuild.file_from_path": (
-        OSBuildContext,
-        ["otk-osbuild", "file-from-path"],
-    ),
-}
+def convert(directive):
+    exe, *args = directive.removeprefix(PREFIX_EXTERNAL).split(".")
+    return (f"otk_external_{exe}", args)
+
+
+def search(exe):
+    paths = [
+        "/usr/local/libexec/otk",
+        "/usr/libexec/otk",
+        "/usr/local/lib/otk",
+        "/usr/lib/otk",
+    ]
+
+    env = os.getenv("OTK_EXTERNAL_PATH", None)
+
+    if env is not None:
+        paths = [env] + paths
+
+    for path in paths:
+        path = pathlib.Path(path) / exe
+
+        if path.exists():
+            return path
+
+    raise RuntimeError(f"could not find {exe!r} in any search path {paths!r}")
