@@ -10,7 +10,7 @@ dependencies = [
 
 [project.scripts]
 otk = "otk.command:root"
-otk-osbuild = "otk_external_osbuild.command:root"
+otk_external_osbuild = "otk_external_osbuild.command:root"
 
 [project.optional-dependencies]
 dev = [
