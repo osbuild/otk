@@ -1,7 +1,7 @@
 otk.op.loop:
   item: ${customization.files}
   foreach:
-    - otk.external.osbuild.embed-file:
+    - otk.external.osbuild.embed_file:
       text: ${item.text}
       path: ${item.path}
     - type: org.osbuild.chmod
