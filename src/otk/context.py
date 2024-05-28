@@ -1,13 +1,12 @@
 """..."""
 
 # Enables postponed annotations on older snakes (PEP-563)
-# Enables | union syntax for types on older snakes (PEP-604)
 from __future__ import annotations
 
 import logging
 import pathlib
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Optional
 
 from .error import (
     TransformDefineDuplicateError,
@@ -35,13 +34,13 @@ class CommonContext(Context):
     duplicate_definitions_allowed: bool
     duplicate_definitions_warning: bool
 
-    _version: int | None
+    _version: Optional[int]
     _path: pathlib.Path
     _variables: dict[str, Any]
 
     def __init__(
         self,
-        path: pathlib.Path | None = None,
+        path: Optional[pathlib.Path] = None,
         *,
         duplicate_definitions_allowed: bool = True,
         duplicate_definitions_warning: bool = False,

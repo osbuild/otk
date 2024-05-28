@@ -3,6 +3,7 @@ import pathlib
 import sys
 import json
 from copy import deepcopy
+from typing import Optional
 
 import click
 
@@ -86,7 +87,7 @@ def root(
 def compile(
     ctx: click.Context,
     input: str,
-    output: str | None,
+    output: Optional[str],
     external: bool,
     requested_target: str,
 ) -> None:

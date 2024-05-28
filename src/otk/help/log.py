@@ -1,11 +1,13 @@
 import json
 import logging
 
+from typing import Optional
+
 
 class _JSONFormatter(logging.Formatter):
     def __init__(
         self,
-        identifier: str | None = None,
+        identifier: Optional[str] = None,
     ) -> None:
         super().__init__()
         self.identifier = identifier
@@ -21,7 +23,7 @@ class _JSONFormatter(logging.Formatter):
 
 
 class JSONSequenceHandler(logging.StreamHandler):
-    def __init__(self, identifier: str | None = None, stream=None) -> None:
+    def __init__(self, identifier: Optional[str] = None, stream=None) -> None:
         super().__init__(stream)
 
         self.formatter = _JSONFormatter(identifier)
