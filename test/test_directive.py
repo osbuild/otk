@@ -2,26 +2,7 @@ import pytest
 
 from otk.context import CommonContext
 from otk.error import TransformDirectiveArgumentError, TransformDirectiveTypeError
-from otk.directive import define, desugar, include, op_join
-
-
-def test_define():
-    ctx = CommonContext()
-
-    define(ctx, {"a": "b", "c": 1})
-
-    assert ctx.variable("a") == "b"
-    assert ctx.variable("c") == 1
-
-
-def test_define_unhappy():
-    ctx = CommonContext()
-
-    with pytest.raises(TransformDirectiveTypeError):
-        define(ctx, 1)
-
-    with pytest.raises(TransformDirectiveTypeError):
-        define(ctx, "str")
+from otk.directive import desugar, include, op_join
 
 
 def test_include_unhappy():
