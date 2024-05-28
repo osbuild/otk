@@ -43,7 +43,7 @@ cp -a example/* %{buildroot}%{_datadir}/otk/example/
 %doc doc
 %{_datadir}/otk
 %{_bindir}/otk
-%{_bindir}/otk-osbuild
+%{_bindir}/otk_external_osbuild
 %{python3_sitelib}/otk
 %{python3_sitelib}/otk_osbuild
 %{python3_sitelib}/otk-%{version}.dist-info

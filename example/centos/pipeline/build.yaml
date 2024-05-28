@@ -4,7 +4,7 @@ name: build
 source-epoch: ${source_epoch}
 runner: "org.osbuild.centos9"
 stages:
-  - otk.external.osbuild.depsolve_dnf4:
+  - otk.external.osbuild_depsolve_dnf4:
     architecture: ${architecture}
     releasever: ${version}
     module_platform_id: platform:el${version}
