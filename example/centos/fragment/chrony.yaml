@@ -1,5 +1,5 @@
 otk.op.if-set:
-  what: customization.chrony
+  what: modfication.chrony
   then:
     - type: org.osbuild.chrony
-      options: ${customization.chrony}
+      options: ${modfication.chrony}

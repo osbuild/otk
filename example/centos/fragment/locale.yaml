@@ -1,6 +1,6 @@
 otk.op.if_set:
-  what: ${customization.locale}
+  what: ${modfication.locale}
   then:
     - type: org.osbuild.locale
       options:
-        locale: ${customization.locale}
+        locale: ${modfication.locale}
