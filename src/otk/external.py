@@ -1,8 +1,6 @@
 """Support for calling external programs to transform trees. External programs
-receive the current context and the subtree to operate on in JSON. They are
-expected to return the context and subtree.
-
-Returned subtrees are resolved during tree transformation."""
+receive the subtree to operate on in JSON. They are expected to return a new
+subtree."""
 
 import json
 import logging
@@ -12,32 +10,30 @@ import sys
 import os
 from typing import Any
 
-from .context import Context
 from .constant import PREFIX_EXTERNAL
 
 log = logging.getLogger(__name__)
 
 
-def call(context: Context, directive: str, tree: Any) -> Any:
-    exe, args = convert(directive)
-    exe = search(exe)
+def call(directive: str, tree: Any) -> Any:
+    exe = exe_from_directive(directive)
+    exe = path_for(exe)
 
     data = json.dumps(
         {
-            "tree": tree,
+            "tree": {
+                directive: tree,
+            },
         }
     )
 
-    process = subprocess.run(
-        [exe] + args, input=data, encoding="utf8", capture_output=True
-    )
+    process = subprocess.run([exe], input=data, encoding="utf8", capture_output=True)
 
     if process.returncode != 0:
         # TODO exception
         log.error(
-            "call: %r %r %r failed: %r, %r",
+            "call: %r %r failed: %r, %r",
             exe,
-            args,
             directive,
             process.stdout,
             process.stderr,
@@ -45,15 +41,17 @@ def call(context: Context, directive: str, tree: Any) -> Any:
         sys.exit(1)
         return
 
+    data = json.loads(process.stdout)
+
     return data["tree"]
 
 
-def convert(directive):
-    exe, *args = directive.removeprefix(PREFIX_EXTERNAL).split(".")
-    return (f"otk_external_{exe}", args)
+def exe_from_directive(directive):
+    exe = directive.removeprefix(PREFIX_EXTERNAL)
+    return f"otk_external_{exe}"
 
 
-def search(exe):
+def path_for(exe):
     paths = [
         "/usr/local/libexec/otk",
         "/usr/libexec/otk",
@@ -69,7 +67,7 @@ def search(exe):
     for path in paths:
         path = pathlib.Path(path) / exe
 
-        if path.exists():
+        if path.exists() and os.access(path, os.X_OK):
             return path
 
     raise RuntimeError(f"could not find {exe!r} in any search path {paths!r}")

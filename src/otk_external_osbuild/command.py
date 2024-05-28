@@ -46,7 +46,7 @@ def source_add_curl(data, checksum, url):
 
 def depsolve_dnf4():
     data = json.loads(sys.stdin.read())
-    tree = data["tree"]
+    tree = data["tree"]["otk.external.osbuild_depsolve_dnf4"]
 
     # source_add_curl("org.osbuild.rpm", data)
 

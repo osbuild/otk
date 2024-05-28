@@ -137,16 +137,14 @@ it finds the first match:
 - `/usr/lib/otk`
 
 The filename for an external executable is based on the external name. When the
-following directive is encountered: `otk.external.<name>.<argument>` then
+following directive is encountered: `otk.external.<name>` then
 `otk` will try to find an executable called `otk_external_<name>` in the previously
 mentioned search paths.
 
-It will call this executable with `<argument>` as its first argument. Here are
-some examples:
+Examples:
 
 - `otk.external.foo` -> `otk_external_foo`
-- `otk.external.foo.bar_baz` -> `otk_external_foo bar_baz`
-- `otk.external.foo.bar.baz` -> `otk_external_foo bar baz`
+- `otk.external.osbuild_bar` -> `otk_external_osbuild_bar`
 
 ## Implementations
 
@@ -157,19 +155,19 @@ These directives can be used as children under an `otk.target.osbuild` tree.
 
 These directives are only allowed within a [`otk.target.osbuild.<name>`](./01-directive.md#otktargetconsumername).
 
-#### `otk.external.osbuild.depsolve_dnf4`
+#### `otk.external.osbuild_depsolve_dnf4`
 
 Solves a list of package specifications to RPMs and specifies them in the
 osbuild manifest as sources.
 
-#### `otk.external.osbuild.depsolve_dnf5`
+#### `otk.external.osbuild_depsolve_dnf5`
 
 Expects a `map` as its value.
 
 `osbuild` directives to write files. **If a stage exists for the type of file
 you want to write: use it.** See the [best practices](../04-best-practices.md).
 
-#### `otk.external.osbuild.file_from_text`
+#### `otk.external.osbuild_file_from_text`
 
 Write inline text to a file. Creates a source in the manifest and copies that
 source to the destination in the tree.
@@ -183,7 +181,7 @@ otk.external.osbuild.file_from_text:
     Hello, World!
 ```
 
-#### `otk.external.osbuild.file_from_path`
+#### `otk.external.osbuild_file_from_path`
 
 Copy a file. Source is relative to the path of the entrypoint omnifest. Creates
 a source in the manifest and copies that source to the destination in tree.
@@ -191,7 +189,7 @@ a source in the manifest and copies that source to the destination in tree.
 Path components up to the destination must be pre-existing in the tree.
 
 ```yaml
-otk.external.osbuild.file_from_path:
+otk.external.osbuild_file_from_path:
   source: README.md
   destination: /path/to
 ```

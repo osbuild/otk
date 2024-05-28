@@ -51,7 +51,7 @@ def resolve_dict(ctx: Context, tree: dict[str, Any]) -> Any:
                 return resolve(ctx, op(ctx, resolve(ctx, val), key))
             elif key.startswith("otk.external."):
                 if isinstance(ctx, OSBuildContext):
-                    return resolve(ctx, call(ctx, key, resolve(ctx, val)))
+                    return resolve(ctx, call(key, resolve(ctx, val)))
                 else:
                     log.error("%r:%r", key, ctx)
 
