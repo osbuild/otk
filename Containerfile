@@ -13,4 +13,4 @@ COPY src /src/src
 RUN pip install .
 RUN rm -rf src/*
 
-CMD ["otk"]
+ENTRYPOINT ["otk"]
