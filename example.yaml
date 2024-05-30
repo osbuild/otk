@@ -1,9 +1,0 @@
-otk.version: "1"
-
-otk.define.tag:
-  var: 1
-
-otk.target.osbuild.example:
-  pipelines:
-    - otk.include.tag: include.yaml
-    - otk.include.bar: include.yaml
