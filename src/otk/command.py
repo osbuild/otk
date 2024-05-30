@@ -15,7 +15,7 @@ from .transform import resolve
 log = logging.getLogger(__name__)
 
 
-def root():
+def root() -> int:
     argv = sys.argv[1:]
 
     parser = parser_create()
@@ -41,13 +41,13 @@ def root():
 
     if arguments.command == "compile":
         return compile(parser, arguments)
-    else:
-        raise RuntimeError("Unknown subcommand")
+
+    raise RuntimeError("Unknown subcommand")
 
 
 def compile(
     parser: argparse.ArgumentParser, arguments: argparse.Namespace
-) -> None:
+) -> int:
     src = pathlib.Path(
         "/dev/stdin" if arguments.input is None else arguments.input
     )
