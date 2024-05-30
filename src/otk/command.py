@@ -159,7 +159,7 @@ def parser_create() -> argparse.Namespace:
     # get a subparser action
     subparsers = parser.add_subparsers(dest="command", required=True, metavar="command")
 
-    parser_compile = subparsers.add_parser("compile", description="")
+    parser_compile = subparsers.add_parser("compile", help="Compile an omnifest.")
     parser_compile.add_argument(
         "input",
         metavar="INPUT",
