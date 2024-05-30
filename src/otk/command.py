@@ -157,7 +157,7 @@ def parser_create() -> argparse.Namespace:
     )
 
     # get a subparser action
-    subparsers = parser.add_subparsers(dest="command")
+    subparsers = parser.add_subparsers(dest="command", metavar="command")
     subparsers.required = True
 
     parser_compile = subparsers.add_parser("compile", description="")
