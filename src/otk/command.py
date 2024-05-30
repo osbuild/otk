@@ -89,15 +89,15 @@ def compile(
         log.fatal("INPUT contains multiple targets, `-t` is required")
         return 1
 
+    # set the requested target to the default case now that we know that
+    # there aren't multiple targets available and none are requested
+    target_requested = list(target_available.keys())[0]
+
     if target_requested not in target_available:
         log.fatal(
             "requested target %r does not exist in INPUT", target_requested
         )
         return 1
-
-    # set the requested target to the default case now that we know that
-    # there aren't multiple targets available and none are requested
-    target_requested = list(target_available.keys())[0]
 
     # resolve the full tree first
     tree = resolve(ctx, doc.tree)
