@@ -19,11 +19,6 @@ def root():
     argv = sys.argv[1:]
 
     parser = parser_create()
-
-    if not len(argv):
-        parser.print_help()
-        parser.exit()
-
     arguments = parser.parse_args(argv)
 
     # turn on logging as *soon* as possible so it can be used early
@@ -44,18 +39,10 @@ def root():
         parser.print_help()
         parser.exit()
 
-    if arguments.command is None:
-        parser.print_help()
-        parser.exit()
-
-    # a subcommand is *required*, argparse has already handled non-existing
-    # subcommands
-    if arguments.command is None:
-        parser.print_help()
-        parser.exit()
-
     if arguments.command == "compile":
         return compile(parser, arguments)
+    else:
+        raise RuntimeError("Unknown subcommand")
 
 
 def compile(
@@ -171,6 +158,7 @@ def parser_create() -> argparse.Namespace:
 
     # get a subparser action
     subparsers = parser.add_subparsers(dest="command")
+    subparsers.required = True
 
     parser_compile = subparsers.add_parser("compile", description="")
     parser_compile.add_argument(
