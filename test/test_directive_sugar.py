@@ -12,14 +12,14 @@ def test_simple_sugar():
     assert desugar(context, "${my_var}") == "foo"
 
 
-def test_simple_sugar_tree():
+def test_simple_sugar_nested():
     context = CommonContext()
     context.define("my_var", [1, 2])
 
     assert desugar(context, "${my_var}") == [1, 2]
 
 
-def test_simple_sugar_tree_fail():
+def test_simple_sugar_nested_fail():
     context = CommonContext()
     context.define("my_var", [1, 2])
 

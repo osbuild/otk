@@ -1,0 +1,3 @@
+# Example file to be included in `02-include.yaml`
+foo: "bar"
+bar: "foo"

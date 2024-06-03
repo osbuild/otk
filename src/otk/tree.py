@@ -4,6 +4,7 @@ objects used validate tree arguments for functions that deal with trees."""
 # Enables postponed annotations on older snakes (PEP-563)
 from __future__ import annotations
 
+
 import functools
 from typing import Type
 
