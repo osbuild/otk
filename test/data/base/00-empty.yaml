@@ -1,0 +1,10 @@
+# This example shows the minimal `otk` omnifest to be considered valid. `otk.version` is a required property and is
+# used to recognize a document as being an omnifest. Aside from that at least one `otk.target` is required. The target
+# is used by `otk` to determine how to format any output.
+#
+# The results of compiling this omnifest are available in `00-empty.json`.
+otk.version: "1"
+
+otk.target.osbuild.name:
+  pipelines:
+    - a: "tree"

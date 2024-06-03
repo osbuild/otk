@@ -1,0 +1,6 @@
+# This example shows `otk.include` usage in an `otk` omnifest.
+otk.version: "1"
+
+otk.target.osbuild.name:
+  pipelines:
+    - otk.include: "02-include/example.yaml"
