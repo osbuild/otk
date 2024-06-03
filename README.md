@@ -56,15 +56,6 @@ make test
 To run the tests, you have to install the package (see [Usage](#Usage))
 and call `pytest`
 
-## Problem(s)
-
-A list of current problems or things that just aren't that nice yet:
-
-- [ ] How should we structure a distribution, the [fedora](./example/fedora)
-      really isn't that pretty yet.
-- [ ] Defining the protocol of JSON that is sent between an `otk.external` and
-      the main process. They'll likely need the entire tree.
-
 ## Principles
 
 - Omnifests are valid YAML, no preprocessing is done on them.
