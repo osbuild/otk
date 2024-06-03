@@ -25,8 +25,8 @@ If you want to hack on `otk` then read the [installation instructions](./doc/00-
 
 ## Documentation
 
-There is documentation about the [format](./doc/format.md) and the available
-[directives](./doc/directives.md).
+There is documentation about the [format](./doc/03-omnifest/index.md) and the available
+[directives](./doc/03-omnifest/01-directive.md).
 
 ## Examples
 
