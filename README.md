@@ -15,15 +15,13 @@ You can find `otk`'s documentation in the [/doc](./doc) subdirectory. This READM
 
 ## Usage
 
-```
-€ python3 -m venv venv
-€ . venv/bin/activate
-€ pip install -e ".[dev]"
-€ otk compile example/fedora/minimal-40-x86_64.yaml
-# ...
+If you want to quickly run and try out `otk` without installation the easiest is to run our container image:
 
-# See `otk --help` for help.
 ```
+podman run -i ghcr.io/osbuild/otk < omnifest.yaml
+```
+
+If you want to hack on `otk` then read the [installation instructions](./doc/00-installation.md).
 
 ## Documentation
 
