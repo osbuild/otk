@@ -21,7 +21,7 @@ def root() -> int:
     parser = parser_create()
     arguments = parser.parse_args(argv)
 
-    # turn on logging as *soon* as possible so it can be used early
+    # turn on logging as *soon* as possible, so it can be used early
     logging.basicConfig(
         level=logging.WARNING - (10 * arguments.verbose),
         handlers=[
@@ -40,26 +40,26 @@ def root() -> int:
         parser.exit()
 
     if arguments.command == "compile":
-        return compile(parser, arguments)
+        return compile(arguments)
+    elif arguments.command == "validate":
+        return validate(arguments)
 
     raise RuntimeError("Unknown subcommand")
 
 
-def compile(
-    parser: argparse.ArgumentParser, arguments: argparse.Namespace
-) -> int:
+def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     src = pathlib.Path(
         "/dev/stdin" if arguments.input is None else arguments.input
     )
     dst = pathlib.Path(
         "/dev/stdout" if arguments.output is None else arguments.output
-    )
+    ) if not dry_run else None
 
     if not src.exists():
         log.fatal("INPUT path %r does not exist", str(src))
         return 1
 
-    if not dst.exists():
+    if not dry_run and not dst.parent.exists():
         log.fatal("OUTPUT path %r does not exist", str(dst))
         return 1
 
@@ -107,7 +107,7 @@ def compile(
         kind, name = target_requested.split(".")
     except ValueError:
         # TODO handle earlier
-        log.fatal("malformatted target name %r", target_requested)
+        log.fatal("malformed target name %r. We need a format of '<TARGET_KIND>.<TARGET_NAME>'.", target_requested)
         return 1
 
     # re-resolve the specific target with the specific context and target if
@@ -116,11 +116,20 @@ def compile(
     tree = resolve(spec, tree[f"{PREFIX_TARGET}{kind}.{name}"])
 
     # and then output by writing to the output
-    dst.write_text(
-        target_registry.get(kind, CommonTarget)().as_string(spec, tree)
-    )
+    if not dry_run:
+        dst.write_text(
+            target_registry.get(kind, CommonTarget)().as_string(spec, tree)
+        )
 
     return 0
+
+
+def compile(arguments: argparse.Namespace) -> int:
+    return _process(arguments, dry_run=False)
+
+
+def validate(arguments: argparse.Namespace) -> int:
+    return _process(arguments, dry_run=True)
 
 
 def parser_create() -> argparse.Namespace:
@@ -178,6 +187,21 @@ def parser_create() -> argparse.Namespace:
         "--target",
         default=None,
         help="Target to output, required if more than one target exists in an omnifest.",
+    )
+
+    parser_validate = subparsers.add_parser("validate", help="Validate an omnifest.")
+    parser_validate.add_argument(
+        "input",
+        metavar="INPUT",
+        nargs="?",
+        default=None,
+        help="Omnifest to validate to or none for STDIN.",
+    )
+    parser_validate.add_argument(
+        "-t",
+        "--target",
+        default=None,
+        help="Target to validate, required if more than one target exists in an omnifest.",
     )
 
     return parser
