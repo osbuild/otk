@@ -68,11 +68,11 @@ def call(context: Context, directive: str, tree: Any) -> Any:
 registry = {
     "otk.external.osbuild.depsolve_dnf4": (
         OSBuildContext,
-        ["otk-osbuild", "depsolve-dnf4"],
+        ["otk-osbuild", "depsolve_dnf4"],
     ),
     "otk.external.osbuild.depsolve_dnf5": (
         OSBuildContext,
-        ["otk-osbuild", "depsolve-dnf5"],
+        ["otk-osbuild", "depsolve_dnf5"],
     ),
     "otk.external.osbuild.file_from_text": (
         OSBuildContext,
