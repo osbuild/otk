@@ -33,9 +33,9 @@ When a file contains multiple targets an error will be shown; you'll have to sel
 
 
 ```
-€ otk compile example.yaml  # contains `osbuild.bar` and `osbuild.foo` targets
+€ otk compile example.yaml  # contains `osbuild.ami` and `osbuild.iso` targets
 [05/05/24 09:42:20] CRITICAL CRITICAL:otk.command:omnifest contains multiple targets, please select one with `-t`: ['osbuild.foo', 'osbuild.bar']
-€ otk compile example.yaml -t osbuild.foo
+€ otk compile example.yaml -t osbuild.iso
 # ...
 ```
 
