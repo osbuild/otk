@@ -48,12 +48,12 @@ def root() -> int:
 
 
 def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
-    src = pathlib.Path(
-        "/dev/stdin" if arguments.input is None else arguments.input
+    src = pathlib.Path("/dev/stdin" if arguments.input is None else arguments.input)
+    dst = (
+        pathlib.Path("/dev/stdout" if arguments.output is None else arguments.output)
+        if not dry_run
+        else None
     )
-    dst = pathlib.Path(
-        "/dev/stdout" if arguments.output is None else arguments.output
-    ) if not dry_run else None
 
     if not src.exists():
         log.fatal("INPUT path %r does not exist", str(src))
@@ -94,9 +94,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     target_requested = list(target_available.keys())[0]
 
     if target_requested not in target_available:
-        log.fatal(
-            "requested target %r does not exist in INPUT", target_requested
-        )
+        log.fatal("requested target %r does not exist in INPUT", target_requested)
         return 1
 
     # resolve the full tree first
@@ -107,7 +105,10 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         kind, name = target_requested.split(".")
     except ValueError:
         # TODO handle earlier
-        log.fatal("malformed target name %r. We need a format of '<TARGET_KIND>.<TARGET_NAME>'.", target_requested)
+        log.fatal(
+            "malformed target name %r. We need a format of '<TARGET_KIND>.<TARGET_NAME>'.",
+            target_requested,
+        )
         return 1
 
     # re-resolve the specific target with the specific context and target if
@@ -117,9 +118,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
 
     # and then output by writing to the output
     if not dry_run:
-        dst.write_text(
-            target_registry.get(kind, CommonTarget)().as_string(spec, tree)
-        )
+        dst.write_text(target_registry.get(kind, CommonTarget)().as_string(spec, tree))
 
     return 0
 
