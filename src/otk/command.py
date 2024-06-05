@@ -54,9 +54,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
 
     # the working directory is either the current directory for stdin or the
     # directory the omnifest is located in
-    cwd = (
-        pathlib.Path.cwd() if arguments.input is None else pathlib.Path(src.name).parent
-    )
+    cwd = pathlib.Path.cwd() if arguments.input is None else pathlib.Path(src.name).parent
 
     ctx = CommonContext(cwd)
     doc = Omnifest.from_yaml_file(src)
