@@ -17,3 +17,9 @@ repos:
     hooks:
       - id: pyspelling
         args: ["--config", ".spellcheck.yml"]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.7
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
