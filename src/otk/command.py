@@ -48,23 +48,18 @@ def root() -> int:
 
 
 def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
-    src = pathlib.Path("/dev/stdin" if arguments.input is None else arguments.input)
-    dst = pathlib.Path("/dev/stdout" if arguments.output is None else arguments.output) if not dry_run else None
-
-    if not src.exists():
-        log.fatal("INPUT path %r does not exist", str(src))
-        return 1
-
-    if not dry_run and not dst.parent.exists():
-        log.fatal("OUTPUT path %r does not exist", str(dst))
-        return 1
+    src = sys.stdin if arguments.input is None else open(arguments.input)
+    if not dry_run:
+        dst = sys.stdout if arguments.output is None else open(arguments.output, "w")
 
     # the working directory is either the current directory for stdin or the
     # directory the omnifest is located in
-    cwd = pathlib.Path.cwd() if arguments.input is None else src.parent
+    cwd = (
+        pathlib.Path.cwd() if arguments.input is None else pathlib.Path(src.name).parent
+    )
 
     ctx = CommonContext(cwd)
-    doc = Omnifest.from_yaml_path(src)
+    doc = Omnifest.from_yaml_file(src)
 
     # let's peek at the tree to validate some things necessary for compilation
     # we might want to move this into a separate place once this gets shared
@@ -112,7 +107,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
 
     # and then output by writing to the output
     if not dry_run:
-        dst.write_text(target_registry.get(kind, CommonTarget)().as_string(spec, tree))
+        dst.write(target_registry.get(kind, CommonTarget)().as_string(spec, tree))
 
     return 0
 
