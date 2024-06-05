@@ -84,10 +84,6 @@ def include(ctx: Context, tree: Any) -> Any:
     # TODO instead
     log.info("otk.include=%s", str(file))
 
-    if not file.exists():
-        # TODO, better error type
-        raise Exception("otk.include nonexistent file %r" % file)
-
     # TODO
     return yaml.safe_load(file.read_text())
 

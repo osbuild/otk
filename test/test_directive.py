@@ -12,6 +12,13 @@ def test_include_unhappy():
         include(ctx, 1)
 
 
+def test_include_file_missing_errors(tmp_path):
+    ctx = CommonContext()
+
+    with pytest.raises(FileNotFoundError):
+        include(ctx, "non-existing.yml")
+
+
 def test_op_seq_join():
     ctx = CommonContext()
 
