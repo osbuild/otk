@@ -1,56 +1,45 @@
 import argparse
-import os.path
-import pytest
+import os
+
 
 from otk.command import compile
 
 
-@pytest.mark.parametrize(
-    "arguments, input_data, output_data, sys_exit_code, log_message",
-    [
-        # "GENERATE" is a placeholder to append "tmp_path" from pytest
-        (
-            argparse.Namespace(input="GENERATE", output="GENERATE", target=None),
-            """otk.version: 1
-otk.target.osbuild.qcow2: { test: 1 }
-""",
-            """{
+fake_otk_yaml = """
+otk.version: 1
+otk.target.osbuild.qcow2:
+ test: 1
+"""
+
+expected_otk_tree = """\
+{
   "test": 1,
   "version": "2",
   "sources": {}
-}""",
-            0,
-            None,
-        ),
-    ],
-)
-def test_compile(
-    tmp_path,
-    caplog,
-    capsys,
-    monkeypatch,
-    arguments,
-    input_data,
-    output_data,
-    sys_exit_code,
-    log_message,
-):
-    if arguments.input == "GENERATE":
-        input_filename = "input.yaml"
-        arguments.input = os.path.join(tmp_path, input_filename)
-        with open(arguments.input, "w") as f:
-            f.write(input_data)
+}"""
 
-    if arguments.output == "GENERATE":
-        # fix path so we only write to tmp_path
-        arguments.output = os.path.join(tmp_path, "output.yaml")
 
+def test_compile_integration_file(tmp_path):
+    input_path = tmp_path / "input.txt"
+    input_path.write_text(fake_otk_yaml)
+    output_path = tmp_path / "output.txt"
+
+    arguments = argparse.Namespace(input=input_path, output=output_path, target="osbuild")
     ret = compile(arguments)
-    assert ret == sys_exit_code
+    assert ret == 0
 
-    if log_message:
-        assert log_message in caplog.text
+    assert output_path.exists()
+    assert output_path.read_text() == expected_otk_tree
 
-    assert os.path.exists(arguments.output)
-    with open(arguments.output) as f:
-        assert f.readlines() == output_data.splitlines(True)
+
+def test_compile_integration_stdin(capsys, monkeypatch):
+    mocked_stdin = os.memfd_create("<fake-stdin>")
+    os.write(mocked_stdin, fake_otk_yaml.encode("utf8"))
+    os.lseek(mocked_stdin, 0, 0)
+    monkeypatch.setattr("sys.stdin", os.fdopen(mocked_stdin))
+
+    arguments = argparse.Namespace(input=None, output=None, target="osbuild")
+    ret = compile(arguments)
+    assert ret == 0
+
+    assert capsys.readouterr().out == expected_otk_tree

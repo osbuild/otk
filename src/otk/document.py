@@ -29,7 +29,7 @@ class Omnifest:
     @classmethod
     def from_yaml_file(cls, file: io.IOBase) -> "Omnifest":
         """Read a YAML file into an Omnifest instance."""
-        log.debug("reading yaml from path %r", str(file.name))
+        log.debug("reading yaml from path %r", file.name)
         return cls.from_yaml_bytes(file.read())
 
     @classmethod
