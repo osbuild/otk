@@ -1,5 +1,5 @@
+import io
 import logging
-import pathlib
 from copy import deepcopy
 from typing import Any
 
@@ -27,17 +27,10 @@ class Omnifest:
         return cls(deserialized_data)
 
     @classmethod
-    def from_yaml_path(cls, path: pathlib.Path) -> "Omnifest":
+    def from_yaml_file(cls, file: io.IOBase) -> "Omnifest":
         """Read a YAML file into an Omnifest instance."""
-
-        log.debug("reading yaml from path %r", str(path))
-
-        # This is an invariant that should be handled at the calling side of
-        # this function
-        assert path.exists(), "path to exist"
-
-        with path.open("rb") as file:
-            return cls.from_yaml_bytes(file.read())
+        log.debug("reading yaml from path %r", str(file.name))
+        return cls.from_yaml_bytes(file.read())
 
     @classmethod
     def read(cls, deserialized_data: Any) -> dict[str, Any]:

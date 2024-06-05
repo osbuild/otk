@@ -1,3 +1,5 @@
+import textwrap
+
 import pytest
 
 from otk.document import Omnifest
@@ -27,15 +29,7 @@ def test_omnifest_ensure_no_keys():
         assert Omnifest.ensure({})
 
 
-def test_omnifest_from_yaml_bytes():
-    # Happy
-    Omnifest.from_yaml_bytes(
-        """
-otk.version: 1
-otk.target.osbuild: {}
-"""
-    )
-
+def test_omnifest_from_yaml_bytes_sad():
     # A bunch of YAMLs that don't contain a top level map
     with pytest.raises(ParseTypeError):
         Omnifest.from_yaml_bytes(
@@ -83,6 +77,29 @@ otk.version: 1
         )
 
 
-def test_omnifest_from_yaml_path():
-    # TODO
-    ...
+TEST_CASES = [
+    (
+        textwrap.dedent("""
+        otk.version: 1
+        otk.target.osbuild:
+          some: key
+        """),
+        {"otk.target.osbuild": {"some": "key"}, "otk.version": 1},
+    )
+]
+
+
+@pytest.mark.parametrize("fake_input,expected_tree", TEST_CASES)
+def test_omnifest_from_yaml_bytes_happy(fake_input, expected_tree):
+    omi = Omnifest.from_yaml_bytes(fake_input)
+    assert omi.tree == expected_tree
+
+
+@pytest.mark.parametrize("fake_input,expected_tree", TEST_CASES)
+def test_omnifest_from_yaml_file_happy(tmp_path, fake_input, expected_tree):
+    fake_yaml_path = tmp_path / "test.otk"
+    fake_yaml_path.write_text(fake_input)
+
+    with fake_yaml_path.open() as fp:
+        omi = Omnifest.from_yaml_file(fp)
+    assert omi.tree == expected_tree
