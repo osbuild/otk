@@ -39,9 +39,7 @@ def call(context: Context, directive: str, tree: Any) -> Any:
         }
     )
 
-    process = subprocess.run(
-        executable, input=data, encoding="utf8", capture_output=True
-    )
+    process = subprocess.run(executable, input=data, encoding="utf8", capture_output=True)
 
     if process.returncode != 0:
         # TODO exception

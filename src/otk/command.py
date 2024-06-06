@@ -49,11 +49,7 @@ def root() -> int:
 
 def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     src = pathlib.Path("/dev/stdin" if arguments.input is None else arguments.input)
-    dst = (
-        pathlib.Path("/dev/stdout" if arguments.output is None else arguments.output)
-        if not dry_run
-        else None
-    )
+    dst = pathlib.Path("/dev/stdout" if arguments.output is None else arguments.output) if not dry_run else None
 
     if not src.exists():
         log.fatal("INPUT path %r does not exist", str(src))
@@ -74,9 +70,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # we might want to move this into a separate place once this gets shared
     # across multiple command
     target_available = {
-        key.removeprefix(PREFIX_TARGET): val
-        for key, val in doc.tree.items()
-        if key.startswith(PREFIX_TARGET)
+        key.removeprefix(PREFIX_TARGET): val for key, val in doc.tree.items() if key.startswith(PREFIX_TARGET)
     }
 
     if not target_available:

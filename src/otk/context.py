@@ -101,9 +101,7 @@ class CommonContext(Context):
                 except IndexError:
                     raise TransformVariableIndexRangeError()
             else:
-                raise TransformVariableTypeError(
-                    "tried to look up %r.%r but %r isn't a dictionary"
-                )
+                raise TransformVariableTypeError("tried to look up %r.%r but %r isn't a dictionary")
 
         return value
 

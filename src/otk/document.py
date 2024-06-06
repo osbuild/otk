@@ -63,17 +63,12 @@ class Omnifest:
         # And that dictionary needs to contain certain keys to indicate this
         # being an Omnifest.
         if NAME_VERSION not in deserialized_data:
-            raise ParseVersionError(
-                "omnifest must contain a key by the name of %r" % (NAME_VERSION,)
-            )
+            raise ParseVersionError("omnifest must contain a key by the name of %r" % (NAME_VERSION,))
 
         # Make sure that the omnifest contains targets. Without targets we
         # can't do much.
         if not any(key.startswith(PREFIX_TARGET) for key in deserialized_data):
-            raise ParseTargetError(
-                "omnifest must contain at least one key by the name of `%s.*`"
-                % (PREFIX_TARGET,)
-            )
+            raise ParseTargetError("omnifest must contain at least one key by the name of `%s.*`" % (PREFIX_TARGET,))
 
     @property
     def tree(self) -> dict[str, Any]:

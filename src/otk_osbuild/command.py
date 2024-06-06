@@ -189,9 +189,9 @@ def root():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
-    (subparsers.add_parser('depsolve_dnf4')).set_defaults(func=depsolve_dnf4)
-    (subparsers.add_parser('file_from_text')).set_defaults(func=file_from_text)
-    (subparsers.add_parser('file_from_path')).set_defaults(func=file_from_path)
+    (subparsers.add_parser("depsolve_dnf4")).set_defaults(func=depsolve_dnf4)
+    (subparsers.add_parser("file_from_text")).set_defaults(func=file_from_text)
+    (subparsers.add_parser("file_from_path")).set_defaults(func=file_from_path)
 
     args = parser.parse_args()
     args.func()
