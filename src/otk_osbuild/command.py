@@ -7,6 +7,7 @@ import sys
 import json
 import hashlib
 import base64
+import os
 import pathlib
 import subprocess
 
@@ -68,8 +69,10 @@ def depsolve_dnf4():
         },
     }
 
+    cmd = os.environ.get("OSBUILD_DEPSOLVE", "/usr/libexec/osbuild-depsolve-dnf")
+
     process = subprocess.run(
-        ["/usr/libexec/osbuild-depsolve-dnf"],
+        [cmd],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         input=json.dumps(request),
