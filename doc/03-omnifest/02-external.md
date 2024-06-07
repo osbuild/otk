@@ -131,20 +131,20 @@ examplestring:
 it finds the first match:
 
 - A path defined by the `OTK_EXTERNAL_PATH` environment variable.
-- `/usr/local/libexec/otk`
-- `/usr/libexec/otk`
-- `/usr/local/lib/otk`
-- `/usr/lib/otk`
+- `/usr/local/libexec/otk/external`
+- `/usr/libexec/otk/external`
+- `/usr/local/lib/otk/external`
+- `/usr/lib/otk/external`
 
 The filename for an external executable is based on the external name. When the
 following directive is encountered: `otk.external.<name>` then
-`otk` will try to find an executable called `otk_external_<name>` in the previously
+`otk` will try to find an executable called `<name>` in the previously
 mentioned search paths.
 
 Examples:
 
-- `otk.external.foo` -> `otk_external_foo`
-- `otk.external.osbuild_bar` -> `otk_external_osbuild_bar`
+- `otk.external.foo` -> `foo`
+- `otk.external.osbuild_bar` -> `osbuild_bar`
 
 ## Implementations
 

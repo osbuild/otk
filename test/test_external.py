@@ -11,9 +11,9 @@ from otk.external import exe_from_directive
 @pytest.mark.parametrize(
     "text,exe",
     [
-        ("otk.external.osbuild", "otk_external_osbuild"),
-        ("otk.external.osbuild_foo-bar", "otk_external_osbuild_foo-bar"),
-        ("otk.external.foo", "otk_external_foo"),
+        ("otk.external.osbuild", "osbuild"),
+        ("otk.external.osbuild_foo-bar", "osbuild_foo-bar"),
+        ("otk.external.foo", "foo"),
     ],
 )
 def test_exe_from_directive(text, exe):
@@ -25,12 +25,12 @@ def test_external_not_found():
     fake_tree = {}
     with pytest.raises(RuntimeError) as exc:
         otk.external.call(fake_directive, fake_tree)
-    assert "could not find 'otk_external_not_available' in any search path" in str(exc.value)
+    assert "could not find 'not_available' in any search path" in str(exc.value)
 
 
 def test_integration_happy(tmp_path):
     os.environ["OTK_EXTERNAL_PATH"] = os.fspath(tmp_path)
-    fake_external_path = tmp_path / "otk_external_test"
+    fake_external_path = tmp_path / "test"
     fake_external_path.write_text(
         textwrap.dedent("""\
     #!/bin/sh
