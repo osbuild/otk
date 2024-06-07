@@ -47,16 +47,15 @@ def call(directive: str, tree: Any) -> Any:
 
 
 def exe_from_directive(directive):
-    exe = directive.removeprefix(PREFIX_EXTERNAL)
-    return f"otk_external_{exe}"
+    return directive.removeprefix(PREFIX_EXTERNAL)
 
 
 def path_for(exe):
     paths = [
-        "/usr/local/libexec/otk",
-        "/usr/libexec/otk",
-        "/usr/local/lib/otk",
-        "/usr/lib/otk",
+        "/usr/local/libexec/otk/external",
+        "/usr/libexec/otk/external",
+        "/usr/local/lib/otk/external",
+        "/usr/lib/otk/external",
     ]
 
     env = os.getenv("OTK_EXTERNAL_PATH", None)
