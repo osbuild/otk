@@ -1,26 +1,20 @@
-import pytest
-import pathlib
+import argparse
 import json
+import pathlib
 
-from otk.context import CommonContext, OSBuildContext
-from otk.document import Omnifest
-from otk.transform import resolve
-from otk.target import OSBuildTarget
+import pytest
+
+from otk import command
 
 
-@pytest.mark.parametrize("path", (pathlib.Path(__file__).parent / "data/base").glob("*.yaml"))
-def test_base(path):
-    with open(path) as src, open(path.with_suffix(".json")) as dst:
-        ctx = CommonContext(path.parent)
-        doc = Omnifest.from_yaml_file(src)
+@pytest.mark.parametrize("src_yaml", (pathlib.Path(__file__).parent / "data/base").glob("*.yaml"))
+def test_command_compile_on_base_examples(tmp_path, src_yaml):
+    dst = tmp_path / "out.json"
 
-        tree0 = resolve(ctx, doc.tree)
+    ns = argparse.Namespace(input=src_yaml, output=dst, target="osbuild")
 
-        spc = OSBuildContext(ctx)
-        tree0 = resolve(spc, tree0["otk.target.osbuild.name"])
-        txt = OSBuildTarget().as_string(spc, tree0)
+    command.compile(ns)
 
-        tree0 = json.loads(txt)
-        tree1 = json.load(dst)
-
-        assert tree0 == tree1
+    expected = json.load(src_yaml.with_suffix(".json").open())
+    actual = json.load(dst.open())
+    assert expected == actual
