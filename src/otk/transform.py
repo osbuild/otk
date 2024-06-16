@@ -25,11 +25,28 @@ from .external import call
 log = logging.getLogger(__name__)
 
 
+def resolve(ctx: Context, tree: Any) -> Any:
+    """Resolves a (sub)tree of any type into a new tree. Each type has its own
+    specific handler to rewrite the tree."""
+
+    typ = type(tree)
+    if typ == dict:
+        return resolve_dict(ctx, tree)
+    elif typ == list:
+        return resolve_list(ctx, tree)
+    elif typ == str:
+        return resolve_str(ctx, tree)
+    elif typ in [int, float, bool, type(None)]:
+        return tree
+    else:
+        log.fatal("could not look up %r in resolvers", type(tree))
+        raise Exception(type(tree))
+
+
 def resolve_dict(ctx: Context, tree: dict[str, Any]) -> Any:
     """...."""
 
     for key, val in tree.items():
-        # Find directives
         if is_directive(key):
             # Define, target, and version are done separately, they allow
             # sibling elements thus they return the tree with their key set to their
@@ -76,33 +93,3 @@ def resolve_str(ctx, tree: str) -> Any:
     log.debug("resolving str %r", tree)
 
     return desugar(ctx, tree)
-
-
-def dont_resolve(ctx: Context, tree: Any) -> Any:
-    """Some types don't need resolving."""
-
-    return tree
-
-
-registry: dict[Type, Any] = {
-    dict: resolve_dict,
-    list: resolve_list,
-    str: resolve_str,
-    int: dont_resolve,
-    float: dont_resolve,
-    bool: dont_resolve,
-    type(None): dont_resolve,
-}
-
-
-def resolve(ctx: Context, tree: Any) -> Any:
-    """Resolves a (sub)tree of any type into a new tree. Each type has its own
-    specific handler to rewrite the tree."""
-
-    # tree = copy.deepcopy(tree)
-
-    if type(tree) not in registry:
-        log.fatal("could not look up %r in resolvers", type(tree))
-        raise Exception(type(tree))
-
-    return registry[type(tree)](ctx, tree)
