@@ -1,3 +1,2 @@
 # Example file to be included in `02-include.yaml`
-foo: "bar"
-bar: "foo"
+otk.include: "example-in-subdir.yaml"

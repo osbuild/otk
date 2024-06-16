@@ -98,3 +98,7 @@ class TransformDirectiveUnknownError(TransformError):
     """Unknown directive."""
 
     pass
+
+
+class IncludeError(OTKError):
+    pass

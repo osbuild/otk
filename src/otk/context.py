@@ -35,7 +35,6 @@ class CommonContext(Context):
     duplicate_definitions_warning: bool
 
     _version: Optional[int]
-    _path: pathlib.Path
     _variables: dict[str, Any]
 
     def __init__(
@@ -46,7 +45,6 @@ class CommonContext(Context):
         duplicate_definitions_warning: bool = False,
     ) -> None:
         self._version = None
-        self._path = path if path else pathlib.Path(".")
         self._variables = {}
 
         self.duplicate_definitions_allowed = duplicate_definitions_allowed
@@ -124,10 +122,6 @@ class OSBuildContext(Context):
 
     def variable(self, name: str) -> Any:
         return self._context.variable(name)
-
-    @property
-    def _path(self):
-        return self._context._path
 
     def for_external(self):
         return {

@@ -17,9 +17,9 @@ def must_be(kind: Type):
     def decorator(function):
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
-            if not isinstance(args[1], kind):
+            if not isinstance(args[2], kind):
                 raise TransformDirectiveTypeError(
-                    "otk.define expects a %r as its argument but received a `%s`: `%r`" % (kind, type(args[1]), args[1])
+                    "otk.define expects a %r as its argument but received a `%s`: `%r`" % (kind, type(args[2]), args[2])
                 )
             return function(*args, **kwargs)
 
@@ -35,7 +35,7 @@ def must_pass(*vs):
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
             for v in vs:
-                v(args[1])
+                v(args[2])
             return function(*args, **kwargs)
 
         return wrapper

@@ -1,10 +1,13 @@
 from otk import transform
 from otk.context import CommonContext
+from otk.parserstate import ParserState
 
 
 def test_resolve_list():
+    ctx = CommonContext()
+    state = ParserState(path="/")
     assert transform.resolve_list(
-        CommonContext(),
+        ctx, state,
         [
             1,
         ],
@@ -14,5 +17,7 @@ def test_resolve_list():
 
 
 def test_resolve_dict():
-    assert transform.resolve_dict(CommonContext(), {1: 1}) == {1: 1}
-    assert transform.resolve_dict(CommonContext(), {"1": 1}) == {"1": 1}
+    ctx = CommonContext()
+    state = ParserState(path="/")
+    assert transform.resolve_dict(ctx, state, {1: 1}) == {1: 1}
+    assert transform.resolve_dict(ctx, state, {"1": 1}) == {"1": 1}
