@@ -1,0 +1,16 @@
+otk.version: "1"
+
+otk.define.a:
+  foo:
+    bar: 1
+    baz: 2
+
+otk.define.b:
+  foo:
+    zoo: 3
+
+otk.target.osbuild.name:
+  pipelines:
+    - ${foo.bar}
+    - ${foo.baz}
+    - ${foo.zoo}
