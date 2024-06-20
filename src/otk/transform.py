@@ -59,6 +59,11 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
     """
 
     for key, val in tree.items():
+        # Replace any variables in a value immediately before doing anything
+        # else, so that variables defined in strings are considered in the
+        # processing of all directives.
+        if isinstance(val, str):
+            val = substitute_vars(ctx, val)
         if is_directive(key):
             # Define, target, and version are done separately, they allow
             # sibling elements thus they return the tree with their key set to their
