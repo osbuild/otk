@@ -76,7 +76,7 @@ def define(ctx: Context, tree: Any) -> Any:
 def include(ctx: Context, tree: Any) -> Any:
     """Include a separate file."""
 
-    tree = desugar(ctx, tree)
+    tree = substitute_vars(ctx, tree)
 
     file = ctx._path / pathlib.Path(tree)
 
@@ -148,21 +148,25 @@ def _op_map_join(ctx: Context, values: List[dict]) -> Any:
 
 
 @tree.must_be(str)
-def desugar(ctx: Context, tree: str) -> Any:
-    """Desugar a string. If the string consists of a single `${name}` value
-    then we return the object it refers to by looking up its name in the
-    variables.
+def substitute_vars(ctx: Context, data: str) -> Any:
+    """Substitute variables in the `data` string.
 
-    If the string has anything around a variable such as `foo${name}-${bar}`
-    then we replace the values inside the string. This requires the type of
-    the variable to be replaced to be either str, int, or float."""
+    If `data` consists only of a single `${name}` value then we return the
+    object that `name` refers to by looking it up in the context variables. The
+    value can be of any supported type (str, int, float, dict, list).
+
+    If `data` contains one or more variable references as substrings, such as
+    `foo${name}-${bar}` the function will replace the values for each variable
+    named (`name` and `bar`, in the example). In this case, the type of the
+    value in the names variables must be primitive types, either str, int, or
+    float."""
 
     bracket = r"\$\{%s\}"
     pattern = bracket % r"(?P<name>[a-zA-Z0-9-_\.]+)"
 
     # If there is a single match and its span is the entire haystack then we
     # return its value directly.
-    if match := re.fullmatch(pattern, tree):
+    if match := re.fullmatch(pattern, data):
         return ctx.variable(match.group("name"))
 
     # Let's find all matches if there are any. We use `list(re.finditer(...))`
@@ -170,30 +174,30 @@ def desugar(ctx: Context, tree: str) -> Any:
     # of matchgroups.
 
     # If there are multiple matches then we always interpolate strings.
-    if matches := list(re.finditer(pattern, tree)):
+    if matches := list(re.finditer(pattern, data)):
         for match in matches:
             name = match.group("name")
-            data = ctx.variable(name)
+            value = ctx.variable(name)
 
-            # We now how to turn ints and floats into str's
-            if isinstance(data, (int, float)):
-                data = str(data)
+            # We know how to turn ints and floats into str's
+            if isinstance(value, (int, float)):
+                value = str(value)
 
             # Any other type we do not
-            if not isinstance(data, str):
+            if not isinstance(value, str):
                 raise TransformDirectiveTypeError(
-                    "string sugar resolves to an incorrect type, expected int, float, or str but got %r",
-                    data,
+                    f"string {data!r} resolves to an incorrect type, "
+                    f"expected int, float, or str but got {type(value).__name__}",
                 )
 
             # Replace all occurences of this name in the str
 
             # NOTE: this means we can recursively replace names, do we want
             # that?
-            tree = re.sub(bracket % re.escape(name), data, tree)
+            data = re.sub(bracket % re.escape(name), value, data)
 
-        log.debug("desugaring %r as substring to %r", name, tree)
+        log.debug("substituting %r as substring to %r", name, data)
 
-        return tree
+        return data
 
-    return tree
+    return data

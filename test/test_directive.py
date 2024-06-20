@@ -2,7 +2,7 @@ import pytest
 
 from otk.context import CommonContext
 from otk.error import TransformDirectiveArgumentError, TransformDirectiveTypeError
-from otk.directive import desugar, include, op_join
+from otk.directive import substitute_vars, include, op_join
 
 
 def test_include_unhappy():
@@ -69,27 +69,27 @@ def test_op_map_join():
     assert op_join(ctx, d) == {"foo": "bar", "bar": "foo"}
 
 
-def test_desugar():
+def test_substitute_vars():
     ctx = CommonContext()
     ctx.define("str", "bar")
     ctx.define("int", 1)
     ctx.define("float", 1.1)
 
-    assert desugar(ctx, "") == ""
-    assert desugar(ctx, "${str}") == "bar"
-    assert desugar(ctx, "a${str}b") == "abarb"
-    assert desugar(ctx, "${int}") == 1
-    assert desugar(ctx, "a${int}b") == "a1b"
-    assert desugar(ctx, "${float}") == 1.1
-    assert desugar(ctx, "a${float}b") == "a1.1b"
+    assert substitute_vars(ctx, "") == ""
+    assert substitute_vars(ctx, "${str}") == "bar"
+    assert substitute_vars(ctx, "a${str}b") == "abarb"
+    assert substitute_vars(ctx, "${int}") == 1
+    assert substitute_vars(ctx, "a${int}b") == "a1b"
+    assert substitute_vars(ctx, "${float}") == 1.1
+    assert substitute_vars(ctx, "a${float}b") == "a1.1b"
 
 
-def test_desugar_unhappy():
+def test_substitute_vars_unhappy():
     ctx = CommonContext()
     ctx.define("dict", {})
 
     with pytest.raises(TransformDirectiveTypeError):
-        desugar(ctx, 1)
+        substitute_vars(ctx, 1)
 
     with pytest.raises(TransformDirectiveTypeError):
-        desugar(ctx, "a${dict}b")
+        substitute_vars(ctx, "a${dict}b")
