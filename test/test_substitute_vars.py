@@ -2,7 +2,7 @@ import re
 
 import pytest
 from otk.context import CommonContext
-from otk.directive import substitute_vars
+from otk.transform import substitute_vars
 from otk.error import TransformDirectiveTypeError
 
 

@@ -1,8 +1,8 @@
 import pytest
-
 from otk.context import CommonContext
-from otk.error import TransformDirectiveArgumentError, TransformDirectiveTypeError
-from otk.directive import include, op_join
+from otk.error import (TransformDirectiveArgumentError,
+                       TransformDirectiveTypeError)
+from otk.transform import include, op_join
 
 
 def test_include_unhappy():
