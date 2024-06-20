@@ -9,17 +9,12 @@ In the dictionary case we apply our directives. Directives are based on the
 keys in the dictionaries."""
 
 import logging
-from typing import Any, Type
+from typing import Any
 
-from .constant import (
-    NAME_VERSION,
-    PREFIX_DEFINE,
-    PREFIX_OP,
-    PREFIX_INCLUDE,
-    PREFIX_TARGET,
-)
+from .constant import (NAME_VERSION, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP,
+                       PREFIX_TARGET)
 from .context import Context, OSBuildContext
-from .directive import define, substitute_vars, include, is_directive, op
+from .directive import define, include, is_directive, op, substitute_vars
 from .external import call
 
 log = logging.getLogger(__name__)
