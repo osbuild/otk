@@ -2,7 +2,11 @@
   "pipelines": [
     {
       "foo": "bar",
-      "bar": "foo"
+      "bar": "foo",
+      "subkey": {
+        "foo": "bar",
+        "bar": "foo"
+      }
     }
   ],
   "version": "2",
