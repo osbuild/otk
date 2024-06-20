@@ -20,22 +20,21 @@ from .external import call
 log = logging.getLogger(__name__)
 
 
-def resolve(ctx: Context, tree: Any) -> Any:
-    """Resolves a (sub)tree of any type into a new tree. Each type has its own
-    specific handler to rewrite the tree."""
+def resolve(ctx: Context, data: Any) -> Any:
+    """Resolves a value of any supported type into a new value. Each type has
+    its own specific handler to replace the data value."""
 
-    typ = type(tree)
-    if typ == dict:
-        return resolve_dict(ctx, tree)
-    elif typ == list:
-        return resolve_list(ctx, tree)
-    elif typ == str:
-        return resolve_str(ctx, tree)
-    elif typ in [int, float, bool, type(None)]:
-        return tree
-    else:
-        log.fatal("could not look up %r in resolvers", type(tree))
-        raise Exception(type(tree))
+    if isinstance(data, dict):
+        return resolve_dict(ctx, data)
+    if isinstance(data, list):
+        return resolve_list(ctx, data)
+    if isinstance(data, str):
+        return resolve_str(ctx, data)
+    if isinstance(data, (int, float, bool, type(None))):
+        return data
+
+    log.fatal("could not look up %r in resolvers", type(data))
+    raise TypeError(type(data))
 
 
 def resolve_dict(ctx: Context, tree: dict[str, Any]) -> Any:
