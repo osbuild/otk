@@ -1,0 +1,17 @@
+otk.version: "1"
+
+otk.define.x:
+  a: 1
+  b:
+    a: 2  # b.a
+    outer: "${a}"  # 1
+    inner: "${b.a}"  # 2
+
+
+otk.target.osbuild.name:
+  vars:
+    - "${a}"
+    - "${b}"
+    - "${b.a}"
+    - "${b.outer}"
+    - "${b.inner}"
