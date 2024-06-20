@@ -19,7 +19,7 @@ from .constant import (
     PREFIX_TARGET,
 )
 from .context import Context, OSBuildContext
-from .directive import define, desugar, include, is_directive, op
+from .directive import define, substitute_vars, include, is_directive, op
 from .external import call
 
 log = logging.getLogger(__name__)
@@ -92,4 +92,4 @@ def resolve_str(ctx, tree: str) -> Any:
 
     log.debug("resolving str %r", tree)
 
-    return desugar(ctx, tree)
+    return substitute_vars(ctx, tree)
