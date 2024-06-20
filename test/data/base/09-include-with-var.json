@@ -1,0 +1,10 @@
+{
+  "pipelines": [
+    {
+      "foo": "bar",
+      "bar": "foo"
+    }
+  ],
+  "version": "2",
+  "sources": {}
+}
