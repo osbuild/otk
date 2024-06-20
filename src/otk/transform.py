@@ -38,7 +38,15 @@ def resolve(ctx: Context, data: Any) -> Any:
 
 
 def resolve_dict(ctx: Context, tree: dict[str, Any]) -> Any:
-    """...."""
+    """
+    Dictionaries are iterated through and both the keys and values are processed.
+    Keys define how a value is interpreted:
+    - otk.include.* loads the file specified by the value.
+    - otk.op.* processes the value with the named operation.
+    - otk.define.* updates the defines dictionary with all the defined key-value
+      pairs.
+    - Values under any other key are processed based on their type (see resolve()).
+    """
 
     for key, val in tree.items():
         if is_directive(key):
