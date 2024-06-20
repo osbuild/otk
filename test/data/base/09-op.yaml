@@ -1,0 +1,17 @@
+otk.version: "1"
+
+otk.target.osbuild.name:
+  pipelines:
+    foo:
+      otk.op.join:
+        values:
+          - [3, 2, 1]
+          - [6, 5, 4]
+    bar:
+      otk.op.join:
+        values:
+          - otk.op.join:
+              values:
+                - [1, 2]
+                - [3, 4]
+          - [5, 6]
