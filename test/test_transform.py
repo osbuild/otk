@@ -1,18 +1,42 @@
+import pytest
 from otk import transform
 from otk.context import CommonContext
+from otk.traversal import State
 
 
-def test_resolve_list():
-    assert transform.resolve_list(
-        CommonContext(),
-        [
-            1,
-        ],
-    ) == [
-        1,
+@pytest.mark.parametrize(
+    "data,defines",
+    [
+        (
+            # simple
+            {"a": 1, "b": 2},
+            {"a": 1, "b": 2}
+        ),
+        (
+            # intra-block reference
+            {"a": "alpha", "b": "${a}"},
+            {"a": "alpha", "b": "alpha"},
+        ),
+        (
+            # subblock
+            {"a": "alpha", "b": {"c": "${a}"}},
+            {"a": "alpha", "b": {"c": "alpha"}},
+        ),
+        (
+            # nested define (ignored)
+            {"a": 1, "otk.define.sub": {"b": 2}},
+            {"a": 1, "b": 2},
+        ),
+        (
+            # sub-block reference
+            {"a": "alpha", "b": {"a": "subalpha", "c": "${b.a}"}},
+            {"a": "alpha", "b": {"a": "subalpha", "c": "subalpha"}},
+        ),
     ]
+)
+def test_transform_process_defines(data, defines):
+    ctx = CommonContext()
+    state = State("", ctx.defines)
 
-
-def test_resolve_dict():
-    assert transform.resolve_dict(CommonContext(), {1: 1}) == {1: 1}
-    assert transform.resolve_dict(CommonContext(), {"1": 1}) == {"1": 1}
+    transform.process_defines(ctx, state, data)
+    assert state.defines == defines

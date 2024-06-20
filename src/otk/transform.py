@@ -112,15 +112,45 @@ def is_directive(needle: Any) -> bool:
     return isinstance(needle, str) and needle.startswith(PREFIX)
 
 
-@tree.must_be(dict)
-def define(ctx: Context, tree: Any) -> Any:
-    """Takes an `otk.define` block (which must be a dictionary and registers
-    everything in it as variables in the context."""
+def process_defines(ctx: Context, state: State, tree: Any):
+    """
+    Processes tree for new defines, resolving any references to other variables,
+    and update the global context. The State holds a reference to the nested
+    defines block the function is working in. New defines are added to the
+    nested block but references are resolved from the global ctx.defines.
+    """
 
-    for key, value in tree.items():
-        ctx.define(key, value)
+    subblock = state.defines
 
-    return tree
+    # Iterate over a copy of the tree so that we can modify it in-place.
+    for key, value in tree.copy().items():
+        if key.startswith("otk.define"):
+            # nested otk.define: process the nested values directly
+            process_defines(ctx, state, value)
+            continue
+
+        if key.startswith("otk.include"):
+            # TODO: disallow this (see https://github.com/osbuild/otk/issues/116)
+            del tree[key]
+            # Pass {"otk.include...": path} to resolve() to have it processed recursively.
+            # The contents will become the define block.
+            incl = resolve(ctx, state, {key: value})
+            subblock.update(incl)
+
+        if isinstance(value, dict):
+            # the value is a dict: process it recursively under a new subblock
+            new_subblock = subblock.get(key, {})
+            # set the new subblock on the parent so that both context and subblock are available immediately
+            subblock[key] = new_subblock
+            new_state = state.copy(defines=new_subblock)
+            process_defines(ctx, new_state, value)
+
+        elif isinstance(value, str):
+            # value is a string: run it through substitute_vars() to resolve any variables and set the define
+            subblock[key] = substitute_vars(ctx, value)
+        else:
+            # for any other type, just set the value to the key
+            subblock[key] = value
 
 
 @tree.must_be(str)
