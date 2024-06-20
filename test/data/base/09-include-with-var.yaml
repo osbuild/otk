@@ -1,0 +1,9 @@
+# Include a file using a path string that contains a variable
+otk.version: "1"
+
+otk.define.vars:
+  name: "example"
+
+otk.target.osbuild.name:
+  pipelines:
+    - otk.include: "02-include/${name}.yaml"
