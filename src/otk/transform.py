@@ -153,6 +153,26 @@ def process_defines(ctx: Context, state: State, tree: Any):
             subblock[key] = value
 
 
+def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
+    """
+    Load a yaml file and send it to resolve() for processing.
+    """
+    # resolve 'path' relative to 'state.path'
+    cur_path = state.path.parent
+    path = cur_path / pathlib.Path(path)
+    try:
+        with open(path, mode="r", encoding="utf=8") as fp:
+            data = yaml.safe_load(fp)
+    except FileNotFoundError as fnfe:
+        raise FileNotFoundError(f"file {path} referenced from {state.path} was not found") from fnfe
+
+    if data is not None:
+        new_state = state.copy(path=path)
+        return resolve(ctx, new_state, data)
+    return {}
+
+
+
 @tree.must_be(str)
 def include(ctx: Context, tree: Any) -> Any:
     """Include a separate file."""
