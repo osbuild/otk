@@ -1,6 +1,6 @@
 name: Build & Deploy
 
-"on":
+on:  # yamllint disable-line rule:truthy
   release:
   push:
 
