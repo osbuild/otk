@@ -13,7 +13,7 @@ otk_external_osbuild = "otk_external_osbuild.command:root"
 
 [project.optional-dependencies]
 dev = [
-    "ruff",
+    "autopep8",
     "pytest >= 8.0",
     "mypy >= 1.9",
     "types-PyYAML >= 6.0",
@@ -25,5 +25,5 @@ dev = [
 requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
-[tool.ruff]
-line-length = 120
+[tool.autopep8]
+max_line_length = 120
