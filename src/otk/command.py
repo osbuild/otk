@@ -11,6 +11,7 @@ from .help.log import JSONSequenceHandler
 from .target import CommonTarget
 from .target import registry as target_registry
 from .transform import resolve
+from .traversal import State
 
 log = logging.getLogger(__name__)
 
@@ -84,8 +85,14 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         log.fatal("requested target %r does not exist in INPUT", target_requested)
         return 1
 
+    # XXX: make this nicer
+    if arguments.input is None:
+        path = cwd / "<stdin>"
+    else:
+        path = pathlib.Path(arguments.input)
+    state = State(path=path, defines=ctx.defines)
     # resolve the full tree first
-    tree = resolve(ctx, doc.tree)
+    tree = resolve(ctx, state, doc.tree)
 
     # and also for the specific target
     try:
@@ -101,7 +108,8 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # re-resolve the specific target with the specific context and target if
     # applicable
     spec = context_registry.get(kind, CommonContext)(ctx)
-    tree = resolve(spec, tree[f"{PREFIX_TARGET}{kind}.{name}"])
+    state = State(path=path, defines=ctx.defines)
+    tree = resolve(spec, state, tree[f"{PREFIX_TARGET}{kind}.{name}"])
 
     # and then output by writing to the output
     if not dry_run:
