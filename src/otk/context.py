@@ -26,6 +26,14 @@ class Context(ABC):
     @abstractmethod
     def variable(self, name: str) -> Any: ...
 
+    @property
+    @abstractmethod
+    def defines(self) -> dict: ...
+
+    @defines.setter
+    @abstractmethod
+    def defines(self, val): ...
+
 
 class CommonContext(Context):
     duplicate_definitions_allowed: bool
@@ -102,6 +110,14 @@ class CommonContext(Context):
 
         return value
 
+    @property
+    def defines(self) -> dict:
+        return self._variables
+
+    @defines.setter
+    def defines(self, val):
+        self._variables = val
+
 
 class OSBuildContext(Context):
     """Composes in a `GenericContext` while providing support for `osbuild`
@@ -136,6 +152,14 @@ class OSBuildContext(Context):
     def from_external(self, data: str):
         self._context._variables = data["variables"]
         self.sources = data.get("sources", {})
+
+    @property
+    def defines(self) -> dict:
+        return self._context._variables
+
+    @defines.setter
+    def defines(self, val):
+        self._context._variables = val
 
 
 registry = {
