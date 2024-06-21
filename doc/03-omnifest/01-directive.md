@@ -74,7 +74,7 @@ otk.include: ${variable}
 
 If a `${}` appears in a `str` value then its string value as it appears
 in `otk.define` is replaced into the string. Note that substitutions
-in this form requires the value to be a string in the `otk.define`.
+in this form require the value to be a string in the `otk.define`.
 
 ```yaml
 # this is OK
