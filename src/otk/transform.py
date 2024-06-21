@@ -65,31 +65,37 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
         if isinstance(val, str):
             val = substitute_vars(ctx, val)
         if is_directive(key):
-            # Define, target, and version are done separately, they allow
-            # sibling elements thus they return the tree with their key set to their
-            # (resolved) value.
+
             if key.startswith(PREFIX_DEFINE):
-                return tree | {"otk.define": resolve(ctx, define(ctx, val))}
-            elif key == NAME_VERSION:
+                process_defines(ctx, state, val)
                 continue
-            elif key.startswith(PREFIX_TARGET):
+
+            if key == NAME_VERSION:
                 continue
+
+            if key.startswith(PREFIX_TARGET):
+                continue
+
+            if key.startswith(PREFIX_INCLUDE):
+                tree = tree.copy()  # copy the tree and drop the include directive
+                del tree[key]
+                tree.update(process_include(ctx, state, val))
+                return tree
 
             # Other directives do *not* allow siblings
             if len(tree) > 1:
-                raise Exception("no siblings!")
+                keys = list(tree.keys())
+                raise KeyError(f"directive {key} should not have siblings: {keys!r}")
 
-            if key.startswith(PREFIX_INCLUDE):
-                return resolve(ctx, include(ctx, val))
-            elif key.startswith(PREFIX_OP):
-                return resolve(ctx, op(ctx, resolve(ctx, val), key))
-            elif key.startswith("otk.external."):
+            if key.startswith(PREFIX_OP):
+                return resolve(ctx, state, op(ctx, resolve(ctx, state, val), key))
+
+            if key.startswith("otk.external."):
                 if isinstance(ctx, OSBuildContext):
-                    return resolve(ctx, call(key, resolve(ctx, val)))
-                else:
-                    log.error("%r:%r", key, ctx)
+                    return resolve(ctx, state, call(key, resolve(ctx, state, val)))
+                log.error("%r:%r", key, ctx)
 
-        tree[key] = resolve(ctx, val)
+        tree[key] = resolve(ctx, state, val)
 
     return tree
 
