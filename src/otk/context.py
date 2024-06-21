@@ -8,13 +8,10 @@ import pathlib
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
-from .error import (
-    TransformDefineDuplicateError,
-    TransformVariableIndexRangeError,
-    TransformVariableIndexTypeError,
-    TransformVariableLookupError,
-    TransformVariableTypeError,
-)
+from .error import (TransformDefineDuplicateError,
+                    TransformVariableIndexRangeError,
+                    TransformVariableIndexTypeError,
+                    TransformVariableLookupError, TransformVariableTypeError)
 
 log = logging.getLogger(__name__)
 
