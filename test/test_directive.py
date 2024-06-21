@@ -2,7 +2,7 @@ import pytest
 
 from otk.context import CommonContext
 from otk.error import TransformDirectiveArgumentError, TransformDirectiveTypeError
-from otk.directive import substitute_vars, include, op_join
+from otk.directive import include, op_join
 
 
 def test_include_unhappy():
@@ -67,29 +67,3 @@ def test_op_map_join():
     d = {"values": [d1, d2]}
 
     assert op_join(ctx, d) == {"foo": "bar", "bar": "foo"}
-
-
-def test_substitute_vars():
-    ctx = CommonContext()
-    ctx.define("str", "bar")
-    ctx.define("int", 1)
-    ctx.define("float", 1.1)
-
-    assert substitute_vars(ctx, "") == ""
-    assert substitute_vars(ctx, "${str}") == "bar"
-    assert substitute_vars(ctx, "a${str}b") == "abarb"
-    assert substitute_vars(ctx, "${int}") == 1
-    assert substitute_vars(ctx, "a${int}b") == "a1b"
-    assert substitute_vars(ctx, "${float}") == 1.1
-    assert substitute_vars(ctx, "a${float}b") == "a1.1b"
-
-
-def test_substitute_vars_unhappy():
-    ctx = CommonContext()
-    ctx.define("dict", {})
-
-    with pytest.raises(TransformDirectiveTypeError):
-        substitute_vars(ctx, 1)
-
-    with pytest.raises(TransformDirectiveTypeError):
-        substitute_vars(ctx, "a${dict}b")
