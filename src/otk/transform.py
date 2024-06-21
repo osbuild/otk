@@ -25,20 +25,21 @@ from .constant import (NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE,
 from .context import Context, OSBuildContext
 from .error import TransformDirectiveTypeError, TransformDirectiveUnknownError
 from .external import call
+from .traversal import State
 
 log = logging.getLogger(__name__)
 
 
-def resolve(ctx: Context, data: Any) -> Any:
+def resolve(ctx: Context, state: State, data: Any) -> Any:
     """Resolves a value of any supported type into a new value. Each type has
     its own specific handler to replace the data value."""
 
     if isinstance(data, dict):
-        return resolve_dict(ctx, data)
+        return resolve_dict(ctx, state, data)
     if isinstance(data, list):
-        return resolve_list(ctx, data)
+        return resolve_list(ctx, state, data)
     if isinstance(data, str):
-        return resolve_str(ctx, data)
+        return resolve_str(ctx, state, data)
     if isinstance(data, (int, float, bool, type(None))):
         return data
 
@@ -46,7 +47,7 @@ def resolve(ctx: Context, data: Any) -> Any:
     raise TypeError(type(data))
 
 
-def resolve_dict(ctx: Context, tree: dict[str, Any]) -> Any:
+def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
     """
     Dictionaries are iterated through and both the keys and values are processed.
     Keys define how a value is interpreted:
@@ -88,16 +89,16 @@ def resolve_dict(ctx: Context, tree: dict[str, Any]) -> Any:
     return tree
 
 
-def resolve_list(ctx, tree: list[Any]) -> list[Any]:
+def resolve_list(ctx, state: State, tree: list[Any]) -> list[Any]:
     """Resolving a list means applying the resolve function to each element in
     the list."""
 
     log.debug("resolving list %r", tree)
 
-    return [resolve(ctx, val) for val in tree]
+    return [resolve(ctx, state, val) for val in tree]
 
 
-def resolve_str(ctx, tree: str) -> Any:
+def resolve_str(ctx, state: State, tree: str) -> Any:
     """Resolving strings means they are parsed for any variable
     interpolation."""
 
