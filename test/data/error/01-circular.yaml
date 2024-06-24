@@ -1,4 +1,3 @@
 otk.version: 1
 
-otk.target.osbuild.name:
-  otk.include: 01-circular/a.yaml
+otk.include: 01-circular/a.yaml
