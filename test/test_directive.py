@@ -2,21 +2,7 @@ import pytest
 from otk.context import CommonContext
 from otk.error import (TransformDirectiveArgumentError,
                        TransformDirectiveTypeError)
-from otk.transform import include, op_join
-
-
-def test_include_unhappy():
-    ctx = CommonContext()
-
-    with pytest.raises(TransformDirectiveTypeError):
-        include(ctx, 1)
-
-
-def test_include_file_missing_errors(tmp_path):
-    ctx = CommonContext()
-
-    with pytest.raises(FileNotFoundError):
-        include(ctx, "non-existing.yml")
+from otk.transform import op_join
 
 
 def test_op_seq_join():

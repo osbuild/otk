@@ -186,22 +186,6 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
     return {}
 
 
-@tree.must_be(str)
-def include(ctx: Context, tree: Any) -> Any:
-    """Include a separate file."""
-
-    tree = substitute_vars(ctx, tree)
-
-    file = ctx._path / pathlib.Path(tree)
-
-    # TODO str'ed for json log, lets add a serializer for posixpath
-    # TODO instead
-    log.info("otk.include=%s", str(file))
-
-    # TODO
-    return yaml.safe_load(file.read_text())
-
-
 def op(ctx: Context, tree: Any, key: str) -> Any:
     """Dispatch the various `otk.op` directives while handling unknown
     operations."""
