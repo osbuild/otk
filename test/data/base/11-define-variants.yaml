@@ -1,0 +1,84 @@
+otk.version: "1"
+
+# dictionary -> List replacement test
+otk.define.dict_to_list_1:
+  dict_to_list:
+    one: 1
+    two: 2
+
+otk.define.dict_to_list_2:
+  dict_to_list:
+    - 3
+    - 4
+    - 5
+
+# dictionary -> string replacement test
+otk.define.dict_to_str_1:
+  dict_to_str:
+    one: 1
+    two: 2
+
+otk.define.dict_to_str_2:
+  dict_to_str: "I'm a string now"
+
+
+# list -> dictionary replacement test
+otk.define.list_to_dict_1:
+  list_to_dict:
+    - 11
+    - 12
+
+otk.define.list_to_dict_2:
+  list_to_dict:
+    eleven: 11
+    twelve: 12
+
+
+# string -> dictionary replacment test
+otk.define.str_to_dict_1:
+  str_to_dict: "thirteen and fourteen"
+
+otk.define.str_to_dict_2:
+  str_to_dict:
+    thirteen: 13
+    fourteen: 14
+
+# string -> list replacement test
+otk.define.str_to_list_1:
+  str_to_list: "I want to be a list"
+
+otk.define.str_to_list_2:
+  str_to_list:
+    - "yay"
+    - "I'm a"
+    - "list"
+
+# list -> str replacement test
+otk.define.list_to_str_1:
+  list_to_str:
+    - "Replace"
+    - "me!"
+
+otk.define.list_to_str_2:
+  list_to_str: "I was a list"
+
+otk.target.osbuild.name:
+  pipelines:
+    - name: "dict_to_list"
+      stages:
+        - ${dict_to_list}
+    - name: "dict_to_str"
+      stages:
+        - ${dict_to_str}
+    - name: "list_to_dict"
+      stages:
+        - ${list_to_dict}
+    - name: "str_to_dict"
+      stages:
+        - ${str_to_dict}
+    - name: "str_to_list"
+      stages:
+        - ${str_to_list}
+    - name: "list_to_str"
+      stages:
+        - ${list_to_str}

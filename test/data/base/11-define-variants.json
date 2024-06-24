@@ -1,0 +1,56 @@
+{
+  "pipelines": [
+    {
+      "name": "dict_to_list",
+      "stages": [
+        [
+          3,
+          4,
+          5
+        ]
+      ]
+    },
+    {
+      "name": "dict_to_str",
+      "stages": [
+        "I'm a string now"
+      ]
+    },
+    {
+      "name": "list_to_dict",
+      "stages": [
+        {
+          "eleven": 11,
+          "twelve": 12
+        }
+      ]
+    },
+    {
+      "name": "str_to_dict",
+      "stages": [
+        {
+          "thirteen": 13,
+          "fourteen": 14
+        }
+      ]
+    },
+    {
+      "name": "str_to_list",
+      "stages": [
+        [
+          "yay",
+          "I'm a",
+          "list"
+        ]
+      ]
+    },
+    {
+      "name": "list_to_str",
+      "stages": [
+        "I was a list"
+      ]
+    }
+  ],
+  "version": "2",
+  "sources": {}
+}
