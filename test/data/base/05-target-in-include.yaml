@@ -1,0 +1,3 @@
+otk.version: "1"
+
+otk.include.name: "05-target-in-include/example.yaml"
