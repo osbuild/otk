@@ -60,11 +60,20 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     ctx = CommonContext(cwd)
     doc = Omnifest.from_yaml_file(src)
 
+    # XXX: make this nicer
+    if arguments.input is None:
+        path = cwd / "<stdin>"
+    else:
+        path = pathlib.Path(arguments.input)
+    state = State(path=path, defines=ctx.defines)
+    # resolve the full tree first
+    tree = resolve(ctx, state, doc.tree)
+
     # let's peek at the tree to validate some things necessary for compilation
     # we might want to move this into a separate place once this gets shared
     # across multiple command
     target_available = {
-        key.removeprefix(PREFIX_TARGET): val for key, val in doc.tree.items() if key.startswith(PREFIX_TARGET)
+        key.removeprefix(PREFIX_TARGET): val for key, val in tree.items() if key.startswith(PREFIX_TARGET)
     }
 
     if not target_available:
@@ -84,15 +93,6 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     if target_requested not in target_available:
         log.fatal("requested target %r does not exist in INPUT", target_requested)
         return 1
-
-    # XXX: make this nicer
-    if arguments.input is None:
-        path = cwd / "<stdin>"
-    else:
-        path = pathlib.Path(arguments.input)
-    state = State(path=path, defines=ctx.defines)
-    # resolve the full tree first
-    tree = resolve(ctx, state, doc.tree)
 
     # and also for the specific target
     try:
