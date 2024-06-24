@@ -3,7 +3,7 @@ import textwrap
 import pytest
 
 from otk.document import Omnifest
-from otk.error import ParseTargetError, ParseTypeError, ParseVersionError
+from otk.error import ParseTypeError, ParseVersionError
 
 
 def test_omnifest_read_dict():
@@ -21,7 +21,7 @@ def test_omnifest_read_string():
 
 
 def test_omnifest_ensure():
-    Omnifest.ensure({"otk.version": 1, "otk.target.osbuild": {}})
+    Omnifest.ensure({"otk.version": 1})
 
 
 def test_omnifest_ensure_no_keys():
@@ -64,15 +64,6 @@ def test_omnifest_from_yaml_bytes_sad():
         Omnifest.from_yaml_bytes(
             """
 otk.not-version: 1
-"""
-        )
-
-    # And a YAML that does have a top level map and `otk.version` but no
-    # targets
-    with pytest.raises(ParseTargetError):
-        Omnifest.from_yaml_bytes(
-            """
-otk.version: 1
 """
         )
 

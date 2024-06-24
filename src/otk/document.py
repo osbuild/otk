@@ -5,8 +5,8 @@ from typing import Any
 
 import yaml
 
-from .constant import NAME_VERSION, PREFIX_TARGET
-from .error import ParseTargetError, ParseTypeError, ParseVersionError
+from .constant import NAME_VERSION
+from .error import ParseTypeError, ParseVersionError
 
 log = logging.getLogger(__name__)
 
@@ -57,11 +57,6 @@ class Omnifest:
         # being an Omnifest.
         if NAME_VERSION not in deserialized_data:
             raise ParseVersionError("omnifest must contain a key by the name of %r" % (NAME_VERSION,))
-
-        # Make sure that the omnifest contains targets. Without targets we
-        # can't do much.
-        if not any(key.startswith(PREFIX_TARGET) for key in deserialized_data):
-            raise ParseTargetError("omnifest must contain at least one key by the name of `%s.*`" % (PREFIX_TARGET,))
 
     @property
     def tree(self) -> dict[str, Any]:
