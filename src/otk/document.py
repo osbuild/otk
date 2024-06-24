@@ -2,8 +2,8 @@ import logging
 from copy import deepcopy
 from typing import Any
 
-from .constant import NAME_VERSION
-from .error import ParseVersionError
+from .constant import PREFIX_TARGET, NAME_VERSION
+from .error import NoTargetsError, ParseVersionError
 
 log = logging.getLogger(__name__)
 
@@ -26,6 +26,12 @@ class Omnifest:
         # being an Omnifest.
         if NAME_VERSION not in deserialized_data:
             raise ParseVersionError("omnifest must contain a key by the name of %r" % (NAME_VERSION,))
+
+        target_available = {
+            key.removeprefix(PREFIX_TARGET): val for key, val in deserialized_data.items() if key.startswith(PREFIX_TARGET)
+        }
+        if not target_available:
+            raise NoTargetsError("input does not contain any targets")
 
     @property
     def tree(self) -> dict[str, Any]:
