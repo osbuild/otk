@@ -1,7 +1,6 @@
 .PHONY: lint
 lint:
-	@find . -name '*.yaml' | xargs yamllint
-	@ruff check
+	pre-commit run --all-files
 
 .PHONY: type
 type:
@@ -13,9 +12,8 @@ format:
 	@find test -name '*.py' | xargs autopep8 --in-place
 
 .PHONY: test
-test:
+test: lint
 	@pytest
-	pre-commit run --all-files
 
 .PHONY: git-diff-check
 git-diff-check:
