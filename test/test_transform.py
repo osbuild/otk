@@ -39,4 +39,4 @@ def test_transform_process_defines(data, defines):
     state = State("", ctx.defines)
 
     transform.process_defines(ctx, state, data)
-    assert state.defines == defines
+    assert ctx._variables == defines

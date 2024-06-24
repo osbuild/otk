@@ -1,25 +1,25 @@
 class State:
-    def __init__(self, path, defines, includes=None):
+    def __init__(self, path, define_subtree_ref, includes=None):
         self.path = path
-        self.defines = defines
+        self.define_subtree_ref = define_subtree_ref
         if includes is None:
             includes = []
         self.includes = includes
 
-    def copy(self, *, path=None, defines=None, includes=None) -> "State":
+    def copy(self, *, path=None, define_subtree_ref=None, includes=None) -> "State":
         """
         Return a new State, optionally redefining the path and defines
         properties. Properties not defined in the args are (shallow) copied
         from the existing instance.
-        A shallow copy of the 'defines' allows us to keep modifying the global
+        A reference the 'define_subtree_ref' allows us to keep modifying the global
         context variables through the reference on this State object, which can
-        refer to a sub-object of the global context when necessary.
+        refer to the current (sub)tree of the defines in the global context.
         """
         if path is None:
             path = self.path
-        if defines is None:
-            defines = self.defines
+        if define_subtree_ref is None:
+            define_subtree_ref = self.define_subtree_ref
         if includes is None:
             includes = self.includes.copy()
 
-        return State(path, defines, includes)
+        return State(path, define_subtree_ref, includes)
