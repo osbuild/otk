@@ -27,12 +27,22 @@ class Omnifest:
         if NAME_VERSION not in deserialized_data:
             raise ParseVersionError("omnifest must contain a key by the name of %r" % (NAME_VERSION,))
 
-        target_available = {
-            key.removeprefix(PREFIX_TARGET): val for key, val in deserialized_data.items() if key.startswith(PREFIX_TARGET)
-        }
+        target_available = _targets(deserialized_data)
         if not target_available:
             raise NoTargetsError("input does not contain any targets")
 
     @property
     def tree(self) -> dict[str, Any]:
         return deepcopy(self._underlying_data)
+
+    @property
+    def targets(self) -> dict[str, Any]:
+        """ Return a dict of target(s) and their subtree(s) """
+        return _targets(self._underlying_data)
+
+
+def _targets(tree: dict[str, Any]) -> dict[str, Any]:
+    return {
+        key.removeprefix(PREFIX_TARGET): val
+        for key, val in tree.items() if key.startswith(PREFIX_TARGET)
+    }
