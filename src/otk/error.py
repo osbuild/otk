@@ -104,3 +104,9 @@ class CircularIncludeError(ParseError):
     """Cirtcular include detected."""
 
     pass
+
+
+class NoTargetsError(ParseError):
+    """No targets in the otk file found."""
+
+    pass
