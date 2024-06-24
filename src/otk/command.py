@@ -49,20 +49,15 @@ def root() -> int:
 
 
 def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
-    src = sys.stdin if arguments.input is None else open(arguments.input)
     if not dry_run:
         dst = sys.stdout if arguments.output is None else open(arguments.output, "w")
-
-    # the working directory is either the current directory for stdin or the
-    # directory the omnifest is located in
-    cwd = pathlib.Path.cwd() if arguments.input is None else pathlib.Path(src.name).parent
 
     if arguments.input is None:
         path = pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")
     else:
         path = pathlib.Path(arguments.input)
 
-    ctx = CommonContext(cwd)
+    ctx = CommonContext()
     state = State(path=path, defines=ctx.defines)
     doc = Omnifest(process_include(ctx, state, path))
 
