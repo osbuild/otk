@@ -9,7 +9,8 @@ type:
 
 .PHONY: format
 format:
-	@ruff format src/ test/
+	@find src -name '*.py' | xargs autopep8 --in-place
+	@find test -name '*.py' | xargs autopep8 --in-place
 
 .PHONY: test
 test:
