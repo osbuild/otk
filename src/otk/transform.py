@@ -149,7 +149,12 @@ def process_defines(ctx: Context, state: State, tree: Any):
 
         if isinstance(value, dict):
             # the value is a dict: process it recursively under a new subblock
-            new_subblock = subblock.get(key, {})
+            new_subblock = {}
+            if isinstance(subblock.get(key), dict):
+                # If the new subblock already exists and is a dictionary, use it so they get merged
+                # Any other type will be replaced completely.
+                new_subblock = subblock[key]
+
             # set the new subblock on the parent so that both context and subblock are available immediately
             subblock[key] = new_subblock
             new_state = state.copy(defines=new_subblock)
