@@ -98,3 +98,9 @@ class TransformDirectiveUnknownError(TransformError):
     """Unknown directive."""
 
     pass
+
+
+class CircularIncludeError(ParseError):
+    """Cirtcular include detected."""
+
+    pass

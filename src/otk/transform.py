@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import itertools
 import logging
+import os
 import pathlib
 import re
 from typing import Any, List
@@ -20,10 +21,9 @@ from typing import Any, List
 import yaml
 
 from . import tree
-from .constant import (NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE,
-                       PREFIX_OP, PREFIX_TARGET)
+from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET
 from .context import Context, OSBuildContext
-from .error import TransformDirectiveTypeError, TransformDirectiveUnknownError
+from .error import CircularIncludeError, TransformDirectiveTypeError, TransformDirectiveUnknownError
 from .external import call
 from .traversal import State
 
@@ -65,7 +65,6 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
         if isinstance(val, str):
             val = substitute_vars(ctx, val)
         if is_directive(key):
-
             if key.startswith(PREFIX_DEFINE):
                 process_defines(ctx, state, val)
                 continue
@@ -170,7 +169,7 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
     """
     # resolve 'path' relative to 'state.path'
     cur_path = state.path.parent
-    path = cur_path / pathlib.Path(path)
+    path = (cur_path / pathlib.Path(path)).resolve()
     try:
         with open(path, mode="r", encoding="utf=8") as fp:
             data = yaml.safe_load(fp)
@@ -178,10 +177,13 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
         raise FileNotFoundError(f"file {path} referenced from {state.path} was not found") from fnfe
 
     if data is not None:
+        if path in state.includes:
+            circle = [os.fspath(p) for p in state.includes]
+            raise CircularIncludeError(f"circular include from {circle}")
         new_state = state.copy(path=path)
+        new_state.includes.append(path)
         return resolve(ctx, new_state, data)
     return {}
-
 
 
 @tree.must_be(str)
