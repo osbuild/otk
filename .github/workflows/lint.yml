@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install yamllint
-        run: sudo apt-get install -y yamllint
+        run: sudo apt-get install -y yamllint aspell
       - name: "Clone Repository"
         uses: actions/checkout@v4
       - name: Install
-        run: pip install ruff
+        run: pip install pre-commit autopep8
       - name: Run linters
         run: make lint
