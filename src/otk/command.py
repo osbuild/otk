@@ -66,19 +66,8 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     state = State(path=path, defines=ctx.defines)
     doc = Omnifest(process_include(ctx, state, path))
 
-    # let's peek at the tree to validate some things necessary for compilation
-    # we might want to move this into a separate place once this gets shared
-    # across multiple command
-    target_available = {
-        key.removeprefix(PREFIX_TARGET): val for key, val in doc.tree.items() if key.startswith(PREFIX_TARGET)
-    }
-
-    if not target_available:
-        log.fatal("INPUT does not contain any targets")
-        return 1
-
+    target_available = doc.targets
     target_requested = arguments.target
-
     if len(target_available) > 1 and not target_requested:
         log.fatal("INPUT contains multiple targets, `-t` is required")
         return 1
