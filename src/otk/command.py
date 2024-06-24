@@ -10,7 +10,7 @@ from .document import Omnifest
 from .help.log import JSONSequenceHandler
 from .target import CommonTarget
 from .target import registry as target_registry
-from .transform import resolve
+from .transform import process_include, resolve
 from .traversal import State
 
 log = logging.getLogger(__name__)
@@ -57,23 +57,20 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # directory the omnifest is located in
     cwd = pathlib.Path.cwd() if arguments.input is None else pathlib.Path(src.name).parent
 
-    ctx = CommonContext(cwd)
-    doc = Omnifest.from_yaml_file(src)
-
-    # XXX: make this nicer
     if arguments.input is None:
-        path = cwd / "<stdin>"
+        path = pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")
     else:
         path = pathlib.Path(arguments.input)
+
+    ctx = CommonContext(cwd)
     state = State(path=path, defines=ctx.defines)
-    # resolve the full tree first
-    tree = resolve(ctx, state, doc.tree)
+    doc = Omnifest(process_include(ctx, state, path))
 
     # let's peek at the tree to validate some things necessary for compilation
     # we might want to move this into a separate place once this gets shared
     # across multiple command
     target_available = {
-        key.removeprefix(PREFIX_TARGET): val for key, val in tree.items() if key.startswith(PREFIX_TARGET)
+        key.removeprefix(PREFIX_TARGET): val for key, val in doc.tree.items() if key.startswith(PREFIX_TARGET)
     }
 
     if not target_available:
@@ -109,7 +106,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # applicable
     spec = context_registry.get(kind, CommonContext)(ctx)
     state = State(path=path, defines=ctx.defines)
-    tree = resolve(spec, state, tree[f"{PREFIX_TARGET}{kind}.{name}"])
+    tree = resolve(spec, state, doc.tree[f"{PREFIX_TARGET}{kind}.{name}"])
 
     # and then output by writing to the output
     if not dry_run:
