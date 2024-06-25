@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import itertools
 import logging
-import os
 import pathlib
 import re
 from typing import Any, List
@@ -23,7 +22,7 @@ import yaml
 from . import tree
 from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET
 from .context import Context, OSBuildContext
-from .error import CircularIncludeError, ParseError, TransformDirectiveTypeError, TransformDirectiveUnknownError
+from .error import ParseError, TransformDirectiveTypeError, TransformDirectiveUnknownError
 from .external import call
 from .traversal import State
 
@@ -143,22 +142,19 @@ def process_defines(ctx: Context, state: State, tree: Any):
         if key.startswith("otk.op"):
             del tree[key]
             value = op(ctx, value, key)
-            ctx.define(".".join(state.define_subkeys), value)
+            ctx.define(state.define_subkey(), value)
             continue
 
-        define_key = ".".join(state.define_subkeys+[key])
         if isinstance(value, dict):
-            new_define_subkeys = state.define_subkeys.copy()
-            new_define_subkeys.append(key)
-            new_state = state.copy(define_subkeys=new_define_subkeys)
+            new_state = state.copy(subkey_add=key)
             process_defines(ctx, new_state, value)
 
         elif isinstance(value, str):
             # value is a string: run it through substitute_vars() to resolve any variables and set the define
-            ctx.define(define_key, substitute_vars(ctx, value))
+            ctx.define(state.define_subkey(key), substitute_vars(ctx, value))
         else:
             # for any other type, just set the value to the key
-            ctx.define(define_key, value)
+            ctx.define(state.define_subkey(key), value)
 
 
 def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
@@ -176,12 +172,7 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
         raise FileNotFoundError(f"file {path} referenced from {state.path} was not found") from fnfe
 
     if data is not None:
-        if path in state.includes:
-            circle = [os.fspath(p) for p in state.includes]
-            raise CircularIncludeError(f"circular include from {circle}")
-        new_state = state.copy(path=path)
-        new_state.includes.append(path)
-        return resolve(ctx, new_state, data)
+        return resolve(ctx, state.copy(path=path), data)
     return {}
 
 
