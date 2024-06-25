@@ -58,7 +58,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         path = pathlib.Path(arguments.input)
 
     ctx = CommonContext()
-    state = State(path=path, defines=ctx.defines)
+    state = State(path=path, define_subkeys=[])
     doc = Omnifest(process_include(ctx, state, path))
 
     target_available = doc.targets
@@ -89,7 +89,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # re-resolve the specific target with the specific context and target if
     # applicable
     spec = context_registry.get(kind, CommonContext)(ctx)
-    state = State(path=path, defines=ctx.defines)
+    state = State(path=path, define_subkeys=[])
     tree = resolve(spec, state, doc.tree[f"{PREFIX_TARGET}{kind}.{name}"])
 
     # and then output by writing to the output

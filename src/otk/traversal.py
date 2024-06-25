@@ -1,25 +1,24 @@
 class State:
-    def __init__(self, path, defines, includes=None):
+    def __init__(self, path, define_subkeys, includes=None):
         self.path = path
-        self.defines = defines
+        self.define_subkeys = define_subkeys
         if includes is None:
             includes = []
         self.includes = includes
 
-    def copy(self, *, path=None, defines=None, includes=None) -> "State":
+    def copy(self, *, path=None, define_subkeys=None, includes=None) -> "State":
         """
-        Return a new State, optionally redefining the path and defines
+        Return a new State, optionally redefining the path and define_subkeys
         properties. Properties not defined in the args are (shallow) copied
         from the existing instance.
-        A shallow copy of the 'defines' allows us to keep modifying the global
-        context variables through the reference on this State object, which can
-        refer to a sub-object of the global context when necessary.
+        The 'define_subkeys' keeps track how deep in a define the recursion
+        is and can be used to modify the global context.
         """
         if path is None:
             path = self.path
-        if defines is None:
-            defines = self.defines
+        if define_subkeys is None:
+            define_subkeys = self.define_subkeys
         if includes is None:
             includes = self.includes.copy()
 
-        return State(path, defines, includes)
+        return State(path, define_subkeys, includes)
