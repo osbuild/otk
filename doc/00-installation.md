@@ -5,7 +5,7 @@ As `otk` is still in a proof of concept state it is not yet packaged for any dis
 To start hacking on `otk` you can:
 
 ```
-€ git checkout https://github.com/osbuild/otk
+€ git clone https://github.com/osbuild/otk
 # ...
 € python3 -m venv venv
 # ...
