@@ -2,7 +2,6 @@ import pytest
 
 from otk.context import CommonContext
 from otk.error import (
-    TransformDefineDuplicateError,
     TransformVariableIndexRangeError,
     TransformVariableIndexTypeError,
     TransformVariableLookupError,
@@ -35,6 +34,22 @@ def test_context():
     assert ctx.variable("boo.1") == 2
 
 
+def test_context_define_subkey():
+    ctx = CommonContext()
+    ctx.define("key", "val")
+    assert ctx.variable("key") == "val"
+
+    ctx.define("key.subkey", "subval")
+    assert ctx.variable("key") == {"subkey": "subval"}
+    ctx.define("key.subkey2", "subval2")
+    assert ctx.variable("key") == {"subkey": "subval", "subkey2": "subval2"}
+    ctx.define("key", "other-val")
+    assert ctx.variable("key") == "other-val"
+
+    ctx.define("other.key.with.subkey", "subval")
+    assert ctx.variable("other") == {"key": {"with": {"subkey": "subval"}}}
+
+
 def test_context_nonexistent():
     ctx = CommonContext()
 
@@ -64,19 +79,3 @@ def test_context_unhappy():
 
     with pytest.raises(TransformVariableIndexRangeError):
         ctx.variable("bar.3")
-
-
-def test_context_duplicate_definition():
-    ctx0 = CommonContext()
-
-    # Redefinition allowed
-    ctx0.define("foo", "bar")
-    ctx0.define("foo", "bar")
-
-    ctx1 = CommonContext(duplicate_definitions_allowed=False)
-
-    # Redefinition NOT allowed
-    ctx1.define("foo", "bar")
-
-    with pytest.raises(TransformDefineDuplicateError):
-        ctx1.define("foo", "bar")
