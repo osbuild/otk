@@ -23,7 +23,7 @@ import yaml
 from . import tree
 from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET
 from .context import Context, OSBuildContext
-from .error import CircularIncludeError, TransformDirectiveTypeError, TransformDirectiveUnknownError
+from .error import CircularIncludeError, ParseError, TransformDirectiveTypeError, TransformDirectiveUnknownError
 from .external import call
 from .traversal import State
 
@@ -138,17 +138,7 @@ def process_defines(ctx: Context, state: State, tree: Any):
             continue
 
         if key.startswith("otk.include"):
-            # TODO: disallow this (see https://github.com/osbuild/otk/issues/116)
-            del tree[key]
-            # Pass {"otk.include...": path} to resolve() to have it processed recursively.
-            # The contents will become the define block.
-            values = resolve(ctx, state, {key: value})
-            if len(state.define_subkeys) > 0:
-                ctx.define(".".join(state.define_subkeys), values)
-            else:
-                for k, v in values.items():
-                    ctx.define(k, v)
-            continue
+            raise ParseError(f"otk.include not allowed in an otk.define in {state.path}")
 
         if key.startswith("otk.op"):
             del tree[key]
