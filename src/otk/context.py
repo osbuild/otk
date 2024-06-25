@@ -8,8 +8,7 @@ import pathlib
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
-from .error import (TransformDefineDuplicateError,
-                    TransformVariableIndexRangeError,
+from .error import (TransformVariableIndexRangeError,
                     TransformVariableIndexTypeError,
                     TransformVariableLookupError, TransformVariableTypeError)
 
@@ -36,9 +35,6 @@ class Context(ABC):
 
 
 class CommonContext(Context):
-    duplicate_definitions_allowed: bool
-    duplicate_definitions_warning: bool
-
     _version: Optional[int]
     _path: pathlib.Path
     _variables: dict[str, Any]
@@ -46,16 +42,10 @@ class CommonContext(Context):
     def __init__(
         self,
         path: Optional[pathlib.Path] = None,
-        *,
-        duplicate_definitions_allowed: bool = True,
-        duplicate_definitions_warning: bool = False,
     ) -> None:
         self._version = None
         self._path = path if path else pathlib.Path(".")
         self._variables = {}
-
-        self.duplicate_definitions_allowed = duplicate_definitions_allowed
-        self.duplicate_definitions_warning = duplicate_definitions_warning
 
     def version(self, v: int) -> None:
         # Set the context version, duplicate definitions with different
@@ -70,19 +60,13 @@ class CommonContext(Context):
     def define(self, name: str, value: Any) -> None:
         log.debug("defining %r", name)
 
-        if name in self._variables:
-            if not self.duplicate_definitions_allowed:
-                raise TransformDefineDuplicateError()
-
-            if self.duplicate_definitions_warning:
-                log.warn(
-                    "redefinition of %r, previous values was %r and new value is %r",
-                    name,
-                    self._variables[name],
-                    value,
-                )
-
-        self._variables[name] = value
+        cur_var_scope = self._variables
+        parts = name.split(".")
+        for part in parts[:-1]:
+            if not isinstance(cur_var_scope.get(part), dict):
+                cur_var_scope[part] = {}
+            cur_var_scope = cur_var_scope[part]
+        cur_var_scope[parts[-1]] = value
 
     def variable(self, name: str) -> Any:
         parts = name.split(".")
