@@ -130,8 +130,6 @@ def process_defines(ctx: Context, state: State, tree: Any):
     nested block but references are resolved from the global ctx.defines.
     """
 
-    subblock = state.defines
-
     # Iterate over a copy of the tree so that we can modify it in-place.
     for key, value in tree.copy().items():
         if key.startswith("otk.define"):
@@ -144,28 +142,33 @@ def process_defines(ctx: Context, state: State, tree: Any):
             del tree[key]
             # Pass {"otk.include...": path} to resolve() to have it processed recursively.
             # The contents will become the define block.
-            incl = resolve(ctx, state, {key: value})
-            subblock.update(incl)
+            values = resolve(ctx, state, {key: value})
+            if len(state.define_subkeys) > 0:
+                ctx.define(".".join(state.define_subkeys), values)
+            else:
+                for k, v in values.items():
+                    ctx.define(k, v)
+            continue
 
+        if key.startswith("otk.op"):
+            del tree[key]
+            value = op(ctx, value, key)
+            ctx.define(".".join(state.define_subkeys), value)
+            continue
+
+        define_key = ".".join(state.define_subkeys+[key])
         if isinstance(value, dict):
-            # the value is a dict: process it recursively under a new subblock
-            new_subblock = {}
-            if isinstance(subblock.get(key), dict):
-                # If the new subblock already exists and is a dictionary, use it so they get merged
-                # Any other type will be replaced completely.
-                new_subblock = subblock[key]
-
-            # set the new subblock on the parent so that both context and subblock are available immediately
-            subblock[key] = new_subblock
-            new_state = state.copy(defines=new_subblock)
+            new_define_subkeys = state.define_subkeys.copy()
+            new_define_subkeys.append(key)
+            new_state = state.copy(define_subkeys=new_define_subkeys)
             process_defines(ctx, new_state, value)
 
         elif isinstance(value, str):
             # value is a string: run it through substitute_vars() to resolve any variables and set the define
-            subblock[key] = substitute_vars(ctx, value)
+            ctx.define(define_key, substitute_vars(ctx, value))
         else:
             # for any other type, just set the value to the key
-            subblock[key] = value
+            ctx.define(define_key, value)
 
 
 def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:

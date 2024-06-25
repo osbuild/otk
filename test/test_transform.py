@@ -36,7 +36,7 @@ from otk.traversal import State
 )
 def test_transform_process_defines(data, defines):
     ctx = CommonContext()
-    state = State("", ctx.defines)
+    state = State("", [])
 
     transform.process_defines(ctx, state, data)
-    assert state.defines == defines
+    assert ctx._variables == defines
