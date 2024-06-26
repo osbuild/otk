@@ -44,7 +44,7 @@ def test_state_detect_circular_1():
     ns2 = ns1.copy(path="c/c.yaml")
     with pytest.raises(CircularIncludeError) as exc:
         ns2.copy(path="a.yaml")
-    assert str(exc.value) == "circular include from ['a.yaml', 'b.yaml', 'c/c.yaml']"
+    assert str(exc.value) == "circular include from a.yaml->b.yaml->c/c.yaml->a.yaml"
     assert ns2._includes == ["a.yaml", "b.yaml", "c/c.yaml"]
 
 
@@ -52,7 +52,7 @@ def test_state_detect_circular_2():
     state = State("a.yaml")
     with pytest.raises(CircularIncludeError) as exc:
         state.copy(path="a.yaml")
-    assert str(exc.value) == "circular include from ['a.yaml']"
+    assert str(exc.value) == "circular include from a.yaml->a.yaml"
 
 
 def test_state_empty_includes():
