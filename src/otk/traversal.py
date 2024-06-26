@@ -29,7 +29,8 @@ class State:
         if path:
             if path in self._includes:
                 circle = [os.fspath(p) for p in new_state._includes]
-                raise CircularIncludeError(f"circular include from {circle}")
+                circle.append(os.fspath(path))
+                raise CircularIncludeError(f"circular include from {'->'.join(circle)}")
             new_state.path = path
             new_state._includes.append(path)
         return new_state
