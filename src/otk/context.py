@@ -4,14 +4,23 @@
 from __future__ import annotations
 
 import logging
+import re
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
-from .error import (TransformVariableIndexRangeError,
+from .constant import VALID_VAR_NAME_RE
+from .error import (ParseError,
+                    TransformVariableIndexRangeError,
                     TransformVariableIndexTypeError,
                     TransformVariableLookupError, TransformVariableTypeError)
 
 log = logging.getLogger(__name__)
+
+
+def _validate_var_name(name):
+    for part in name.split("."):
+        if not re.fullmatch(VALID_VAR_NAME_RE, part):
+            raise ParseError(f"invalid variable part '{part}' in '{name}', allowed {VALID_VAR_NAME_RE}")
 
 
 class Context(ABC):
@@ -55,6 +64,7 @@ class CommonContext(Context):
 
     def define(self, name: str, value: Any) -> None:
         log.debug("defining %r", name)
+        _validate_var_name(name)
 
         cur_var_scope = self._variables
         parts = name.split(".")

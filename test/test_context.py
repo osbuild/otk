@@ -2,6 +2,7 @@ import pytest
 
 from otk.context import CommonContext
 from otk.error import (
+    ParseError,
     TransformVariableIndexRangeError,
     TransformVariableIndexTypeError,
     TransformVariableLookupError,
@@ -79,3 +80,30 @@ def test_context_unhappy():
 
     with pytest.raises(TransformVariableIndexRangeError):
         ctx.variable("bar.3")
+
+
+@pytest.mark.parametrize(
+    "var_name",
+    ["0", "00", "?", "a?b", "a.", "a..", "a|", "a.b?.c"])
+def test_context_define_validates_bad(var_name):
+    ctx = CommonContext()
+
+    with pytest.raises(ParseError) as exc:
+        ctx.define(var_name, "val")
+    assert "invalid variable part " in str(exc.value)
+
+
+def test_context_define_validates_err_msg():
+    ctx = CommonContext()
+
+    with pytest.raises(ParseError) as exc:
+        ctx.define("a.b?.c", "val")
+    assert "invalid variable part 'b?' in 'a.b?.c', allowed [a-zA-Z][a-zA-Z0-9_]*" in str(exc.value)
+
+
+@pytest.mark.parametrize(
+    "var_name",
+    ["a", "a0", "A", "Aa", "a00", "aA0", "zZ9", "a_", "a__"])
+def test_context_define_validates_good(var_name):
+    ctx = CommonContext()
+    ctx.define(var_name, "val")
