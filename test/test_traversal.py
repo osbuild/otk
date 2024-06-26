@@ -57,4 +57,4 @@ def test_state_detect_circular_2():
 
 def test_state_empty_includes():
     state = State()
-    assert state._includes == []
+    assert len(state._includes) == 0

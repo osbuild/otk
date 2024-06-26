@@ -19,8 +19,7 @@ def must_be(kind: Type):
         def wrapper(*args, **kwargs):
             if not isinstance(args[1], kind):
                 raise TransformDirectiveTypeError(
-                    "otk.define expects a %r as its argument but received a `%s`: `%r`" % (kind, type(args[1]), args[1])
-                )
+                    f"otk.define expects a {kind!r} as its argument but received a `{type(args[1])}`: `{args[1]!r}`")
             return function(*args, **kwargs)
 
         return wrapper
@@ -47,6 +46,6 @@ def has_keys(keys):
     def inner(tree):
         for key in keys:
             if key not in tree:
-                raise TransformDirectiveArgumentError("Expected key %r", key)
+                raise TransformDirectiveArgumentError(f"Expected key {key!r}")
 
     return inner

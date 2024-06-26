@@ -57,7 +57,7 @@ class CommonContext(Context):
         log.debug("context setting version to %r", v)
         self._version = v
 
-    def _maybe_log_var_override(self, cur_var_scope, parts, name, value):
+    def _maybe_log_var_override(self, cur_var_scope, parts, value):
         if not self.duplicate_definitions_warning:
             return
         key = parts[-1]
@@ -72,10 +72,10 @@ class CommonContext(Context):
         parts = name.split(".")
         for i, part in enumerate(parts[:-1]):
             if not isinstance(cur_var_scope.get(part), dict):
-                self._maybe_log_var_override(cur_var_scope, parts[:i+1], name, {".".join(parts[i+1:]): value})
+                self._maybe_log_var_override(cur_var_scope, parts[:i+1], {".".join(parts[i+1:]): value})
                 cur_var_scope[part] = {}
             cur_var_scope = cur_var_scope[part]
-        self._maybe_log_var_override(cur_var_scope, parts, name, value)
+        self._maybe_log_var_override(cur_var_scope, parts, value)
         cur_var_scope[parts[-1]] = value
 
     def variable(self, name: str) -> Any:
@@ -86,7 +86,7 @@ class CommonContext(Context):
         for part in parts:
             if isinstance(value, dict):
                 if part not in value:
-                    raise TransformVariableLookupError("Could not find %r" % parts)
+                    raise TransformVariableLookupError(f"Could not find {parts!r}")
 
                 # TODO how should we deal with integer keys, convert them
                 # TODO on KeyError? Check for existence of both?
@@ -97,8 +97,8 @@ class CommonContext(Context):
 
                 try:
                     value = value[int(part)]
-                except IndexError:
-                    raise TransformVariableIndexRangeError()
+                except IndexError as exc:
+                    raise TransformVariableIndexRangeError() from exc
             else:
                 raise TransformVariableTypeError("tried to look up %r.%r but %r isn't a dictionary")
 

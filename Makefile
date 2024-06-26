@@ -1,6 +1,7 @@
 .PHONY: lint
 lint:
 	pre-commit run --all-files
+	pylint src/ test/*.py
 
 .PHONY: type
 type:

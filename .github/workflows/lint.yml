@@ -16,6 +16,6 @@ jobs:
       - name: "Clone Repository"
         uses: actions/checkout@v4
       - name: Install
-        run: pip install pre-commit autopep8
+        run: pip install pre-commit autopep8 pylint
       - name: Run linters
         run: make lint

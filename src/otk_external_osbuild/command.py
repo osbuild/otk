@@ -25,8 +25,8 @@ def source_add_inline(data, text):
     source_add("org.osbuild.inline", data)
 
     text = text.encode("utf8")
-    hash = hashlib.sha256(text).hexdigest()
-    addr = f"sha256:{hash}"
+    hashsum = hashlib.sha256(text).hexdigest()
+    addr = f"sha256:{hashsum}"
 
     if addr not in data["context"]["sources"]["org.osbuild.inline"]["items"]:
         data["context"]["sources"]["org.osbuild.inline"]["items"][addr] = {
@@ -34,7 +34,7 @@ def source_add_inline(data, text):
             "data": base64.b64encode(text).decode("utf8"),
         }
 
-    return hash, f"sha256:{hash}"
+    return hashsum, f"sha256:{hashsum}"
 
 
 def source_add_curl(data, checksum, url):
@@ -74,10 +74,11 @@ def depsolve_dnf4():
         stderr=subprocess.PIPE,
         input=json.dumps(request),
         encoding="utf8",
+        check=False,
     )
-
     if process.returncode != 0:
-        raise Exception(process.stderr)
+        # TODO: fix this
+        raise Exception(process.stderr)  # pylint: disable=broad-exception-raised
 
     results = json.loads(process.stdout)
 
@@ -116,7 +117,7 @@ def file_from_text():
     data = json.loads(sys.stdin.read())
 
     dest = data["tree"]["destination"]
-    hash, addr = source_add_inline(data, data["tree"]["text"])
+    hashsum, addr = source_add_inline(data, data["tree"]["text"])
 
     sys.stdout.write(
         json.dumps(
@@ -125,7 +126,7 @@ def file_from_text():
                 "tree": {
                     "type": "org.osbuild.copy",
                     "inputs": {
-                        f"file-{hash}": {
+                        f"file-{hashsum}": {
                             "type": "org.osbuild.files",
                             "origin": "org.osbuild.source",
                             "references": [
@@ -136,7 +137,7 @@ def file_from_text():
                     "options": {
                         "paths": [
                             {
-                                "from": f"input://file-{hash}/{addr}",
+                                "from": f"input://file-{hashsum}/{addr}",
                                 "to": f"tree://{dest}",
                                 "remove_destination": True,
                             }
@@ -153,7 +154,7 @@ def file_from_path():
 
     dest = data["tree"]["destination"]
     text = (pathlib.Path(data["context"]["path"]) / data["tree"]["source"]).read_text()
-    hash, addr = source_add_inline(data, text)
+    hashsum, addr = source_add_inline(data, text)
 
     sys.stdout.write(
         json.dumps(
@@ -162,7 +163,7 @@ def file_from_path():
                 "tree": {
                     "type": "org.osbuild.copy",
                     "inputs": {
-                        f"file-{hash}": {
+                        f"file-{hashsum}": {
                             "type": "org.osbuild.files",
                             "origin": "org.osbuild.source",
                             "references": [
@@ -173,7 +174,7 @@ def file_from_path():
                     "options": {
                         "paths": [
                             {
-                                "from": f"input://file-{hash}/{addr}",
+                                "from": f"input://file-{hashsum}/{addr}",
                                 "to": f"tree://{dest}",
                                 "remove_destination": True,
                             }
