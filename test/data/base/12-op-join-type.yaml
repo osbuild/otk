@@ -1,0 +1,9 @@
+otk.version: "1"
+
+otk.target.osbuild.test:
+  pipelines:
+    otk.op.join:
+      values:
+        - - 1
+          - 2
+        - otk.include: "12-op-join-type/example.yaml"
