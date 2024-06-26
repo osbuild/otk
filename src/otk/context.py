@@ -34,14 +34,18 @@ class Context(ABC):
 
 
 class CommonContext(Context):
+    duplicate_definitions_warning: bool
     _version: Optional[int]
     _variables: dict[str, Any]
 
     def __init__(
         self,
+        *,
+        duplicate_definitions_warning: bool = False,
     ) -> None:
         self._version = None
         self._variables = {}
+        self.duplicate_definitions_warning = duplicate_definitions_warning
 
     def version(self, v: int) -> None:
         # Set the context version, duplicate definitions with different
@@ -53,15 +57,25 @@ class CommonContext(Context):
         log.debug("context setting version to %r", v)
         self._version = v
 
+    def _maybe_log_var_override(self, cur_var_scope, parts, name, value):
+        if not self.duplicate_definitions_warning:
+            return
+        key = parts[-1]
+        if cur_var_scope.get(key):
+            log.warning("redefinition of %r, previous values was %r and new value is %r",
+                        ".".join(parts), cur_var_scope[parts[-1]], value)
+
     def define(self, name: str, value: Any) -> None:
         log.debug("defining %r", name)
 
         cur_var_scope = self._variables
         parts = name.split(".")
-        for part in parts[:-1]:
+        for i, part in enumerate(parts[:-1]):
             if not isinstance(cur_var_scope.get(part), dict):
+                self._maybe_log_var_override(cur_var_scope, parts[:i+1], name, {".".join(parts[i+1:]): value})
                 cur_var_scope[part] = {}
             cur_var_scope = cur_var_scope[part]
+        self._maybe_log_var_override(cur_var_scope, parts, name, value)
         cur_var_scope[parts[-1]] = value
 
     def variable(self, name: str) -> Any:
