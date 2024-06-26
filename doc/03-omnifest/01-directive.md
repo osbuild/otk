@@ -60,6 +60,10 @@ otk.define:
   boot_mode: uefi
 ```
 
+Valid variable names must start with `[a-zA-Z]` and after that initial
+char can also contain `[a-zA-Z0-9_]`. E.g. `foo` is valid but `f?` is
+not.
+
 ## Usage of `${}`
 
 Use a previously defined variable. String values can be used inside other

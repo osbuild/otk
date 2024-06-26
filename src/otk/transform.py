@@ -20,7 +20,7 @@ from typing import Any, List
 import yaml
 
 from . import tree
-from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET
+from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET, VALID_VAR_NAME_RE
 from .context import Context, OSBuildContext
 from .error import ParseError, TransformDirectiveTypeError, TransformDirectiveUnknownError
 from .external import call
@@ -248,7 +248,8 @@ def substitute_vars(ctx: Context, data: str) -> Any:
     float."""
 
     bracket = r"\$\{%s\}"
-    pattern = bracket % r"(?P<name>[a-zA-Z0-9-_\.]+)"
+    pattern = bracket % r"(?P<name>%(VALID_VAR_NAME_RE)s(?:\.%(VALID_VAR_NAME_RE)s)*)" % {
+        "VALID_VAR_NAME_RE": VALID_VAR_NAME_RE}
 
     # If there is a single match and its span is the entire haystack then we
     # return its value directly.
