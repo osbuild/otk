@@ -34,7 +34,7 @@ def test_parse_no_command(capsys):
         (["validate", "foo.yaml"], {"command": "validate", "input": "foo.yaml"}),
     ],
 )
-def test_parse_commands_success(capsys, command, results):
+def test_parse_commands_success(command, results):
     p = parser_create()
     r = p.parse_args(command)
     for k in results.keys():

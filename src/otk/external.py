@@ -6,11 +6,11 @@ import json
 import logging
 import pathlib
 import subprocess
-import sys
 import os
 from typing import Any
 
 from .constant import PREFIX_EXTERNAL
+from .error import ExternalFailedError
 
 log = logging.getLogger(__name__)
 
@@ -27,23 +27,15 @@ def call(directive: str, tree: Any) -> Any:
         }
     )
 
-    process = subprocess.run([exe], input=data, encoding="utf8", capture_output=True)
-
+    process = subprocess.run([exe], input=data, encoding="utf8", capture_output=True, check=False)
     if process.returncode != 0:
-        # TODO exception
-        log.error(
-            "call: %r %r failed: %r, %r",
-            exe,
-            directive,
-            process.stdout,
-            process.stderr,
-        )
-        sys.exit(1)
-        return
+        msg = f"call: {exe!r} {directive!r} failed: {process.stdout!r}, {process.stderr!r}"
+        log.error(msg)
+        raise ExternalFailedError(msg)
 
-    data = json.loads(process.stdout)
+    res = json.loads(process.stdout)
 
-    return data["tree"]
+    return res["tree"]
 
 
 def exe_from_directive(directive):

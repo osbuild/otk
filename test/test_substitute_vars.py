@@ -50,7 +50,7 @@ def test_sub_var_multiple_fail():
 
     # the a will be replaced but the b will cause an error
     expected_error = re.escape(
-        r"string 'foo-${b}' resolves to an incorrect type, " "expected int, float, or str but got list"
+        r"string 'foo-${b}' resolves to an incorrect type, expected int, float, or str but got list"
     )
 
     # Fails due to non-str type
@@ -61,7 +61,7 @@ def test_sub_var_multiple_fail():
 
     # the a will be replaced but the c will cause an error
     expected_error = re.escape(
-        r"string 'foo-${c}' resolves to an incorrect type, " "expected int, float, or str but got dict"
+        r"string 'foo-${c}' resolves to an incorrect type, expected int, float, or str but got dict"
     )
 
     # Fails due to non-str type

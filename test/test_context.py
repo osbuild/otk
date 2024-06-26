@@ -71,11 +71,13 @@ def test_context_warn_on_override_nested(caplog):
     assert len(caplog.records) == 0
     ctx.define("key.subkey", "newsubval")
     # from dict -> str
-    expected_msg1 = "redefinition of 'key.subkey', previous values was {'subsubkey': 'subsubval'} and new value is 'newsubval'"
+    expected_msg1 = ("redefinition of 'key.subkey', previous values was "
+                     "{'subsubkey': 'subsubval'} and new value is 'newsubval'")
     assert [expected_msg1] == [r.message for r in caplog.records]
     ctx.define("key.subkey", {"sub": "dict"})
     # from str -> dict
-    expected_msg2 = "redefinition of 'key.subkey', previous values was 'newsubval' and new value is {'sub': 'dict'}"
+    expected_msg2 = ("redefinition of 'key.subkey', previous values was "
+                     "'newsubval' and new value is {'sub': 'dict'}")
     assert [expected_msg1, expected_msg2] == [r.message for r in caplog.records]
 
 
@@ -85,7 +87,8 @@ def test_context_warn_on_override_nested_from_val_to_dict(caplog):
     ctx.define("key.sub", "subval")
     assert len(caplog.records) == 0
     ctx.define("key.sub.subsub.subsubsub", {"subsubsub": "val2"})
-    expected_msg = "redefinition of 'key.sub', previous values was 'subval' and new value is {'subsub.subsubsub': {'subsubsub': 'val2'}}"
+    expected_msg = ("redefinition of 'key.sub', previous values was "
+                    "'subval' and new value is {'subsub.subsubsub': {'subsubsub': 'val2'}}")
 
     assert [expected_msg] == [r.message for r in caplog.records]
 

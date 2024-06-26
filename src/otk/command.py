@@ -42,7 +42,7 @@ def root() -> int:
 
     if arguments.command == "compile":
         return compile(arguments)
-    elif arguments.command == "validate":
+    if arguments.command == "validate":
         return validate(arguments)
 
     raise RuntimeError("Unknown subcommand")
@@ -50,7 +50,8 @@ def root() -> int:
 
 def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     if not dry_run:
-        dst = sys.stdout if arguments.output is None else open(arguments.output, "w")
+        # pylint: disable=R1732
+        dst = sys.stdout if arguments.output is None else open(arguments.output, "w", encoding="utf-8")
 
     if arguments.input is None:
         path = pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")
@@ -99,7 +100,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     return 0
 
 
-def compile(arguments: argparse.Namespace) -> int:
+def compile(arguments: argparse.Namespace) -> int:  # pylint: disable=redefined-builtin
     return _process(arguments, dry_run=False)
 
 
@@ -111,7 +112,9 @@ def parser_create() -> argparse.Namespace:
     # set up the main parser arguments
     parser = argparse.ArgumentParser(
         prog="otk",
-        description="`otk` is the omnifest toolkit. A program to work with omnifest inputs and translate them into the native formats for image build tooling.",
+        description="`otk` is the omnifest toolkit. A program to work with "
+        "omnifest inputs and translate them into the native formats for image "
+        "build tooling.",
     )
     parser.add_argument(
         "-j",

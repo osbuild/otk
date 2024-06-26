@@ -113,7 +113,7 @@ def resolve_list(ctx, state: State, tree: list[Any]) -> list[Any]:
     return [resolve(ctx, state, val) for val in tree]
 
 
-def resolve_str(ctx, state: State, tree: str) -> Any:
+def resolve_str(ctx, _: State, tree: str) -> Any:
     """Resolving strings means they are parsed for any variable
     interpolation."""
 
@@ -188,50 +188,43 @@ def op(ctx: Context, tree: Any, key: str) -> Any:
 
     if key == "otk.op.join":
         return op_join(ctx, tree)
-    else:
-        raise TransformDirectiveUnknownError("nonexistent op %r", key)
+    raise TransformDirectiveUnknownError(f"nonexistent op {key!r}")
 
 
 @tree.must_be(dict)
 @tree.must_pass(tree.has_keys(["values"]))
-def op_join(ctx: Context, tree: dict[str, Any]) -> Any:
+def op_join(_: Context, tree: dict[str, Any]) -> Any:
     """Join a map/seq."""
 
     values = tree["values"]
     if not isinstance(values, list):
         raise TransformDirectiveTypeError(
-            "seq join received values of the wrong type, was expecting a list of lists but got %r",
-            values,
-        )
+            f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}")
+
     if all(isinstance(sl, list) for sl in values):
-        return _op_seq_join(ctx, values)
-    elif all(isinstance(sl, dict) for sl in values):
-        return _op_map_join(ctx, values)
-    else:
-        raise TransformDirectiveTypeError(f"cannot join {values}")
+        return _op_seq_join(values)
+    if all(isinstance(sl, dict) for sl in values):
+        return _op_map_join(values)
+    raise TransformDirectiveTypeError(f"cannot join {values}")
 
 
-def _op_seq_join(ctx: Context, values: List[list]) -> Any:
+def _op_seq_join(values: List[list]) -> Any:
     """Join to sequences by concatenating them together."""
 
     if not all(isinstance(sl, list) for sl in values):
         raise TransformDirectiveTypeError(
-            "seq join received values of the wrong type, was expecting a list of lists but got %r",
-            values,
-        )
+            f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}")
 
     return list(itertools.chain.from_iterable(values))
 
 
-def _op_map_join(ctx: Context, values: List[dict]) -> Any:
+def _op_map_join(values: List[dict]) -> Any:
     """Join two dictionaries. Keys from the second dictionary overwrite keys
     in the first dictionary."""
 
     if not all(isinstance(sl, dict) for sl in values):
         raise TransformDirectiveTypeError(
-            "map join received values of the wrong type, was expecting a list of dicts but got %r",
-            values,
-        )
+            f"map join received values of the wrong type, was expecting a list of dicts but got {values!r}")
 
     result = {}
 

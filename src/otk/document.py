@@ -25,7 +25,7 @@ class Omnifest:
         # And that dictionary needs to contain certain keys to indicate this
         # being an Omnifest.
         if NAME_VERSION not in deserialized_data:
-            raise ParseVersionError("omnifest must contain a key by the name of %r" % (NAME_VERSION,))
+            raise ParseVersionError(f"omnifest must contain a key by the name of {NAME_VERSION!r}")
 
         target_available = _targets(deserialized_data)
         if not target_available:
