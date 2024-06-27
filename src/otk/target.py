@@ -3,7 +3,7 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any
 
-from .context import Context, CommonContext, OSBuildContext
+from .context import CommonContext, OSBuildContext
 
 
 log = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ class Target(ABC):
     def is_valid(self, tree: Any) -> bool: ...
 
     @abstractmethod
-    def as_string(self, context: Context, tree: Any, pretty: bool) -> str: ...
+    def as_string(self, context: Any, tree: Any, pretty: bool = True) -> str: ...
 
 
 # NOTE this common target is a bit weird, we probably shouldn't always assume JSON but
@@ -39,8 +39,3 @@ class OSBuildTarget(Target):
         tree["sources"] = context.sources
 
         return json.dumps(tree, indent=2 if pretty else None)
-
-
-registry = {
-    "osbuild": OSBuildTarget,
-}

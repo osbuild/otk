@@ -34,7 +34,6 @@ def call(directive: str, tree: Any) -> Any:
         raise ExternalFailedError(msg)
 
     res = json.loads(process.stdout)
-
     return res["tree"]
 
 

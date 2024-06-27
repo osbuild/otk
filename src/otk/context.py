@@ -131,7 +131,7 @@ class OSBuildContext(Context):
 
     sources: dict[str, list[Any]]
 
-    def __init__(self, context: Context) -> None:
+    def __init__(self, context: CommonContext) -> None:
         self.sources = {}
         self._context = context
 
@@ -151,8 +151,3 @@ class OSBuildContext(Context):
     @defines.setter
     def defines(self, val):
         self._context._variables = val
-
-
-registry = {
-    "osbuild": OSBuildContext,
-}

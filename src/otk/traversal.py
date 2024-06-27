@@ -2,22 +2,23 @@ import copy
 import inspect
 import os
 import pathlib
+from typing import Union
 
 from .error import CircularIncludeError
 
 
 class State:
 
-    def __init__(self, path: pathlib.Path = None):
+    def __init__(self, path: Union[pathlib.Path, None] = None) -> None:
         if path is None:
             path = pathlib.Path()
         self.path = path
-        self._define_subkeys = []
+        self._define_subkeys: list[str] = []
         self._includes = []
         if path != pathlib.Path():
             self._includes.append(path)
 
-    def copy(self, *, path=None, subkey_add: str = None) -> "State":
+    def copy(self, *, path: Union[pathlib.Path, None] = None, subkey_add: Union[str, None] = None) -> "State":
         """
         Return a new State, optionally redefining the path and add a define
         subkey. Properties not defined in the args are (shallow) copied
@@ -35,7 +36,7 @@ class State:
             new_state._includes.append(path)
         return new_state
 
-    def define_subkey(self, key: str = None):
+    def define_subkey(self, key: Union[str, None] = None):
         """
         Return the current dotted path for a define, e.g. "key.subkey"
         """
