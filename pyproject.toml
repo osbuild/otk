@@ -17,7 +17,8 @@ dev = [
     "pytest >= 8.0",
     "mypy >= 1.9",
     "types-PyYAML >= 6.0",
-    "pre-commit"
+    "pre-commit",
+    "pylint"
 ]
 
 
