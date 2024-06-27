@@ -132,16 +132,6 @@ class OSBuildContext(Context):
     def variable(self, name: str) -> Any:
         return self._context.variable(name)
 
-    def for_external(self):
-        return {
-            "variables": self._context._variables,
-            "sources": self.sources,
-        }
-
-    def from_external(self, data: str):
-        self._context._variables = data["variables"]
-        self.sources = data.get("sources", {})
-
     @property
     def defines(self) -> dict:
         return self._context._variables
