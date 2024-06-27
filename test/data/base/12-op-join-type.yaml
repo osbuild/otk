@@ -6,6 +6,9 @@ otk.target.osbuild.test:
       values:
         - - 1
           - 2
-        - otk.include: "12-op-join-type/example.yaml"
+        - otk.include: "12-op-join-type/list.yaml"
         - - otk.include: "12-op-join-type/val.yaml"
+        - - otk.include: "12-op-join-type/float.yaml"
+        - - otk.include: "12-op-join-type/string.yaml"
+        - - otk.include: "12-op-join-type/bool.yaml"
         - - 6
