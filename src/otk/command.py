@@ -2,6 +2,7 @@ import argparse
 import logging
 import pathlib
 import sys
+from typing import List
 
 from .constant import PREFIX_TARGET
 from .context import CommonContext, OSBuildContext
@@ -17,7 +18,7 @@ def root() -> int:
     return run(sys.argv[1:])
 
 
-def run(argv) -> int:
+def run(argv: List[str]) -> int:
     parser = parser_create()
     arguments = parser.parse_args(argv)
 

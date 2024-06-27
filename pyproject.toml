@@ -32,3 +32,16 @@ max_line_length = 120
 [tool.pylint.main]
 max-line-length = 120
 disable = ["C0114", "C0115", "C0116", "fixme", "protected-access", "redefined-outer-name"]
+
+[tool.mypy]
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+strict_equality = true
+extra_checks = true
+disallow_incomplete_defs = true
+# TODO: follow
+# https://mypy.readthedocs.io/en/stable/existing_code.html#introduce-stricter-options
+# and get to "--strict" eventually
+#check_untyped_defs = true
+#disallow_untyped_calls = true

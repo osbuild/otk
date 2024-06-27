@@ -6,12 +6,12 @@ from __future__ import annotations
 
 
 import functools
-from typing import Type
+from typing import Callable, Type
 
 from .error import TransformDirectiveArgumentError, TransformDirectiveTypeError
 
 
-def must_be(kind: Type):
+def must_be(kind: Type) -> Callable:
     """Handles the tree having to be of a specific type at runtime."""
 
     def decorator(function):

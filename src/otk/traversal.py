@@ -2,7 +2,7 @@ import copy
 import inspect
 import os
 import pathlib
-from typing import Optional
+from typing import Any, Optional
 
 from .error import CircularIncludeError
 
@@ -36,7 +36,7 @@ class State:
             new_state._includes.append(path)
         return new_state
 
-    def define_subkey(self, key: Optional[str] = None):
+    def define_subkey(self, key: Optional[str] = None) -> str:
         """
         Return the current dotted path for a define, e.g. "key.subkey"
         """
@@ -44,7 +44,7 @@ class State:
             return ".".join(self._define_subkeys)
         return ".".join(self._define_subkeys + [key])
 
-    def __setattr__(self, name, val):
+    def __setattr__(self, name: str, val: Any) -> None:
         caller = inspect.stack()[1][3]
         # ideally we would check that the caller is State.copy() here
         if hasattr(self, name) and caller != "copy":
