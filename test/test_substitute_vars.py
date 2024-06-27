@@ -3,7 +3,7 @@ import re
 import pytest
 from otk.context import CommonContext
 from otk.transform import substitute_vars
-from otk.error import TransformDirectiveTypeError, TransformVariableLookupError, TransformVariableTypeError
+from otk.error import ParseError, TransformDirectiveTypeError, TransformVariableLookupError, TransformVariableTypeError
 
 
 def test_simple_sub_var():
@@ -52,6 +52,21 @@ def test_sub_var_missing_var_in_context():
     expected_err = r"tried to look up 'a.b', but prefix 'a' value 'foo' is not a dictionary"
     with pytest.raises(TransformVariableTypeError, match=expected_err):
         substitute_vars(context, "${a.b}")
+
+
+def test_sub_var_incorrect_var():
+    context = CommonContext()
+    expected_err = r"invalid variable part 'a-' in 'a-', allowed .*"
+    with pytest.raises(ParseError, match=expected_err):
+        substitute_vars(context, "${a-}")
+    # nested
+    expected_err = r"invalid variable part 'b-' in 'a.b-', allowed .*"
+    with pytest.raises(ParseError, match=expected_err):
+        substitute_vars(context, "${a.b-}")
+    # "recursive"
+    expected_err = r"invalid variable part '\$\{b' in 'a.\$\{b', allowed .*"
+    with pytest.raises(ParseError, match=expected_err):
+        substitute_vars(context, "${a.${b}}")
 
 
 def test_sub_var_multiple_fail():
