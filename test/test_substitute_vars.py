@@ -3,7 +3,7 @@ import re
 import pytest
 from otk.context import CommonContext
 from otk.transform import substitute_vars
-from otk.error import TransformDirectiveTypeError
+from otk.error import TransformDirectiveTypeError, TransformVariableLookupError, TransformVariableTypeError
 
 
 def test_simple_sub_var():
@@ -39,6 +39,19 @@ def test_sub_var_multiple():
     context.define("b", "bar")
 
     assert substitute_vars(context, "${a}-${b}") == "foo-bar"
+
+
+def test_sub_var_missing_var_in_context():
+    context = CommonContext()
+    # toplevel
+    expected_err = r"could not find \['a'\]"
+    with pytest.raises(TransformVariableLookupError, match=expected_err):
+        substitute_vars(context, "${a}")
+    # subtree
+    context.define("a", "foo")
+    expected_err = r"tried to look up 'a.b', but prefix 'a' value 'foo' is not a dictionary"
+    with pytest.raises(TransformVariableTypeError, match=expected_err):
+        substitute_vars(context, "${a.b}")
 
 
 def test_sub_var_multiple_fail():
