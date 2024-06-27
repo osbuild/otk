@@ -17,7 +17,7 @@ from .error import (ParseError,
 log = logging.getLogger(__name__)
 
 
-def _validate_var_name(name):
+def validate_var_name(name):
     for part in name.split("."):
         if not re.fullmatch(VALID_VAR_NAME_RE, part):
             raise ParseError(f"invalid variable part '{part}' in '{name}', allowed {VALID_VAR_NAME_RE}")
@@ -76,7 +76,7 @@ class CommonContext(Context):
 
     def define(self, name: str, value: Any) -> None:
         log.debug("defining %r", name)
-        _validate_var_name(name)
+        validate_var_name(name)
 
         cur_var_scope = self._variables
         parts = name.split(".")

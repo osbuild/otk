@@ -20,8 +20,8 @@ from typing import Any, List
 import yaml
 
 from . import tree
-from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET, VALID_VAR_NAME_RE
-from .context import Context, OSBuildContext
+from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET
+from .context import Context, OSBuildContext, validate_var_name
 from .error import ParseError, TransformDirectiveTypeError, TransformDirectiveUnknownError
 from .external import call
 from .traversal import State
@@ -248,24 +248,19 @@ def substitute_vars(ctx: Context, data: str) -> Any:
     float."""
 
     bracket = r"\$\{%s\}"
-    pattern = bracket % r"(?P<name>%(VALID_VAR_NAME_RE)s(?:\.%(VALID_VAR_NAME_RE)s)*)" % {
-        "VALID_VAR_NAME_RE": VALID_VAR_NAME_RE}
-
+    pattern = bracket % r"(?P<name>[^}]+)"
     # If there is a single match and its span is the entire haystack then we
     # return its value directly.
-    if match := re.fullmatch(pattern, data):
-        return ctx.variable(match.group("name"))
+    if m := re.fullmatch(pattern, data):
+        validate_var_name(m.group("name"))
+        return ctx.variable(m.group("name"))
 
-    # Let's find all matches if there are any. We use `list(re.finditer(...))`
-    # to get a list of match objects instead of `re.findall` which gives a list
-    # of matchgroups.
+    if matches := re.finditer(pattern, data):
+        for m in matches:
+            name = m.group("name")
+            validate_var_name(m.group("name"))
 
-    # If there are multiple matches then we always interpolate strings.
-    if matches := list(re.finditer(pattern, data)):
-        for match in matches:
-            name = match.group("name")
             value = ctx.variable(name)
-
             # We know how to turn ints and floats into str's
             if isinstance(value, (int, float)):
                 value = str(value)
@@ -278,13 +273,7 @@ def substitute_vars(ctx: Context, data: str) -> Any:
                 )
 
             # Replace all occurences of this name in the str
-
-            # NOTE: this means we can recursively replace names, do we want
-            # that?
             data = re.sub(bracket % re.escape(name), value, data)
-
-        log.debug("substituting %r as substring to %r", name, data)
-
-        return data
+            log.debug("substituting %r as substring to %r", name, data)
 
     return data
