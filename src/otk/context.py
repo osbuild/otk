@@ -83,10 +83,10 @@ class CommonContext(Context):
 
         value = self._variables
 
-        for part in parts:
+        for i, part in enumerate(parts):
             if isinstance(value, dict):
                 if part not in value:
-                    raise TransformVariableLookupError(f"Could not find {parts!r}")
+                    raise TransformVariableLookupError(f"could not find {parts!r}")
 
                 # TODO how should we deal with integer keys, convert them
                 # TODO on KeyError? Check for existence of both?
@@ -100,7 +100,9 @@ class CommonContext(Context):
                 except IndexError as exc:
                     raise TransformVariableIndexRangeError() from exc
             else:
-                raise TransformVariableTypeError("tried to look up %r.%r but %r isn't a dictionary")
+                prefix = ".".join(parts[:i])
+                raise TransformVariableTypeError(
+                    f"tried to look up '{prefix}.{part}', but prefix '{prefix}' value {value!r} is not a dictionary")
 
         return value
 
