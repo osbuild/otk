@@ -71,7 +71,7 @@ class CommonContext(Context):
             return
         key = parts[-1]
         if cur_var_scope.get(key):
-            log.warning("redefinition of %r, previous values was %r and new value is %r",
+            log.warning("redefinition of %r, previous value was %r and new value is %r",
                         ".".join(parts), cur_var_scope[parts[-1]], value)
 
     def define(self, name: str, value: Any) -> None:

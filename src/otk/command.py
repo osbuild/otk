@@ -17,8 +17,10 @@ log = logging.getLogger(__name__)
 
 
 def root() -> int:
-    argv = sys.argv[1:]
+    return run(sys.argv[1:])
 
+
+def run(argv) -> int:
     parser = parser_create()
     arguments = parser.parse_args(argv)
 
@@ -58,7 +60,8 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     else:
         path = pathlib.Path(arguments.input)
 
-    ctx = CommonContext()
+    ddw = "duplicate-definition" in getattr(arguments, "warn", [])
+    ctx = CommonContext(duplicate_definitions_warning=ddw)
     state = State()
     doc = Omnifest(process_include(ctx, state, path))
 
@@ -139,7 +142,8 @@ def parser_create() -> argparse.Namespace:
     parser.add_argument(
         "-w",
         "--warn",
-        default=None,
+        action='append',
+        default=[],
         help="Enable warnings, can be passed multiple times.",
     )
 
