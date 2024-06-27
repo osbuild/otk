@@ -1,14 +1,34 @@
 import argparse
 import json
 import pathlib
+import os
+import textwrap
 
 import pytest
 from otk import command
 
 
+@pytest.fixture()
+def mirror(tmp_path):
+    os.environ["OTK_EXTERNAL_PATH"] = os.fspath(tmp_path)
+    fake_external_path = tmp_path / "mirror"
+    fake_external_path.write_text(
+        textwrap.dedent("""\
+    #!/bin/sh
+    cat - > "$0".stdin
+    echo '{"tree": {"some": "result"}}'
+    """)
+    )
+    os.chmod(fake_external_path, 0o755)
+
+    yield tmp_path
+
+    del os.environ["OTK_EXTERNAL_PATH"]
+
+
 @pytest.mark.parametrize("src_yaml",
                          [str(path) for path in (pathlib.Path(__file__).parent / "data/base").glob("*.yaml")])
-def test_command_compile_on_base_examples(tmp_path, src_yaml):
+def test_command_compile_on_base_examples(tmp_path, src_yaml, mirror):
     src_yaml = pathlib.Path(src_yaml)
     dst = tmp_path / "out.json"
 

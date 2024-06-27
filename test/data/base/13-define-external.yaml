@@ -1,0 +1,9 @@
+otk.version: "1"
+
+otk.define.name:
+  otk.external.mirror:
+    a: "b"
+
+otk.target.osbuild.name:
+  pipelines:
+    - a: "${a}"
