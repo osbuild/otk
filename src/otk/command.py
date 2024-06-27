@@ -117,11 +117,11 @@ def parser_create() -> argparse.ArgumentParser:
         help="Sets verbosity. Can be passed multiple times to be more verbose.",
     )
     parser.add_argument(
-        "-w",
+        "-W",
         "--warn",
         action='append',
         default=[],
-        help="Enable warnings, use 'all' to get all warnings or enable specific warnings. Can be passed multiple times.",
+        help="Enable warnings, use 'all' to get all or enable specific warnings. Can be passed multiple times.",
     )
 
     # get a subparser action
