@@ -7,3 +7,5 @@ otk.target.osbuild.test:
         - - 1
           - 2
         - otk.include: "12-op-join-type/example.yaml"
+        - - otk.include: "12-op-join-type/val.yaml"
+        - - 6
