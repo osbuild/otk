@@ -77,7 +77,13 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
             if key.startswith(PREFIX_INCLUDE):
                 tree = tree.copy()  # copy the tree and drop the include directive
                 del tree[key]
-                tree.update(process_include(ctx, state, pathlib.Path(val)))
+                included = process_include(ctx, state, pathlib.Path(val))
+
+                if isinstance(included, list):
+                    return included
+
+                tree.update(included)
+
                 return tree
 
             # Other directives do *not* allow siblings
