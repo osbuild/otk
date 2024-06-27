@@ -44,7 +44,7 @@ Variable scope is global, an `otk.define` directive anywhere in the omnifest
 tree will result in the defined names being hoisted to the global scope.
 
 Redefinitions of variables are allowed. This allows for setting up default
-values. If `-w duplicate-definition` is passed as an argument to `otk` then
+values. If `-W duplicate-definition` is passed as an argument to `otk` then
 `otk` will warn on all duplicate definitions.
 
 Expects a `map` for its value.

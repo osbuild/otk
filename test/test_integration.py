@@ -31,7 +31,7 @@ def test_warn(tmp_path, caplog, cmd, warn_arg, expect_warning):
     """))
 
     if warn_arg:
-        prefix = ["-w", warn_arg]
+        prefix = ["-W", warn_arg]
     else:
         prefix = []
     run(prefix + [cmd, os.fspath(test_otk)])
