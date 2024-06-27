@@ -23,3 +23,5 @@ jobs:
           pip install .[dev]
       - name: Run linters
         run: make lint
+      - name: Run type checker
+        run: make type

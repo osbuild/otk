@@ -4,12 +4,10 @@ import pathlib
 import sys
 
 from .constant import PREFIX_TARGET
-from .context import CommonContext
-from .context import registry as context_registry
+from .context import CommonContext, OSBuildContext
 from .document import Omnifest
 from .help.log import JSONSequenceHandler
-from .target import CommonTarget
-from .target import registry as target_registry
+from .target import OSBuildTarget
 from .transform import process_include, resolve
 from .traversal import State
 
@@ -92,13 +90,17 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
 
     # re-resolve the specific target with the specific context and target if
     # applicable
-    spec = context_registry.get(kind, CommonContext)(ctx)
+    # TODO: redo/readd {context,target}_registry in type safe way
+    if kind != "osbuild":
+        raise ValueError("only target osbuild supported right now")
+    spec = OSBuildContext(ctx)
+    target = OSBuildTarget()
     state = State(path=path)
     tree = resolve(spec, state, doc.tree[f"{PREFIX_TARGET}{kind}.{name}"])
 
     # and then output by writing to the output
     if not dry_run:
-        dst.write(target_registry.get(kind, CommonTarget)().as_string(spec, tree))
+        dst.write(target.as_string(spec, tree))
 
     return 0
 
@@ -111,7 +113,7 @@ def validate(arguments: argparse.Namespace) -> int:
     return _process(arguments, dry_run=True)
 
 
-def parser_create() -> argparse.Namespace:
+def parser_create() -> argparse.ArgumentParser:
     # set up the main parser arguments
     parser = argparse.ArgumentParser(
         prog="otk",
