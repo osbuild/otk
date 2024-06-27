@@ -53,13 +53,13 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
 
     target_available = doc.targets
     target_requested = arguments.target
-    if len(target_available) > 1 and not target_requested:
-        log.fatal("INPUT contains multiple targets, `-t` is required")
-        return 1
-
-    # set the requested target to the default case now that we know that
-    # there aren't multiple targets available and none are requested
-    target_requested = list(target_available.keys())[0]
+    if not target_requested:
+        if len(target_available) > 1:
+            log.fatal("INPUT contains multiple targets, `-t` is required")
+            return 1
+        # set the requested target to the default case now that we know that
+        # there aren't multiple targets available and none are requested
+        target_requested = list(target_available.keys())[0]
 
     if target_requested not in target_available:
         log.fatal("requested target %r does not exist in INPUT", target_requested)

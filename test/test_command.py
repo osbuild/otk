@@ -1,6 +1,6 @@
 import pytest
 
-from otk.command import parser_create
+from otk.command import parser_create, run
 
 
 def test_parse_no_command(capsys):
@@ -66,3 +66,110 @@ def test_parse_commands_failure(capsys, command, sys_exit_code, sys_exit_message
 
     captured_stderr = capsys.readouterr().err
     assert sys_exit_message in captured_stderr
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        # Select no target - only one available
+        {"command": ["compile", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": """otk.version: "1"
+
+otk.target.osbuild.name:
+  pipelines:
+    - "test"
+""",
+         "output_data": """{
+  "pipelines": [
+    "test"
+  ],
+  "version": "2",
+  "sources": {}
+}""",
+         "ret_expected": 0,
+         "log_expected": ""
+         },
+
+        # Select the one available target
+        {"command": ["compile", "-t", "osbuild.name", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": """otk.version: "1"
+
+otk.target.osbuild.name:
+  pipelines:
+    - "test"
+""",
+         "output_data": """{
+  "pipelines": [
+    "test"
+  ],
+  "version": "2",
+  "sources": {}
+}""",
+         "ret_expected": 0,
+         "log_expected": ""
+         },
+
+        # Select the one of multiple targets
+        {"command": ["compile", "-t", "osbuild.name1", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": """otk.version: "1"
+otk.target.osbuild.name1:
+ pipelines:
+   - "test1"
+otk.target.osbuild.name:
+ pipelines:
+   - "test"
+""",
+         "output_data": """{
+  "pipelines": [
+    "test1"
+  ],
+  "version": "2",
+  "sources": {}
+}""",
+         "ret_expected": 0,
+         "log_expected": ""
+         },
+
+        # Select an invalid target
+        {"command": ["compile", "-t", "osbuild.nonexist", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": """otk.version: "1"
+
+otk.target.osbuild.name:
+  pipelines:
+    - "test"
+""",
+         "output_data": "",
+         "ret_expected": 1,
+         "log_expected": "requested target 'osbuild.nonexist' does not exist in INPUT"
+         },
+
+        # Select no target but multiples available
+        {"command": ["compile", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": """otk.version: "1"
+
+otk.target.osbuild.name:
+  pipelines:
+    - "test"
+otk.target.osbuild.name1:
+  pipelines:
+    - "test1"
+""",
+         "output_data": "",
+         "ret_expected": 1,
+         "log_expected": "INPUT contains multiple targets"
+         },
+    ]
+)
+def test_argument_t(tmp_path, caplog, data):
+    output_file = tmp_path / "output.yaml"
+    input_file = tmp_path / "input.yaml"
+    input_file.write_text(data["input_data"])
+
+    command = [str(output_file) if item == "OUTPUTFILE" else item for item in data["command"]]
+    command = [str(input_file) if item == "INPUTFILE" else item for item in command]
+
+    ret = run(command)
+
+    assert output_file.read_text() == data["output_data"]
+    assert ret == data["ret_expected"]
+    assert data["log_expected"] in caplog.text
