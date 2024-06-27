@@ -45,7 +45,8 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     else:
         path = pathlib.Path(arguments.input)
 
-    ddw = "duplicate-definition" in getattr(arguments, "warn", [])
+    ddw = any(arg in getattr(arguments, "warn", [])
+              for arg in ["duplicate-definition", "all"])
     ctx = CommonContext(duplicate_definitions_warning=ddw)
     state = State()
     doc = Omnifest(process_include(ctx, state, path))
@@ -120,7 +121,7 @@ def parser_create() -> argparse.ArgumentParser:
         "--warn",
         action='append',
         default=[],
-        help="Enable warnings, can be passed multiple times.",
+        help="Enable warnings, use 'all' to get all warnings or enable specific warnings. Can be passed multiple times.",
     )
 
     # get a subparser action
