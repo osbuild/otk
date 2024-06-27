@@ -54,8 +54,8 @@ def path_for(exe):
     if env is not None:
         paths = [env] + paths
 
-    for path in paths:
-        path = pathlib.Path(path) / exe
+    for pathname in paths:
+        path = pathlib.Path(pathname) / exe
 
         if path.exists() and os.access(path, os.X_OK):
             return path

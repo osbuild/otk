@@ -103,7 +103,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
     return tree
 
 
-def resolve_list(ctx, state: State, tree: list[Any]) -> list[Any]:
+def resolve_list(ctx: Context, state: State, tree: list[Any]) -> list[Any]:
     """Resolving a list means applying the resolve function to each element in
     the list."""
 
@@ -112,7 +112,7 @@ def resolve_list(ctx, state: State, tree: list[Any]) -> list[Any]:
     return [resolve(ctx, state, val) for val in tree]
 
 
-def resolve_str(ctx, _: State, tree: str) -> Any:
+def resolve_str(ctx: Context, _: State, tree: str) -> Any:
     """Resolving strings means they are parsed for any variable
     interpolation."""
 
@@ -126,7 +126,7 @@ def is_directive(needle: Any) -> bool:
     return isinstance(needle, str) and needle.startswith(PREFIX)
 
 
-def process_defines(ctx: Context, state: State, tree: Any):
+def process_defines(ctx: Context, state: State, tree: Any) -> None:
     """
     Processes tree for new defines, resolving any references to other variables,
     and update the global context. The State holds a reference to the nested
