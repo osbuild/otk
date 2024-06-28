@@ -2,4 +2,3 @@
 otk.version: "1"
 
 otk.include: "13-include-in-subdir/target.yaml"
-
