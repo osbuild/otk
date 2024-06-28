@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from .context import CommonContext, OSBuildContext
-
+from .constant import PREFIX_TARGET
 
 log = logging.getLogger(__name__)
 
@@ -29,10 +29,6 @@ class CommonTarget(Target):
 
 class OSBuildTarget(Target):
     def is_valid(self, tree: Any) -> bool:
-        if not isinstance(tree, dict):
-            log.fatal("First level below a 'target' should be a dictionary (not a %s)", type(tree).__name__)
-            return False
-
         if "version" in tree:
             log.fatal("First level below a 'target' must not contain 'version'.")
             log.fatal("The key 'version' is added by otk internally.")
@@ -43,8 +39,8 @@ class OSBuildTarget(Target):
     def as_string(self, context: OSBuildContext, tree: Any, pretty: bool = True) -> str:
         log.debug("as string %r!", context.sources)
 
-        # TODO: test these
-        tree["version"] = "2"
-        tree["sources"] = context.sources
+        osbuild_tree = tree[PREFIX_TARGET + context.target_requested]
+        osbuild_tree["version"] = "2"
+        osbuild_tree["sources"] = context.sources
 
-        return json.dumps(tree, indent=2 if pretty else None)
+        return json.dumps(osbuild_tree, indent=2 if pretty else None)

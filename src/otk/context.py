@@ -36,20 +36,31 @@ class Context(ABC):
     @abstractmethod
     def variable(self, name: str) -> Any: ...
 
+    @property
+    @abstractmethod
+    def target_requested(self) -> str: ...
+
 
 class CommonContext(Context):
     duplicate_definitions_warning: bool
+    _target_requested: str
     _version: Optional[int]
     _variables: dict[str, Any]
 
     def __init__(
         self,
         *,
+        target_requested: str = "",
         duplicate_definitions_warning: bool = False,
     ) -> None:
         self._version = None
         self._variables = {}
+        self._target_requested = target_requested
         self.duplicate_definitions_warning = duplicate_definitions_warning
+
+    @property
+    def target_requested(self) -> str:
+        return self._target_requested
 
     def version(self, v: int) -> None:
         # Set the context version, duplicate definitions with different
@@ -136,3 +147,7 @@ class OSBuildContext(Context):
 
     def merge_defines(self, defines: dict[str, Any]) -> None:
         self._context.merge_defines(defines)
+
+    @property
+    def target_requested(self) -> str:
+        return self._context._target_requested

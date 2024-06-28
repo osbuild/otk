@@ -46,6 +46,8 @@ def resolve(ctx: Context, state: State, data: Any) -> Any:
     raise TypeError(type(data))
 
 
+# XXX: look into this
+# pylint: disable=too-many-branches
 def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
     """
     Dictionaries are iterated through and both the keys and values are processed.
@@ -72,7 +74,19 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                 continue
 
             if key.startswith(PREFIX_TARGET):
-                continue
+                # no target, "dry" run
+                if not ctx.target_requested:
+                    continue
+                # wrong target
+                if not key.startswith(PREFIX_TARGET + ctx.target_requested):
+                    continue
+                target = resolve(ctx, state, val)
+                if not isinstance(target, dict):
+                    raise ParseError(
+                        f"First level below a 'target' should be a dictionary (not a {type(target).__name__})")
+
+                tree.update(target)
+                return tree
 
             if key.startswith(PREFIX_INCLUDE):
                 tree = tree.copy()  # copy the tree and drop the include directive
