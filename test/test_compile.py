@@ -24,7 +24,7 @@ def test_compile_integration_file(tmp_path):
     input_path.write_text(FAKE_OTK_YAML)
     output_path = tmp_path / "output.txt"
 
-    arguments = argparse.Namespace(input=input_path, output=output_path, target="osbuild")
+    arguments = argparse.Namespace(input=input_path, output=output_path, target="osbuild.qcow2")
     ret = compile(arguments)
     assert ret == 0
 
@@ -38,7 +38,7 @@ def test_compile_integration_stdin(capsys, monkeypatch):
     os.lseek(mocked_stdin, 0, 0)
     monkeypatch.setattr("sys.stdin", os.fdopen(mocked_stdin))
 
-    arguments = argparse.Namespace(input=None, output=None, target="osbuild")
+    arguments = argparse.Namespace(input=None, output=None, target="osbuild.qcow2")
     ret = compile(arguments)
     assert ret == 0
 
