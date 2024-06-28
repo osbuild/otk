@@ -42,15 +42,19 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         dst = sys.stdout if arguments.output is None else open(arguments.output, "w", encoding="utf-8")
 
     if arguments.input is None:
-        path = pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")
+        input_file = pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")
+        # non-existing fake file to get the base paths for includes right
+        path = pathlib.Path.cwd() / "<stdin>"
+        state = State(path=path)
     else:
-        path = pathlib.Path(arguments.input)
+        input_file = pathlib.Path(arguments.input)
+        path = input_file
+        state = State()
 
     ddw = any(arg in getattr(arguments, "warn", [])
               for arg in ["duplicate-definition", "all"])
     ctx = CommonContext(duplicate_definitions_warning=ddw)
-    state = State()
-    doc = Omnifest(process_include(ctx, state, path))
+    doc = Omnifest(process_include(ctx, state, input_file))
 
     target_available = doc.targets
     target_requested = arguments.target
@@ -83,16 +87,14 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     if kind != "osbuild":
         raise ValueError("only target osbuild supported right now")
     spec = OSBuildContext(ctx)
-    target = OSBuildTarget()
-    state = State(path=path)
-    tree = resolve(spec, state, doc.tree[f"{PREFIX_TARGET}{kind}.{name}"])
+    tree = resolve(spec, State(path=path), doc.tree[f"{PREFIX_TARGET}{kind}.{name}"])
 
     if not target.is_valid(tree):
         return 1
 
     # and then output by writing to the output
     if not dry_run:
-        dst.write(target.as_string(spec, tree))
+        dst.write(OSBuildTarget().as_string(spec, tree))
 
     return 0
 
