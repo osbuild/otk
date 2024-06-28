@@ -29,6 +29,15 @@ class CommonTarget(Target):
 
 class OSBuildTarget(Target):
     def is_valid(self, tree: Any) -> bool:
+        if not isinstance(tree, dict):
+            log.fatal("First level below a 'target' should be a dictionary (not a %s)", type(tree).__name__)
+            return False
+
+        if "version" in tree:
+            log.fatal("First level below a 'target' must not contain 'version'.")
+            log.fatal("The key 'version' is added by otk internally.")
+            return False
+
         return True
 
     def as_string(self, context: OSBuildContext, tree: Any, pretty: bool = True) -> str:

@@ -87,6 +87,9 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     state = State(path=path)
     tree = resolve(spec, state, doc.tree[f"{PREFIX_TARGET}{kind}.{name}"])
 
+    if not target.is_valid(tree):
+        return 1
+
     # and then output by writing to the output
     if not dry_run:
         dst.write(target.as_string(spec, tree))
