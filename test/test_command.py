@@ -68,84 +68,14 @@ def test_parse_commands_failure(capsys, command, sys_exit_code, sys_exit_message
     assert sys_exit_message in captured_stderr
 
 
-@pytest.mark.parametrize(
-    "data",
-    [
-        # Select no target - only one available
-        {"command": ["compile", "-o", "OUTPUTFILE", "INPUTFILE"],
-         "input_data": """otk.version: "1"
+TEST_ARGUMENT_T_INPUT = """otk.version: "1"
 
 otk.target.osbuild.name:
   pipelines:
     - "test"
-""",
-         "output_data": """{
-  "pipelines": [
-    "test"
-  ],
-  "version": "2",
-  "sources": {}
-}""",
-         "ret_expected": 0,
-         "log_expected": ""
-         },
+"""
 
-        # Select the one available target
-        {"command": ["compile", "-t", "osbuild.name", "-o", "OUTPUTFILE", "INPUTFILE"],
-         "input_data": """otk.version: "1"
-
-otk.target.osbuild.name:
-  pipelines:
-    - "test"
-""",
-         "output_data": """{
-  "pipelines": [
-    "test"
-  ],
-  "version": "2",
-  "sources": {}
-}""",
-         "ret_expected": 0,
-         "log_expected": ""
-         },
-
-        # Select the one of multiple targets
-        {"command": ["compile", "-t", "osbuild.name1", "-o", "OUTPUTFILE", "INPUTFILE"],
-         "input_data": """otk.version: "1"
-otk.target.osbuild.name1:
- pipelines:
-   - "test1"
-otk.target.osbuild.name:
- pipelines:
-   - "test"
-""",
-         "output_data": """{
-  "pipelines": [
-    "test1"
-  ],
-  "version": "2",
-  "sources": {}
-}""",
-         "ret_expected": 0,
-         "log_expected": ""
-         },
-
-        # Select an invalid target
-        {"command": ["compile", "-t", "osbuild.nonexist", "-o", "OUTPUTFILE", "INPUTFILE"],
-         "input_data": """otk.version: "1"
-
-otk.target.osbuild.name:
-  pipelines:
-    - "test"
-""",
-         "output_data": "",
-         "ret_expected": 1,
-         "log_expected": "requested target 'osbuild.nonexist' does not exist in INPUT"
-         },
-
-        # Select no target but multiples available
-        {"command": ["compile", "-o", "OUTPUTFILE", "INPUTFILE"],
-         "input_data": """otk.version: "1"
+TEST_ARGUMENT_T_INPUT_TWO_TARGETS = """otk.version: "1"
 
 otk.target.osbuild.name:
   pipelines:
@@ -153,7 +83,63 @@ otk.target.osbuild.name:
 otk.target.osbuild.name1:
   pipelines:
     - "test1"
-""",
+"""
+
+TEST_ARGUMENT_T_OUTPUT = """{
+  "pipelines": [
+    "test"
+  ],
+  "version": "2",
+  "sources": {}
+}"""
+
+TEST_ARGUMENT_T_OUTPUT1 = """{
+  "pipelines": [
+    "test1"
+  ],
+  "version": "2",
+  "sources": {}
+}"""
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        # Select no target - only one available
+        {"command": ["compile", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": TEST_ARGUMENT_T_INPUT,
+         "output_data": TEST_ARGUMENT_T_OUTPUT,
+         "ret_expected": 0,
+         "log_expected": ""
+         },
+
+        # Select the one available target
+        {"command": ["compile", "-t", "osbuild.name", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": TEST_ARGUMENT_T_INPUT,
+         "output_data": TEST_ARGUMENT_T_OUTPUT,
+         "ret_expected": 0,
+         "log_expected": ""
+         },
+
+        # Select the one of multiple targets
+        {"command": ["compile", "-t", "osbuild.name1", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": TEST_ARGUMENT_T_INPUT_TWO_TARGETS,
+         "output_data": TEST_ARGUMENT_T_OUTPUT1,
+         "ret_expected": 0,
+         "log_expected": ""
+         },
+
+        # Select an invalid target
+        {"command": ["compile", "-t", "osbuild.nonexist", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": TEST_ARGUMENT_T_INPUT,
+         "output_data": "",
+         "ret_expected": 1,
+         "log_expected": "requested target 'osbuild.nonexist' does not exist in INPUT"
+         },
+
+        # Select no target but multiples available
+        {"command": ["compile", "-o", "OUTPUTFILE", "INPUTFILE"],
+         "input_data": TEST_ARGUMENT_T_INPUT_TWO_TARGETS,
          "output_data": "",
          "ret_expected": 1,
          "log_expected": "INPUT contains multiple targets"
