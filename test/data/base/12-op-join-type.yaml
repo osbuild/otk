@@ -1,6 +1,6 @@
 otk.version: "1"
 
-otk.target.osbuild.test:
+otk.target.osbuild.name:
   pipelines:
     otk.op.join:
       values:
