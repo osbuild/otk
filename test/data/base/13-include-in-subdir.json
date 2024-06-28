@@ -1,10 +1,7 @@
 {
   "pipelines": [
     {
-      "subdir-include": {
-        "foo": "bar",
-        "bar": "foo"
-      }
+      "a": 1
     }
   ],
   "version": "2",
