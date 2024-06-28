@@ -75,11 +75,7 @@ otk.target.osbuild.name:
     - "test"
 """
 
-TEST_ARGUMENT_T_INPUT_TWO_TARGETS = """otk.version: "1"
-
-otk.target.osbuild.name:
-  pipelines:
-    - "test"
+TEST_ARGUMENT_T_INPUT_TWO_TARGETS = TEST_ARGUMENT_T_INPUT + """
 otk.target.osbuild.name1:
   pipelines:
     - "test1"
