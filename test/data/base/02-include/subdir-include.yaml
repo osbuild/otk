@@ -1,0 +1,3 @@
+# testing includes relative to include (self)
+subdir-include:
+  otk.include: "example.yaml"
