@@ -1,0 +1,3 @@
+otk.target.osbuild.name:
+  pipelines:
+    - otk.include: "foo.yaml"
