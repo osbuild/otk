@@ -36,20 +36,31 @@ class Context(ABC):
     @abstractmethod
     def variable(self, name: str) -> Any: ...
 
+    @property
+    @abstractmethod
+    def target_requested(self) -> str: ...
+
 
 class CommonContext(Context):
-    duplicate_definitions_warning: bool
+    warn_duplicated_defs: bool
+    _target_requested: str
     _version: Optional[int]
     _variables: dict[str, Any]
 
     def __init__(
         self,
         *,
-        duplicate_definitions_warning: bool = False,
+        target_requested: str = "",
+        warn_duplicated_defs: bool = False,
     ) -> None:
         self._version = None
         self._variables = {}
-        self.duplicate_definitions_warning = duplicate_definitions_warning
+        self._target_requested = target_requested
+        self.warn_duplicated_defs = warn_duplicated_defs
+
+    @property
+    def target_requested(self) -> str:
+        return self._target_requested
 
     def version(self, v: int) -> None:
         # Set the context version, duplicate definitions with different
@@ -62,7 +73,7 @@ class CommonContext(Context):
         self._version = v
 
     def _maybe_log_var_override(self, cur_var_scope, parts, value):
-        if not self.duplicate_definitions_warning:
+        if not self.warn_duplicated_defs:
             return
         key = parts[-1]
         if cur_var_scope.get(key):
@@ -136,3 +147,7 @@ class OSBuildContext(Context):
 
     def merge_defines(self, defines: dict[str, Any]) -> None:
         self._context.merge_defines(defines)
+
+    @property
+    def target_requested(self) -> str:
+        return self._context._target_requested

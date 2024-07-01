@@ -57,7 +57,7 @@ def test_context_define_subkey(caplog):
 
 def test_context_warn_on_override_simple(caplog):
     caplog.set_level(logging.WARNING)
-    ctx = CommonContext(duplicate_definitions_warning=True)
+    ctx = CommonContext(warn_duplicated_defs=True)
     ctx.define("key", "val")
     assert len(caplog.records) == 0
     ctx.define("key", "new-val")
@@ -67,7 +67,7 @@ def test_context_warn_on_override_simple(caplog):
 
 def test_context_warn_on_override_nested(caplog):
     caplog.set_level(logging.WARNING)
-    ctx = CommonContext(duplicate_definitions_warning=True)
+    ctx = CommonContext(warn_duplicated_defs=True)
     ctx.define("key.subkey.subsubkey", "subsubval")
     assert len(caplog.records) == 0
     ctx.define("key.subkey", "newsubval")
@@ -84,7 +84,7 @@ def test_context_warn_on_override_nested(caplog):
 
 def test_context_warn_on_override_nested_from_val_to_dict(caplog):
     caplog.set_level(logging.WARNING)
-    ctx = CommonContext(duplicate_definitions_warning=True)
+    ctx = CommonContext(warn_duplicated_defs=True)
     ctx.define("key.sub", "subval")
     assert len(caplog.records) == 0
     ctx.define("key.sub.subsub.subsubsub", {"subsubsub": "val2"})
