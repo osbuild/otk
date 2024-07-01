@@ -31,6 +31,9 @@ class Context(ABC):
     def define(self, name: str, value: Any) -> None: ...
 
     @abstractmethod
+    def merge_defines(self, defines: dict[str, Any]) -> None: ...
+
+    @abstractmethod
     def variable(self, name: str) -> Any: ...
 
 
@@ -108,6 +111,9 @@ class CommonContext(Context):
 
         return value
 
+    def merge_defines(self, defines: dict[str, Any]) -> None:
+        self._variables.update(defines)
+
 
 class OSBuildContext(Context):
     """Composes in a `GenericContext` while providing support for `osbuild`
@@ -127,3 +133,6 @@ class OSBuildContext(Context):
 
     def variable(self, name: str) -> Any:
         return self._context.variable(name)
+
+    def merge_defines(self, defines: dict[str, Any]) -> None:
+        self._context.merge_defines(defines)
