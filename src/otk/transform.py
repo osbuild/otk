@@ -21,7 +21,7 @@ import yaml
 
 from . import tree
 from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET
-from .context import Context, OSBuildContext, validate_var_name
+from .context import Context, validate_var_name
 from .error import ParseError, TransformDirectiveTypeError, TransformDirectiveUnknownError
 from .external import call
 from .traversal import State
@@ -108,9 +108,11 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                 return resolve(ctx, state, op(ctx, resolve(ctx, state, val), key))
 
             if key.startswith("otk.external."):
-                if isinstance(ctx, OSBuildContext):
-                    return resolve(ctx, state, call(key, resolve(ctx, state, val)))
-                log.error("%r:%r", key, ctx)
+                # no target, "dry" run
+                if not ctx.target_requested:
+                    continue
+
+                return resolve(ctx, state, call(key, resolve(ctx, state, val)))
 
         tree[key] = resolve(ctx, state, val)
 
