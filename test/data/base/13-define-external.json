@@ -2,6 +2,14 @@
   "pipelines": [
     {
       "a": "b"
+    },
+    {
+      "c": "d"
+    },
+    {
+      "nested": {
+	"sub": "key"
+      }
     }
   ],
   "version": "2",
