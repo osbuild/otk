@@ -4,12 +4,7 @@ import pathlib
 import sys
 from typing import List
 
-from .constant import PREFIX_TARGET
-from .context import CommonContext, OSBuildContext
 from .document import Omnifest
-from .target import OSBuildTarget
-from .transform import process_include, resolve
-from .traversal import State
 
 log = logging.getLogger(__name__)
 
@@ -46,11 +41,14 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     else:
         path = pathlib.Path(arguments.input)
 
-    ddw = any(arg in getattr(arguments, "warn", [])
-              for arg in ["duplicate-definition", "all"])
-    ctx = CommonContext(duplicate_definitions_warning=ddw)
-    state = State()
-    doc = Omnifest(process_include(ctx, state, path))
+    warn_duplicated_defs = any(arg in getattr(arguments, "warn", [])
+                               for arg in ["duplicate-definition", "all"])
+    # First pass of resolving the otk file is "shallow", it will not run
+    # externals and not resolve anything under otk.target.*
+    #
+    # It only exists as convinience for the user so that they do not need
+    # to use "-t"
+    doc = Omnifest(path, warn_duplicated_defs=warn_duplicated_defs)
 
     target_available = doc.targets
     target_requested = arguments.target
@@ -66,33 +64,13 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         log.fatal("requested target %r does not exist in INPUT", target_requested)
         return 1
 
-    # and also for the specific target
-    try:
-        kind, name = target_requested.split(".")
-    except ValueError:
-        # TODO handle earlier
-        log.fatal(
-            "malformed target name %r. We need a format of '<TARGET_KIND>.<TARGET_NAME>'.",
-            target_requested,
-        )
-        return 1
-
-    # re-resolve the specific target with the specific context and target if
-    # applicable
-    # TODO: redo/readd {context,target}_registry in type safe way
-    if kind != "osbuild":
-        raise ValueError("only target osbuild supported right now")
-    spec = OSBuildContext(ctx)
-    target = OSBuildTarget()
-    state = State(path=path)
-    tree = resolve(spec, state, doc.tree[f"{PREFIX_TARGET}{kind}.{name}"])
-
-    if not target.is_valid(tree):
-        return 1
+    # Now do the real resolve that takes the target into account. It needs
+    # a full run so that resolving includes works correctly.
+    doc = Omnifest(path, target=target_requested, warn_duplicated_defs=warn_duplicated_defs)
 
     # and then output by writing to the output
     if not dry_run:
-        dst.write(target.as_string(spec, tree))
+        dst.write(doc.as_target_string())
 
     return 0
 

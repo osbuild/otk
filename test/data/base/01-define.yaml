@@ -3,10 +3,10 @@
 # The results of compiling this omnifest are available in `01-define.json`.
 otk.version: "1"
 
-otk.define.name:
+otk.define:
   a: "tree"
 
-otk.target.osbuild.name:
+otk.target.osbuild:
   pipelines:
     - a: "${a}"
     - a: "${a}/b"
