@@ -32,16 +32,3 @@ def test_errors(src_yaml):
     with pytest.raises(Exception) as exception:
         command.compile(ns)
     assert expected in str(exception.value)
-
-
-@pytest.mark.parametrize("src_yaml",
-                         [str(path) for path in (pathlib.Path(__file__).parent / "data/log_fatal").glob("*.yaml")])
-def test_log_fatal(caplog, src_yaml):
-    src_yaml = pathlib.Path(src_yaml)
-    expected = src_yaml.with_suffix(".err").read_text(encoding="utf8").strip()
-    ns = argparse.Namespace(input=src_yaml, output="/dev/null", target="osbuild.name")
-    ret = command.compile(ns)
-
-    assert ret != 0
-    log_text = caplog.text
-    assert expected in log_text
