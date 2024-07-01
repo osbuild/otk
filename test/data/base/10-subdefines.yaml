@@ -1,6 +1,6 @@
 otk.version: "1"
 
-otk.define.x:
+otk.define:
   a: 1
   b:
     a: 2  # b.a
@@ -8,7 +8,7 @@ otk.define.x:
     inner: "${b.a}"  # 2
 
 
-otk.target.osbuild.name:
+otk.target.osbuild:
   vars:
     - "${a}"
     - "${b}"

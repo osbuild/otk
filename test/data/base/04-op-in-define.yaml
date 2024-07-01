@@ -1,12 +1,12 @@
 otk.version: "1"
 
-otk.define.name:
+otk.define:
   foo:
     otk.op.join:
       values:
         - - 1
         - - 2
 
-otk.target.osbuild.name:
+otk.target.osbuild:
   pipelines:
     - foo: ${foo}

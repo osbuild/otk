@@ -1,4 +1,4 @@
-otk.target.osbuild.name:
+otk.target.osbuild:
   pipelines:
     - foo: bar
       bar: foo

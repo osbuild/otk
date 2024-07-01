@@ -62,7 +62,7 @@ otk.define.list_to_str_1:
 otk.define.list_to_str_2:
   list_to_str: "I was a list"
 
-otk.target.osbuild.name:
+otk.target.osbuild:
   pipelines:
     - name: "dict_to_list"
       stages:
