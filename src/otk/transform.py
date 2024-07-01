@@ -150,6 +150,11 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
             ctx.define(state.define_subkey(), value)
             continue
 
+        if key.startswith("otk.external."):
+            new_vars = resolve(ctx, state, call(key, resolve(ctx, state, value)))
+            ctx._variables.update(new_vars)
+            continue
+
         if isinstance(value, dict):
             new_state = state.copy(subkey_add=key)
             process_defines(ctx, new_state, value)
