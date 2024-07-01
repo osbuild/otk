@@ -5,7 +5,6 @@ import sys
 from typing import List
 
 from .document import Omnifest
-from .target import OSBuildTarget
 
 log = logging.getLogger(__name__)
 
@@ -68,9 +67,6 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # Now do the real resolve that takes the target into account. It needs
     # a full run so that resolving includes works correctly.
     doc = Omnifest(path, target=target_requested, warn_duplicated_defs=warn_duplicated_defs)
-    target = OSBuildTarget()
-    if not target.is_valid(doc._tree):
-        return 1
 
     # and then output by writing to the output
     if not dry_run:

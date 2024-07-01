@@ -62,10 +62,11 @@ class Omnifest:
         return _targets(self._tree)
 
     def as_target_string(self) -> str:
+        # XXX: redo using type-safe target registry
         if not self._target.startswith("osbuild"):
             raise OTKError("only osbuild targets supported right now")
         target = OSBuildTarget()
-        # target.ensure_valid()
+        target.ensure_valid(self._tree)
         return target.as_string(self._osbuild_ctx, self._tree)
 
 
