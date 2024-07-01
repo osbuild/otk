@@ -3,7 +3,12 @@ otk.version: "1"
 otk.define.name:
   otk.external.mirror:
     a: "b"
+    nested:
+      sub: "key"
+  c: "d"
 
 otk.target.osbuild.name:
   pipelines:
     - a: "${a}"
+    - c: "${c}"
+    - nested: "${nested}"
