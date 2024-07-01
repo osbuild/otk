@@ -2,8 +2,8 @@ import logging
 from copy import deepcopy
 from typing import Any
 
-from .constant import PREFIX_TARGET, NAME_VERSION
-from .error import NoTargetsError, ParseVersionError
+from .constant import PREFIX, PREFIX_TARGET, NAME_VERSION
+from .error import NoTargetsError, ParseError, ParseVersionError
 
 log = logging.getLogger(__name__)
 
@@ -26,6 +26,12 @@ class Omnifest:
         # being an Omnifest.
         if NAME_VERSION not in deserialized_data:
             raise ParseVersionError(f"omnifest must contain a key by the name of {NAME_VERSION!r}")
+
+        # no toplevel keys without a target or an otk directive
+        targetless_keys = [key for key in deserialized_data
+                           if not key.startswith(PREFIX)]
+        if len(targetless_keys):
+            raise ParseError(f"otk file contains top-level keys {targetless_keys} without a target")
 
         target_available = _targets(deserialized_data)
         if not target_available:
