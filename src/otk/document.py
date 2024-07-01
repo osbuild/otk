@@ -1,21 +1,36 @@
 import logging
+import pathlib
 from copy import deepcopy
 from typing import Any
 
 from .constant import PREFIX, PREFIX_TARGET, NAME_VERSION
-from .error import NoTargetsError, ParseError, ParseVersionError
+from .context import CommonContext, OSBuildContext
+from .error import NoTargetsError, ParseError, ParseVersionError, OTKError
+from .transform import process_include
+from .traversal import State
+from .target import OSBuildTarget
 
 log = logging.getLogger(__name__)
 
 
 class Omnifest:
-    # Underlying data is a dictionary containing the validated deserialized
-    # contents of the bytes that were used to create this omnifest.
-    _underlying_data: dict[str, Any]
+    _tree: dict[str, Any]
+    _ctx: CommonContext
+    _osbuild_ctx: OSBuildContext
+    _target: str
 
-    def __init__(self, underlying_data: dict[str, Any]) -> None:
-        Omnifest.ensure(underlying_data)
-        self._underlying_data = underlying_data
+    def __init__(self, path: pathlib.Path, target: str = "", *, warn_duplicated_defs: bool = False) -> None:
+        self._ctx = CommonContext(target_requested=target, warn_duplicated_defs=warn_duplicated_defs)
+        self._target = target
+        # XXX: redo using a type-safe target registry
+        if target:
+            if not target.startswith("osbuild"):
+                raise OTKError("only target osbuild supported right now")
+            self._osbuild_ctx = OSBuildContext(self._ctx)
+        state = State()
+        tree = process_include(self._ctx, state, path)
+        Omnifest.ensure(tree)
+        self._tree = tree
 
     @classmethod
     def ensure(cls, deserialized_data: dict[str, Any]) -> None:
@@ -39,12 +54,19 @@ class Omnifest:
 
     @property
     def tree(self) -> dict[str, Any]:
-        return deepcopy(self._underlying_data)
+        return deepcopy(self._tree)
 
     @property
     def targets(self) -> dict[str, Any]:
         """ Return a dict of target(s) and their subtree(s) """
-        return _targets(self._underlying_data)
+        return _targets(self._tree)
+
+    def as_target_string(self) -> str:
+        if not self._target.startswith("osbuild"):
+            raise OTKError("only osbuild targets supported right now")
+        target = OSBuildTarget()
+        # target.ensure_valid()
+        return target.as_string(self._osbuild_ctx, self._tree)
 
 
 def _targets(tree: dict[str, Any]) -> dict[str, Any]:

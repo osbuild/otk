@@ -42,7 +42,7 @@ class Context(ABC):
 
 
 class CommonContext(Context):
-    duplicate_definitions_warning: bool
+    warn_duplicated_defs: bool
     _target_requested: str
     _version: Optional[int]
     _variables: dict[str, Any]
@@ -51,12 +51,12 @@ class CommonContext(Context):
         self,
         *,
         target_requested: str = "",
-        duplicate_definitions_warning: bool = False,
+        warn_duplicated_defs: bool = False,
     ) -> None:
         self._version = None
         self._variables = {}
         self._target_requested = target_requested
-        self.duplicate_definitions_warning = duplicate_definitions_warning
+        self.warn_duplicated_defs = warn_duplicated_defs
 
     @property
     def target_requested(self) -> str:
@@ -73,7 +73,7 @@ class CommonContext(Context):
         self._version = v
 
     def _maybe_log_var_override(self, cur_var_scope, parts, value):
-        if not self.duplicate_definitions_warning:
+        if not self.warn_duplicated_defs:
             return
         key = parts[-1]
         if cur_var_scope.get(key):

@@ -4,11 +4,8 @@ import pathlib
 import sys
 from typing import List
 
-from .context import CommonContext, OSBuildContext
 from .document import Omnifest
 from .target import OSBuildTarget
-from .transform import process_include
-from .traversal import State
 
 log = logging.getLogger(__name__)
 
@@ -45,21 +42,14 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     else:
         path = pathlib.Path(arguments.input)
 
-    ddw = any(arg in getattr(arguments, "warn", [])
-              for arg in ["duplicate-definition", "all"])
+    warn_duplicated_defs = any(arg in getattr(arguments, "warn", [])
+                               for arg in ["duplicate-definition", "all"])
     # First pass of resolving the otk file is "shallow", it will not run
     # externals and not resolve anything under otk.target.*
     #
     # It only exists as convenience for the user so that they do not need
     # to use "-t"
-    # XXX: do we actually need to do all this given that we currently have
-    # a single "otk.target.osbuild"?
-    ctx = CommonContext(duplicate_definitions_warning=ddw)
-    state = State()
-    tree = process_include(ctx, state, path)
-    # XXX: what is the role of the "Omnifest" object? we use it here but
-    # not in the (real) resolving below? can we improve it? drop it?
-    doc = Omnifest(tree)
+    doc = Omnifest(path, warn_duplicated_defs=warn_duplicated_defs)
 
     target_available = doc.targets
     target_requested = arguments.target
@@ -77,23 +67,14 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
 
     # Now do the real resolve that takes the target into account. It needs
     # a full run so that resolving includes works correctly.
-
-    # TODO: redo/readd {context,target}_registry in type safe way
-    if not target_requested.startswith("osbuild"):
-        raise ValueError("only target osbuild supported right now")
-    # FIXME: OSBuildContext should just create a CommonContext itself
-    common_ctx = CommonContext(target_requested=target_requested, duplicate_definitions_warning=ddw)
-    osbuild_ctx = OSBuildContext(common_ctx)
+    doc = Omnifest(path, target=target_requested, warn_duplicated_defs=warn_duplicated_defs)
     target = OSBuildTarget()
-    state = State()
-    tree = process_include(osbuild_ctx, state, path)
-
-    if not target.is_valid(tree):
+    if not target.is_valid(doc._tree):
         return 1
 
     # and then output by writing to the output
     if not dry_run:
-        dst.write(target.as_string(osbuild_ctx, tree))
+        dst.write(doc.as_target_string())
 
     return 0
 
