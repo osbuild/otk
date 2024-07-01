@@ -70,7 +70,7 @@ def test_parse_commands_failure(capsys, command, sys_exit_code, sys_exit_message
 
 TEST_ARGUMENT_T_INPUT = """otk.version: "1"
 
-otk.target.osbuild.name:
+otk.target.osbuild:
   pipelines:
     - "test"
 """
@@ -110,7 +110,7 @@ TEST_ARGUMENT_T_OUTPUT1 = """{
          },
 
         # Select the one available target
-        {"command": ["compile", "-t", "osbuild.name", "-o", "OUTPUTFILE", "INPUTFILE"],
+        {"command": ["compile", "-t", "osbuild", "-o", "OUTPUTFILE", "INPUTFILE"],
          "input_data": TEST_ARGUMENT_T_INPUT,
          "output_data": TEST_ARGUMENT_T_OUTPUT,
          "ret_expected": 0,

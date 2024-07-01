@@ -1,11 +1,11 @@
 otk.version: "1"
 
-otk.define.name:
+otk.define:
   otk.include: "02-include-in-define/example.yaml"
   subkey:
     otk.include: "02-include-in-define/example.yaml"
 
-otk.target.osbuild.name:
+otk.target.osbuild:
   pipelines:
     - foo: ${foo}
       bar: ${bar}
