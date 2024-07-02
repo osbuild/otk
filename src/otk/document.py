@@ -29,7 +29,13 @@ class Omnifest:
             self._osbuild_ctx = OSBuildContext(self._ctx)
         state = State()
         tree = process_include(self._ctx, state, path)
-        Omnifest.ensure(tree)
+        # XXX: review this code, the idea is to find top-level keys that
+        # have no targets but that of course only works if there are
+        # no targets in the resolving. this means we are currently forced
+        # to resolve without target first to get this kind of error checking
+        # :(
+        if self._target == "":
+            Omnifest.ensure(tree)
         self._tree = tree
 
     @classmethod
