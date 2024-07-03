@@ -4,18 +4,12 @@ name: build
 source-epoch: ${source_epoch}
 runner: "org.osbuild.centos9"
 stages:
-  - otk.external.osbuild_depsolve_dnf4:
-    architecture: ${architecture}
-    releasever: ${version}
-    module_platform_id: platform:el${version}
-    docs: ${packages.build.docs}
-    weak: ${packages.build.weak}
-    repositories: ${packages.repositories}
-    gpgkeys: ${packages.keys}
-    packages: ${packages.buildroot.packages}
-  - type: org.osbuild.selinux
-    options:
-      file_contexts: etc/selinux/targeted/contexts/files/file_contexts
-      labels:
-        /usr/bin/cp: system_u:object_r:install_exec_t:s0
-        /usr/bin/tar: system_u:object_r:install_exec_t:s0
+  otk.op.join:
+    values:
+      - ${packages.build.stages}
+      - - type: org.osbuild.selinux
+          options:
+            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+            labels:
+              /usr/bin/cp: system_u:object_r:install_exec_t:s0
+              /usr/bin/tar: system_u:object_r:install_exec_t:s0

@@ -10,3 +10,9 @@ otk.target.osbuild:
   pipelines:
     - otk.include: "pipeline/build.yaml"
     - otk.include: "pipeline/os.yaml"
+  sources:
+    org.osbuild.rpm:
+      otk.op.join:
+        values:
+          - ${packages.build.sources["org.osbuild.rpm"]}
+          - ${packages.os.sources["org.osbuild.rpm"]}

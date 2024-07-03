@@ -17,8 +17,8 @@ def source_add(kind, data):
     """Add an osbuild source to the tree."""
 
     # Initialize empty sources
-    if data["context"]["sources"].get(kind) is None:
-        data["context"]["sources"][kind] = {"items": {}}
+    if data.get(kind) is None:
+        data[kind] = {"items": {}}
 
 
 def source_add_inline(data, text):
@@ -28,8 +28,8 @@ def source_add_inline(data, text):
     hashsum = hashlib.sha256(text).hexdigest()
     addr = f"sha256:{hashsum}"
 
-    if addr not in data["context"]["sources"]["org.osbuild.inline"]["items"]:
-        data["context"]["sources"]["org.osbuild.inline"]["items"][addr] = {
+    if addr not in data["org.osbuild.inline"]["items"]:
+        data["org.osbuild.inline"]["items"][addr] = {
             "encoding": "base64",
             "data": base64.b64encode(text).decode("utf8"),
         }
@@ -40,15 +40,16 @@ def source_add_inline(data, text):
 def source_add_curl(data, checksum, url):
     source_add("org.osbuild.curl", data)
 
-    if checksum not in data["context"]["sources"]["org.osbuild.curl"]["items"]:
-        data["context"]["sources"]["org.osbuild.curl"]["items"][checksum] = {"url": url}
+    if checksum not in data["org.osbuild.curl"]["items"]:
+        data["org.osbuild.curl"]["items"][checksum] = {"url": url}
 
 
-def depsolve_dnf4():
+def depsolve_dnf4_defines():
     data = json.loads(sys.stdin.read())
-    tree = data["tree"]["otk.external.osbuild_depsolve_dnf4"]
+    tree = data["tree"]["otk.external.osbuild_depsolve_dnf4_defines"]
+    srcs = {}
 
-    # source_add_curl("org.osbuild.rpm", data)
+    source_add("org.osbuild.rpm", srcs)
 
     request = {
         "command": "depsolve",
@@ -83,33 +84,35 @@ def depsolve_dnf4():
     results = json.loads(process.stdout)
 
     for package in results.get("packages", []):
-        source_add_curl(data, package["checksum"], package["remote_location"])
+        source_add_curl(srcs, package["checksum"], package["remote_location"])
+
+    out = {
+        "tree": {
+            "stages": [{
+                "type": "org.osbuild.rpm",
+                "inputs": {
+                    "packages": {
+                        "type": "org.osbuild.files",
+                        "origin": "org.osbuild.source",
+                        "references": [
+                            {
+                                "id": package["checksum"],
+                                "options": {"metadata": {"rpm.check_gpg": True}},
+                            }
+                            for package in results.get("packages", [])
+                        ],
+                    }
+                },
+                "options": {
+                    "gpgkeys": tree["gpgkeys"],
+                },
+            }],
+            "sources": {"rpms": srcs["org.osbuild.rpm"]},
+        }
+    }
 
     sys.stdout.write(
-        json.dumps(
-            {
-                "context": data["context"],
-                "tree": {
-                    "type": "org.osbuild.rpm",
-                    "inputs": {
-                        "packages": {
-                            "type": "org.osbuild.files",
-                            "origin": "org.osbuild.source",
-                            "references": [
-                                {
-                                    "id": package["checksum"],
-                                    "options": {"metadata": {"rpm.check_gpg": True}},
-                                }
-                                for package in results.get("packages", [])
-                            ],
-                        }
-                    },
-                    "options": {
-                        "gpgkeys": tree["gpgkeys"],
-                    },
-                },
-            }
-        )
+        json.dumps(out)
     )
 
 
