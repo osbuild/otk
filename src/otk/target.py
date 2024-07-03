@@ -36,10 +36,7 @@ class OSBuildTarget(Target):
                 "The key 'version' is added by otk internally.")
 
     def as_string(self, context: OSBuildContext, tree: Any, pretty: bool = True) -> str:
-        log.debug("as string %r!", context.sources)
-
         osbuild_tree = tree[PREFIX_TARGET + context.target_requested]
         osbuild_tree["version"] = "2"
-        osbuild_tree["sources"] = context.sources
 
         return json.dumps(osbuild_tree, indent=2 if pretty else None)
