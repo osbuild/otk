@@ -41,14 +41,12 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     else:
         path = pathlib.Path(arguments.input)
 
-    warn_duplicated_defs = any(arg in getattr(arguments, "warn", [])
-                               for arg in ["duplicate-definition", "all"])
     # First pass of resolving the otk file is "shallow", it will not run
     # externals and not resolve anything under otk.target.*
     #
     # It only exists as convenience for the user so that they do not need
     # to use "-t"
-    doc = Omnifest(path, warn_duplicated_defs=warn_duplicated_defs)
+    doc = Omnifest(path)
 
     target_available = doc.targets
     target_requested = arguments.target
@@ -66,6 +64,8 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
 
     # Now do the real resolve that takes the target into account. It needs
     # a full run so that resolving includes works correctly.
+    warn_duplicated_defs = any(arg in getattr(arguments, "warn", [])
+                               for arg in ["duplicate-definition", "all"])
     doc = Omnifest(path, target=target_requested, warn_duplicated_defs=warn_duplicated_defs)
 
     # and then output by writing to the output
