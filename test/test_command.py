@@ -85,16 +85,14 @@ TEST_ARGUMENT_T_OUTPUT = """{
   "pipelines": [
     "test"
   ],
-  "version": "2",
-  "sources": {}
+  "version": "2"
 }"""
 
 TEST_ARGUMENT_T_OUTPUT1 = """{
   "pipelines": [
     "test1"
   ],
-  "version": "2",
-  "sources": {}
+  "version": "2"
 }"""
 
 
