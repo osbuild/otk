@@ -1,0 +1,11 @@
+otk.version: "1"
+
+otk.define:
+  architecture: "x86_64"
+  version: "9"
+
+otk.include: "14-include-regression/centos-9.yaml"
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: "14-include-regression/build.yaml"

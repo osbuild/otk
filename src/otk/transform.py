@@ -59,7 +59,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
     - Values under any other key are processed based on their type (see resolve()).
     """
 
-    for key, val in tree.items():
+    for key, val in tree.copy().items():
         # Replace any variables in a value immediately before doing anything
         # else, so that variables defined in strings are considered in the
         # processing of all directives.
@@ -86,7 +86,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                         f"First level below a 'target' should be a dictionary (not a {type(target).__name__})")
 
                 tree.update(target)
-                return tree
+                continue
 
             if key.startswith(PREFIX_INCLUDE):
                 tree = tree.copy()  # copy the tree and drop the include directive
@@ -97,7 +97,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                     return included
 
                 tree.update(included)
-                return tree
+                continue
 
             # Other directives do *not* allow siblings
             if len(tree) > 1:
