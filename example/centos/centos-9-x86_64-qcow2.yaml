@@ -1,7 +1,12 @@
 otk.version: "1"
 
-otk.define.centos-9-x86_64-qcow2:
+otk.define:
   architecture: "x86_64"
   version: "9"
 
-otk.include.centos-9-x86_64: "common/centos-9.yaml"
+otk.include: "common/centos-9.yaml"
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: "pipeline/build.yaml"
+    - otk.include: "pipeline/os.yaml"
