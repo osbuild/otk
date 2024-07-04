@@ -31,7 +31,7 @@ class Context(ABC):
     def define(self, name: str, value: Any) -> None: ...
 
     @abstractmethod
-    def merge_defines(self, defines: dict[str, Any]) -> None: ...
+    def merge_defines(self, name: str, defines: dict[str, Any]) -> None: ...
 
     @abstractmethod
     def variable(self, name: str) -> Any: ...
@@ -96,9 +96,7 @@ class CommonContext(Context):
 
     def variable(self, name: str) -> Any:
         parts = name.split(".")
-
         value = self._variables
-
         for i, part in enumerate(parts):
             if isinstance(value, dict):
                 if part not in value:
@@ -122,8 +120,11 @@ class CommonContext(Context):
 
         return value
 
-    def merge_defines(self, defines: dict[str, Any]) -> None:
-        self._variables.update(defines)
+    def merge_defines(self, name: str, defines: dict[str, Any]) -> None:
+        if name == "":
+            self._variables.update(defines)
+        else:
+            self.define(name, defines)
 
 
 class OSBuildContext(Context):
@@ -145,8 +146,8 @@ class OSBuildContext(Context):
     def variable(self, name: str) -> Any:
         return self._context.variable(name)
 
-    def merge_defines(self, defines: dict[str, Any]) -> None:
-        self._context.merge_defines(defines)
+    def merge_defines(self, name: str, defines: dict[str, Any]) -> None:
+        self._context.merge_defines(name, defines)
 
     @property
     def target_requested(self) -> str:
