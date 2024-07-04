@@ -1,14 +1,25 @@
 otk.version: "1"
 
-otk.define:
+otk.define.top-level-dict:
   otk.external.mirror:
     a: "b"
-    nested:
+    b:
       sub: "key"
-  c: "d"
+
+otk.define.list:
+  c:
+    otk.external.mirror:
+      - 1
+      - 2
+
+otk.define.dict:
+  d:
+    otk.external.mirror:
+      sub: "key"
 
 otk.target.osbuild:
   pipelines:
     - a: "${a}"
+    - b: "${b}"
     - c: "${c}"
-    - nested: "${nested}"
+    - d: "${d}"
