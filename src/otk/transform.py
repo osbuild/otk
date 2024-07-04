@@ -105,13 +105,14 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                 raise KeyError(f"directive {key} should not have siblings: {keys!r}")
 
             if key.startswith(PREFIX_OP):
+                # return is fine, no siblings allowed
                 return resolve(ctx, state, op(ctx, resolve(ctx, state, val), key))
 
             if key.startswith("otk.external."):
                 # no target, "dry" run
                 if not ctx.target_requested:
                     continue
-
+                # return is fine, no siblings allowed
                 return resolve(ctx, state, call(key, resolve(ctx, state, val)))
 
         tree[key] = resolve(ctx, state, val)
