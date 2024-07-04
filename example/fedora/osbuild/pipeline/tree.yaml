@@ -18,7 +18,7 @@ stages:
     options:
       filesystems:
         - ${filesystem.boot}
-        - ${filesystem.boot-efi}
+        - ${filesystem.boot_efi}
         - ${filesystem.root}
   - type: org.osbuild.grub2
     options:

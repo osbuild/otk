@@ -28,3 +28,7 @@ jobs:
           pip install .[dev]
       - name: Run unit tests
         run: PYTHONPATH=./src pytest
+      - name: Validate OTK configuration
+        run: |
+          otk -v validate example/fedora/minimal-40-aarch64.yaml
+          otk -v validate example/fedora/minimal-40-x86_64.yaml
