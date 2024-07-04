@@ -1,0 +1,8 @@
+otk.version: 1
+
+otk.target.osbuild:
+  a:
+    otk.external.mirror:
+      a: b
+    otk.external.other:
+      c: d

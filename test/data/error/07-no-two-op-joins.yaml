@@ -1,0 +1,8 @@
+otk.version: 1
+
+otk.target.osbuild:
+  otk.op.join:
+    - 1
+    - 2
+  otk.op.noop:
+    - 3

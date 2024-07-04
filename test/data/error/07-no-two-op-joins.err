@@ -1,0 +1,1 @@
+directive otk.op.join should not have siblings: ['otk.op.join', 'otk.op.noop']
