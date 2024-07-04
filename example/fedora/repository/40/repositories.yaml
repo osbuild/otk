@@ -1,2 +1,5 @@
-- id: "fedora"
-  metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-${version}&arch=${architecture}
+otk.define:
+  packages:
+    repositories:
+      - id: "fedora"
+        metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-${version}&arch=${architecture}
