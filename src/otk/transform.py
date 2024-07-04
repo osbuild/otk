@@ -169,7 +169,7 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
 
         if key.startswith("otk.external."):
             new_vars = resolve(ctx, state, call(key, resolve(ctx, state, value)))
-            ctx.merge_defines(new_vars)
+            ctx.merge_defines(state.define_subkey(), new_vars)
             continue
 
         if isinstance(value, dict):
