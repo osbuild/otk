@@ -2,7 +2,7 @@ name: build
 # source-epoch will support reproducible builds:
 # https://reproducible-builds.org/docs/source-date-epoch/
 source-epoch: ${source_epoch}
-runner: "org.osbuild.centos9"
+runner: "org.osbuild.centos${version}"
 stages:
   otk.op.join:
     values:

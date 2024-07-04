@@ -5,36 +5,25 @@ stages:
   otk.op.join:
     values:
       - ${packages.os.stages}
-        # Disk bits
-      - - otk.external.osbuild.partition_table.gen_fstab_stage:
-          source: ${filesystem}
 
-        # Boot bits
-        - otk.include: fragment/kernel-cmdline.yaml
-        - otk.include: fragment/dracut.yaml
-        - otk.include: fragment/fix-bls.yaml
-        - otk.include: fragment/grub2.yaml
+      # Boot bits
+      - otk.include: ../fragment/kernel-cmdline.yaml
+      - otk.include: ../fragment/dracut.yaml
+      - otk.include: ../fragment/fix-bls.yaml
+      - otk.include: ../fragment/grub2.yaml
 
-        # General bits, could probably be split out further
-        - otk.include: fragment/locale.yaml
-        - otk.include: fragment/keymap.yaml
-        - otk.include: fragment/timezone.yaml
-        - otk.include: fragment/chrony.yaml
-        - otk.include: fragment/sysconfig.yaml
-        - otk.include: fragment/systemd-logind.yaml
-        - otk.include: fragment/cloud-init.yaml
-        - otk.include: fragment/modprobe.yaml
-        - otk.include: fragment/authselect.yaml
-        - otk.include: fragment/sshd.yaml
-        - otk.include: fragment/systemd-unit.yaml
-        - otk.include: fragment/systemd.yaml
+      # General bits, could probably be split out further
+      - otk.include: ../fragment/locale.yaml
+      - otk.include: ../fragment/keymap.yaml
+      - otk.include: ../fragment/chrony.yaml
+      - otk.include: ../fragment/sysconfig.yaml
+      - otk.include: ../fragment/systemd-logind.yaml
+      - otk.include: ../fragment/cloud-init.yaml
+      - otk.include: ../fragment/modprobe.yaml
+      - otk.include: ../fragment/authselect.yaml
+      - otk.include: ../fragment/sshd.yaml
+      - otk.include: ../fragment/systemd-unit.yaml
+      - otk.include: ../fragment/systemd.yaml
 
-        # Custom bits
-        - otk.include: fragment/directories.yaml
-        - otk.include: fragment/files.yaml
-
-        - otk.include: fragment/users.yaml
-        - otk.include: fragment/oscap.yaml
-
-        # Always
-        - otk.include: fragment/selinux.yaml
+      # Always
+      - otk.include: ../fragment/selinux.yaml

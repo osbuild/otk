@@ -1,9 +1,6 @@
-otk.op.if-set:
-  what: modfication.keymap
-  then:
-    - type: org.osbuild.keymap
-      options:
-        keymap: ${modfication.keymap}
-        x11-keymap:
-          layouts:
-            - ${modfication.keymap}
+- type: org.osbuild.keymap
+  options:
+    keymap:
+      x11-keymap:
+        layouts:
+          - 1 # ${modify.keymap}

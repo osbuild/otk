@@ -1,4 +1,4 @@
 - type: org.osbuild.sshd_config
   options:
-    config:
-      PasswordAuthentication: ${sshd_password_authentication}
+    config: []
+      #      PasswordAuthentication: ${sshd_password_authentication}

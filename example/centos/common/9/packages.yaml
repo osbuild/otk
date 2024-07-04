@@ -1,0 +1,99 @@
+otk.include: "repositories.yaml"
+
+otk.define:
+  packages:
+    build:
+      otk.external.osbuild_depsolve_dnf4_defines:
+        architecture: ${architecture}
+        releasever: ${version}
+        module_platform_id: "platform:el${version}"
+        docs: false
+        weak: true
+        packages:
+          include:
+            # duplicated entries can be removed
+            # only added due to functionality of the current implementation
+            - "coreutils"
+            - "dosfstools"
+            - "glibc"
+            - "grub2-pc"
+            - "platform-python"
+            - "policycoreutils"
+            - "python3"
+            - "python3-pyyaml"
+            - "qemu-img"   # only needed for the qcow pipeline but for simplicity have a common buildroot
+            - "rpm"
+            - "selinux-policy-targeted"
+            - "systemd"
+            - "xfsprogs"  # conditionally added depending on the target filesystem
+            - "xz"
+          exclude: []
+        repositories: ${repositories}
+        gpgkeys: ${gpgkeys}
+    os:
+      otk.external.osbuild_depsolve_dnf4_defines:
+        architecture: ${architecture}
+        releasever: ${version}
+        module_platform_id: "platform:el${version}"
+        docs: false
+        weak: true
+        packages:
+          include:
+            - "@core"
+            - "NetworkManager-cloud-setup"
+            - "authselect-compat"
+            - "chrony"
+            - "cloud-init"
+            - "cloud-utils-growpart"
+            - "dhcp-client"
+            - "dosfstools"
+            - "dracut-config-generic"
+            - "efibootmgr"
+            - "gdisk"
+            - "grub2"
+            - "grub2-efi-x64"
+            - "grub2-pc"
+            - "kernel"
+            - "langpacks-en"
+            - "redhat-release"
+            - "redhat-release-eula"
+            - "rsync"
+            - "selinux-policy-targeted"
+            - "shim-x64"
+            - "tar"
+            - "tuned"
+            - "xfsprogs"
+            - "yum-utils"
+            - "dracut-config-generic"
+          exclude:
+            - "aic94xx-firmware"
+            - "alsa-firmware"
+            - "alsa-tools-firmware"
+            - "biosdevname"
+            - "dracut-config-rescue"
+            - "firewalld"
+            - "iprutils"
+            - "ivtv-firmware"
+            - "iwl100-firmware"
+            - "iwl1000-firmware"
+            - "iwl105-firmware"
+            - "iwl135-firmware"
+            - "iwl2000-firmware"
+            - "iwl2030-firmware"
+            - "iwl3160-firmware"
+            - "iwl3945-firmware"
+            - "iwl4965-firmware"
+            - "iwl5000-firmware"
+            - "iwl5150-firmware"
+            - "iwl6000-firmware"
+            - "iwl6000g2a-firmware"
+            - "iwl6000g2b-firmware"
+            - "iwl6050-firmware"
+            - "iwl7260-firmware"
+            - "libertas-sd8686-firmware"
+            - "libertas-sd8787-firmware"
+            - "libertas-usb8388-firmware"
+            - "plymouth"
+            - "qemu-guest-agent"
+        repositories: ${repositories}
+        gpgkeys: ${gpgkeys}

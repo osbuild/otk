@@ -1,5 +1,2 @@
-otk.op.if-set:
-  what: modfication.chrony
-  then:
-    - type: org.osbuild.chrony
-      options: ${modfication.chrony}
+- type: org.osbuild.chrony
+  options: 1 # ${modification.chrony}

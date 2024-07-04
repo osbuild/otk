@@ -49,7 +49,7 @@ def depsolve_dnf4_defines():
     tree = data["tree"]["otk.external.osbuild_depsolve_dnf4_defines"]
     srcs = {}
 
-    source_add("org.osbuild.rpm", srcs)
+    source_add("org.osbuild.curl", srcs)
 
     request = {
         "command": "depsolve",
@@ -107,7 +107,7 @@ def depsolve_dnf4_defines():
                     "gpgkeys": tree["gpgkeys"],
                 },
             }],
-            "sources": {"rpms": srcs["org.osbuild.rpm"]},
+            "sources": {"curl": srcs["org.osbuild.curl"]},
         }
     }
 
