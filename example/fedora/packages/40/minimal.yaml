@@ -1,9 +1,0 @@
-include:
-  - "@core"
-  - "initial-setup"
-  - "libxkbcommon"
-  - "NetworkManager-wifi"
-  - "brcmfmac-firmware"
-  - "realtek-firmware"
-  - "iwlwifi-mvm-firmware"
-exclude: []

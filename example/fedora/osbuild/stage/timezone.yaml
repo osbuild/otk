@@ -1,7 +1,0 @@
-type: org.osbuild.timezone
-options:
-  otk.modfication.language:
-    default:
-      zone: UTC
-    if-set:
-      zone: UTC

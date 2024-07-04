@@ -1,3 +1,0 @@
-type: org.osbuild.selinux
-options:
-  file_contexts: etc/selinux/targeted/contexts/files/file_contexts
