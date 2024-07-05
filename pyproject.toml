@@ -18,6 +18,7 @@ dev = [
     "mypy >= 1.9",
     "types-PyYAML >= 6.0",
     "pre-commit",
+    "toml",
     "pylint"
 ]
 

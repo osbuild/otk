@@ -3,6 +3,8 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any
 
+import toml
+
 from .context import CommonContext, OSBuildContext
 from .constant import PREFIX_TARGET
 from .error import ParseError
@@ -41,3 +43,11 @@ class JSONTarget(Target):
 
     def as_string(self, context: CommonContext, tree: Any, pretty: bool = True) -> str:
         return json.dumps(tree, indent=2 if pretty else None)
+
+
+class TOMLTarget(Target):
+    def ensure_valid(self, tree: Any) -> None:
+        return None
+
+    def as_string(self, context: CommonContext, tree: Any, _pretty: bool = True) -> str:
+        return toml.dumps(tree)
