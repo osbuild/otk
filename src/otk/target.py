@@ -33,3 +33,11 @@ class OSBuildTarget(Target):
         osbuild_tree["sources"] = context.sources
 
         return json.dumps(osbuild_tree, indent=2 if pretty else None)
+
+
+class JSONTarget(Target):
+    def ensure_valid(self, tree: Any) -> None:
+        return None
+
+    def as_string(self, context: CommonContext, tree: Any, pretty: bool = True) -> str:
+        return json.dumps(tree, indent=2 if pretty else None)

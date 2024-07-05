@@ -8,7 +8,7 @@ from .context import CommonContext, OSBuildContext
 from .error import NoTargetsError, ParseError, ParseVersionError, OTKError
 from .transform import process_include
 from .traversal import State
-from .target import OSBuildTarget
+from .target import OSBuildTarget, JSONTarget
 
 log = logging.getLogger(__name__)
 
@@ -69,9 +69,14 @@ class Omnifest:
 
     def as_target_string(self) -> str:
         # XXX: redo using type-safe target registry
-        if not self._target.startswith("osbuild"):
+        if self._target.startswith("osbuild"):
+            target = OSBuildTarget()
+        elif self._target.startswith("json"):
+            target = JSONTarget()
+        else:
             raise OTKError("only osbuild targets supported right now")
-        target = OSBuildTarget()
+
+        target.ensure_valid(self._tree)
         target.ensure_valid(self._tree)
         return target.as_string(self._osbuild_ctx, self._tree)
 
