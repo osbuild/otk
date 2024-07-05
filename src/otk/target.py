@@ -18,16 +18,6 @@ class Target(ABC):
     def as_string(self, context: Any, tree: Any, pretty: bool = True) -> str: ...
 
 
-# NOTE this common target is a bit weird, we probably shouldn't always assume JSON but
-# NOTE it makes development a tad easier until we figure out all our targets
-class CommonTarget(Target):
-    def ensure_valid(self, _tree: Any) -> None:
-        pass
-
-    def as_string(self, context: CommonContext, tree: Any, pretty: bool = True) -> str:
-        return json.dumps(tree, indent=2 if pretty else None)
-
-
 class OSBuildTarget(Target):
     def ensure_valid(self, tree: Any) -> None:
         if "version" in tree:
