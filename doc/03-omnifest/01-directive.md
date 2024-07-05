@@ -23,6 +23,8 @@ A target is necessary for `otk` to generate any outputs. The target is namespace
 The following values are valid for the `<consumer>` part of the key, this list can grow as other image build tooling is supported:
 
 - `osbuild`
+- `toml`
+- `json`
 
 The `<name>` part of the key is free form and allows you to use a descriptive name for the export. Note that there MUST be no duplication of the `<consumer>.<name>` tuple.
 
@@ -177,27 +179,6 @@ otk.define:
   c:
    a: 1
    b: 2
-```
-
-## `otk.meta.<name>`
-
-Under the `otk.meta` namespace any data can be stored that other applications
-need to use from an omnifest.
-
-Expects a `map` for its value.
-
-```yaml
-otk.meta.osbuild-composer:
-  boot_mode: uefi
-  export: image
-  pipelines:
-    build:
-      - root
-    system:
-      - tree
-
-otk.meta.kiwi:
-  label: "A Label"
 ```
 
 ## `otk.external`
