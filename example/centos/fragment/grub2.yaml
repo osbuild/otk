@@ -8,7 +8,7 @@
     vendor: centos
     unified: true
   # TODO: expose this somehow from the depsolve (could also be ${depsolve.kernel...})
-  saved_entry: "ff" #"ffffffffffffffffffffffffffffffff-${kernel-core.version}"
+  saved_entry: "ffffffffffffffffffffffffffffffff-${packages.os.resolved.kernel-core.version}"
   write_cmdline: false
   config:
     default: saved

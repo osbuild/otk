@@ -3,5 +3,5 @@
     root_fs_uuid: 1
     # seems consensus is to *not* use jinja2 for now (unless we have a better use-case than
     # '" ".join(kernle_opts_list)')
-    # TODO: consider a small subset of "filters" inspired by jinja2 "${ kernel_opts_list | join }" ? 
+    # TODO: consider a small subset of "filters" inspired by jinja2 "${ kernel_opts_list | join }" ?
     kernel_opts: []

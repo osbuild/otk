@@ -77,6 +77,7 @@ def depsolve_dnf4_defines():
         encoding="utf8",
         check=False,
     )
+
     if process.returncode != 0:
         # TODO: fix this
         raise Exception(process.stderr)  # pylint: disable=broad-exception-raised
@@ -108,6 +109,9 @@ def depsolve_dnf4_defines():
                 },
             }],
             "sources": {"curl": srcs["org.osbuild.curl"]},
+            "resolved": {
+                p["name"]: p for p in results.get("packages", [])
+            },
         }
     }
 
