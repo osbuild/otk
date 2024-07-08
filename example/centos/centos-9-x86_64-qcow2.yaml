@@ -18,10 +18,10 @@ otk.include: "common/prelude.yaml"
 otk.target.osbuild:
   pipelines:
     - otk.include: "pipeline/build.yaml"
-    - otk.include: "pipeline/os.yaml"
+    - otk.include: "pipeline/root.yaml"
   sources:
     org.osbuild.curl:
       otk.op.join:
         values:
           - ${packages.build.sources.curl}
-          - ${packages.os.sources.curl}
+          - ${packages.root.sources.curl}

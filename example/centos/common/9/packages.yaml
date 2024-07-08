@@ -2,6 +2,7 @@ otk.include: "repositories.yaml"
 
 otk.define:
   packages:
+    # Packages installed in the build root, these must contain all tools used by further stages in the omnifest.
     build:
       otk.external.osbuild_depsolve_dnf4_defines:
         architecture: ${architecture}
@@ -30,7 +31,8 @@ otk.define:
           exclude: []
         repositories: ${repositories}
         gpgkeys: ${gpgkeys}
-    os:
+    # Packages to be installed in the root filesystem. The root is generally the "thing that you are going to boot".
+    root:
       otk.external.osbuild_depsolve_dnf4_defines:
         architecture: ${architecture}
         releasever: ${version}

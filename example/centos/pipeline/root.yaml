@@ -1,10 +1,10 @@
-name: os
+name: root
 build: "name:build"
 
 stages:
   otk.op.join:
     values:
-      - ${packages.os.stages}
+      - ${packages.root.stages}
 
       # Boot bits
       - otk.include: ../fragment/kernel-cmdline.yaml
