@@ -153,6 +153,9 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
     if tree is None:
         log.warning("empty otk.define in %s", state.path)
         return
+    if tree == {}:
+        ctx.define(state.define_subkey(), {})
+        return
 
     # Iterate over a copy of the tree so that we can modify it in-place.
     for key, value in tree.copy().items():
