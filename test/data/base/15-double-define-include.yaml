@@ -1,0 +1,11 @@
+otk.version: "1"
+
+otk.include.a: "15-double-define-include/one.yaml"
+otk.include.b: "15-double-define-include/two.yaml"
+
+otk.target.osbuild:
+  pipelines:
+    - ${bar}
+    - ${baz}
+    - ${zoo}
+    - ${zam}
