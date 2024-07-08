@@ -1,8 +1,6 @@
 # An example `omnifest` that creates a CentOS 9 QCOW disk image. This example
-# serves to show the possibilities on how to lay out omnifests and their
+# serves to show some possibilities on how to lay out omnifests and their
 # includes on disk.
-#
-# It also shows some externals being used for dependency solving.
 otk.version: "1"
 
 # Some variables that we want to re-use.
@@ -13,15 +11,24 @@ otk.define:
 # Common information for all CentOS 9 images.
 otk.include: "common/prelude.yaml"
 
-# A target that generates on [osbuild](https://github.com/osbuild/osbuild)
+# A target that generates an [osbuild](https://github.com/osbuild/osbuild)
 # manifest.
 otk.target.osbuild:
   pipelines:
     - otk.include: "pipeline/build.yaml"
     - otk.include: "pipeline/root.yaml"
+    - otk.include: "pipeline/qcow2.yaml"
   sources:
     org.osbuild.curl:
       otk.op.join:
         values:
           - ${packages.build.sources.curl}
           - ${packages.root.sources.curl}
+
+# An example target that exports some of the values used in this omnifest and
+# can be generated together with the other targets as metadata.
+# otk.target.toml:
+#   build:
+#     packages: ${packages.build.resolved}
+#   root:
+#     packages: ${packages.root.resolved}
