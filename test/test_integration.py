@@ -40,3 +40,17 @@ def test_warn(tmp_path, caplog, cmd, warn_arg, expect_warning):
         assert [expected_msg] == [rec.message for rec in caplog.records]
     else:
         assert [] == [rec.message for rec in caplog.records]
+
+
+def test_otk_define_empty(tmp_path, caplog):
+    test_otk = tmp_path / "foo.yaml"
+    test_otk.write_text(textwrap.dedent("""
+    otk.version: 1
+    otk.target.osbuild:
+      otk.define:
+    """))
+    run(["validate", os.fspath(test_otk)])
+    # note that this will appear twice because we resolve the otk file
+    # twice
+    expected_msg = f"empty otk.define in {test_otk}"
+    assert expected_msg in [rec.message for rec in caplog.records]

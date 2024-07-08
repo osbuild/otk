@@ -150,6 +150,9 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
     defines block the function is working in. New defines are added to the
     nested block but references are resolved from the global ctx.defines.
     """
+    if tree is None:
+        log.warning("empty otk.define in %s", state.path)
+        return
 
     # Iterate over a copy of the tree so that we can modify it in-place.
     for key, value in tree.copy().items():
