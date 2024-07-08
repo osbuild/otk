@@ -7,6 +7,18 @@ import pytest
 from otk.command import run
 
 
+TEST_OTK = """
+otk.version: 1
+otk.target.osbuild.foo:
+  x: y
+
+otk.define.1:
+  a: 1
+otk.define.2:
+  a: 2
+"""
+
+
 @pytest.mark.parametrize("cmd,warn_arg,expect_warning", [
     ("compile", "", False),
     ("compile", "duplicate-definition", True),
@@ -19,16 +31,7 @@ def test_warn(tmp_path, caplog, cmd, warn_arg, expect_warning):
     caplog.set_level(logging.WARNING)
 
     test_otk = tmp_path / "foo.yaml"
-    test_otk.write_text(textwrap.dedent("""
-    otk.version: 1
-    otk.target.osbuild.foo:
-      x: y
-
-    otk.define.1:
-      a: 1
-    otk.define.2:
-      a: 2
-    """))
+    test_otk.write_text(TEST_OTK)
 
     if warn_arg:
         prefix = ["-W", warn_arg]
@@ -53,4 +56,16 @@ def test_otk_define_empty(tmp_path, caplog):
     # note that this will appear twice because we resolve the otk file
     # twice
     expected_msg = f"empty otk.define in {test_otk}"
+    assert expected_msg in [rec.message for rec in caplog.records]
+
+
+def test_verbose_logs_processed_files(tmp_path, caplog):
+    caplog.set_level(logging.INFO)
+
+    test_otk = tmp_path / "foo.yaml"
+    test_otk.write_text(TEST_OTK)
+    run(["validate", os.fspath(test_otk)])
+
+    # note that this will appear twice as we resolve the otk file twice
+    expected_msg = f"resolving {test_otk}"
     assert expected_msg in [rec.message for rec in caplog.records]
