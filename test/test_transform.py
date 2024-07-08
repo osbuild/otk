@@ -32,6 +32,11 @@ from otk.traversal import State
             {"a": "alpha", "b": {"a": "subalpha", "c": "${b.a}"}},
             {"a": "alpha", "b": {"a": "subalpha", "c": "subalpha"}},
         ),
+        (
+            # special
+            {"a": {}},
+            {"a": {}},
+        ),
     ]
 )
 def test_transform_process_defines(data, defines):
