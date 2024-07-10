@@ -1,0 +1,4 @@
+otk.define:
+  answer: 42
+
+answer: "is ${answer}"
