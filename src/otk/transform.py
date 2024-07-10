@@ -94,6 +94,8 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
 
                 included = process_include(ctx, state, pathlib.Path(val))
                 if not isinstance(included, dict):
+                    if len(tree) > 0:
+                        raise ValueError(f"otk.include '{val}' overrides non-empty dict {tree} with '{included}'")
                     return included
 
                 tree.update(included)

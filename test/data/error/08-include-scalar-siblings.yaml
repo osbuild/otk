@@ -1,0 +1,6 @@
+otk.version: 1
+
+otk.target.osbuild:
+  sub:
+    c: d
+    otk.include: "08-include-scalar-siblings/foo.yaml"
