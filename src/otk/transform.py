@@ -89,8 +89,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                 continue
 
             if key.startswith(PREFIX_INCLUDE):
-                tree = tree.copy()  # copy the tree and drop the include directive
-                del tree[key]
+                del tree[key]  # replace "otk.include" with resolved included data
 
                 included = process_include(ctx, state, pathlib.Path(val))
                 if not isinstance(included, dict):
@@ -116,7 +115,6 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                 return resolve(ctx, state, call(key, resolve(ctx, state, val)))
 
         tree[key] = resolve(ctx, state, val)
-
     return tree
 
 
