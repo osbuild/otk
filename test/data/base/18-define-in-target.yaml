@@ -1,0 +1,5 @@
+otk.version: 1
+otk.target.osbuild:
+  otk.define:
+    a: b
+  a: "${a}"

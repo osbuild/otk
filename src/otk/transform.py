@@ -67,6 +67,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
             val = substitute_vars(ctx, val)
         if is_directive(key):
             if key.startswith(PREFIX_DEFINE):
+                del tree[key]  # remove otk.define from the output tree
                 process_defines(ctx, state, val)
                 continue
 
