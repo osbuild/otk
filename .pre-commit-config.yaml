@@ -22,3 +22,8 @@ repos:
     rev: v2.3.0
     hooks:
       - id: autopep8
+  - repo: https://github.com/pycqa/pylint
+    rev: v3.2.6
+    hooks:
+      - id: pylint
+        additional_dependencies: ["PyYAML", "types-PyYAML", "pytest"]
