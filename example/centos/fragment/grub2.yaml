@@ -1,13 +1,13 @@
 - type: org.osbuild.grub2
   options:
-  root_fs_uuid: 1  # ${filesystem.root.uuid}
-  boot_fs_uuid: 2  # ${filesystem.boot.uuid}
-  kernel_opts: []  # '{{ " ".join(kernel_opts_list) }}'
-  legacy: i386-pc
-  uefi:
-    vendor: centos
-    unified: true
-  saved_entry: "ffffffffffffffffffffffffffffffff-${packages.root.resolved.kernel-core.version}"
-  write_cmdline: false
-  config:
-    default: saved
+    root_fs_uuid: "757ec422-3e6c-44e6-bd9f-86363b2972dc"
+    boot_fs_uuid: "371742b5-c979-4f9e-ad73-274f345831e4"
+    kernel_opts: "a"  # '{{ " ".join(kernel_opts_list) }}'
+    legacy: i386-pc
+    uefi:
+      vendor: centos
+      unified: true
+    saved_entry: "ffffffffffffffffffffffffffffffff-${packages.root.meta.kernel-core.version}"
+    write_cmdline: false
+    config:
+      default: saved

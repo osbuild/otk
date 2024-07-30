@@ -1,0 +1,17 @@
+name: qcow2
+build: "name:build"
+
+stages:
+  - type: org.osbuild.qemu
+    inputs:
+      image:
+        type: org.osbuild.files
+        origin: org.osbuild.pipeline
+        references:
+          "name:disk":
+            file: "disk.image"
+    options:
+      filename: disk.qcow2
+      format:
+        type: qcow2
+        compat: "1.1"

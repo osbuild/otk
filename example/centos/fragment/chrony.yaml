@@ -1,2 +1,2 @@
 - type: org.osbuild.chrony
-  options: 1 # ${modification.chrony}
+  options: {} # ${modification.chrony}

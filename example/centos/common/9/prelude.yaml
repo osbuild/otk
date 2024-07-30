@@ -1,4 +1,5 @@
 otk.define:
   source_epoch: 1715673600
 
-otk.include: "packages.yaml"
+otk.include.packages: "packages.yaml"
+otk.include.partitions: "partition_tables.yaml"

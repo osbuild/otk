@@ -1,5 +1,10 @@
-"""`otk-osbuild` is the [otk](https://github.com/osbuild/otk) external to work
-with [osbuild](https://github.com/osbuild/osbuild) manifests.
+"""`otk-external-osbuild` is an [otk](https://github.com/osbuild/otk) external
+to work with [osbuild](https://github.com/osbuild/osbuild) manifests.
+
+It currently implements:
+
+- `otk.external.osbuild_depsolve_dnf4_defines`: Depsolving through
+  `osbuild-depsolve-dnf4`.
 
 THIS FILE IS VERY, VERY PROOF OF CONCEPT AND NEEDS TO BE CLEANED UP"""
 
@@ -13,30 +18,6 @@ import subprocess
 import argparse
 
 
-def source_add(kind, data):
-    """Add an osbuild source to the tree."""
-
-    # Initialize empty sources
-    if data.get(kind) is None:
-        data[kind] = {"items": {}}
-
-
-def source_add_inline(data, text):
-    source_add("org.osbuild.inline", data)
-
-    text = text.encode("utf8")
-    hashsum = hashlib.sha256(text).hexdigest()
-    addr = f"sha256:{hashsum}"
-
-    if addr not in data["org.osbuild.inline"]["items"]:
-        data["org.osbuild.inline"]["items"][addr] = {
-            "encoding": "base64",
-            "data": base64.b64encode(text).decode("utf8"),
-        }
-
-    return hashsum, f"sha256:{hashsum}"
-
-
 def source_add_curl(data, checksum, url):
     source_add("org.osbuild.curl", data)
 
@@ -44,17 +25,39 @@ def source_add_curl(data, checksum, url):
         data["org.osbuild.curl"]["items"][checksum] = {"url": url}
 
 
-def depsolve_dnf4_defines():
+def depsolve_dnf4_defines() -> int:
+    """Dependency solve a set of included and excluded packages from a set of
+       given repositories."""
+
+    # Our data structure requires a `tree` key.
     data = json.loads(sys.stdin.read())
-    tree = data["tree"]["otk.external.osbuild_depsolve_dnf4_defines"]
+
+    if "tree" not in data:
+        raise ValueError("missing `tree` key in data")
+
+    tree = data["tree"]
+
+    # And our relevant external-name needs to be in that tree
+    if "otk.external.osbuild_depsolve_dnf4_defines" not in tree:
+        raise ValueError("missing `otk.external.osbuild_depsolve_dnf4_defines` key in tree")
+
+    tree = tree["otk.external.osbuild_depsolve_dnf4_defines"]
+
+    # Empty dictionary to contain our sources
     srcs = {}
 
-    source_add("org.osbuild.curl", srcs)
+    # Empty dictionary to contain meta information about the performed request
+    meta = {}
 
+    if "org.osbuild.curl" not in srcs:
+        srcs["org.osbuild.curl"] = {"items": {}}
+
+    # The request as given to `osbuild-depsolve-dnf4`, most of the relevant
+    # inputs come directly from the tree we've received from `otk`.
     request = {
         "command": "depsolve",
         "arch": tree["architecture"],
-        "module_platform_id": "platform:" + tree["module_platform_id"],
+        "module_platform_id": f"platform:{tree['module_platform_id']}",
         "releasever": tree["releasever"],
         "cachedir": "/tmp",
         "arguments": {
@@ -62,13 +65,14 @@ def depsolve_dnf4_defines():
             "repos": tree["repositories"],
             "transactions": [
                 {
-                    "package-specs": tree["packages"]["include"],
+                    "package-specs": tree["packages"].get("include", []),
                     "exclude-specs": tree["packages"].get("exclude", []),
                 },
             ],
         },
     }
 
+    # Run the external depsolver
     process = subprocess.run(
         ["/usr/libexec/osbuild-depsolve-dnf"],
         stdout=subprocess.PIPE,
@@ -79,15 +83,15 @@ def depsolve_dnf4_defines():
     )
 
     if process.returncode != 0:
-        # TODO: fix this
-        raise Exception(process.stderr)  # pylint: disable=broad-exception-raised
+        raise RuntimeError(process.stderr)
 
     results = json.loads(process.stdout)
 
     for package in results.get("packages", []):
-        source_add_curl(srcs, package["checksum"], package["remote_location"])
+        srcs["org.osbuild.curl"]["items"][package["checksum"]] = package["remote_location"]
+        meta[package["name"]] = package
 
-    out = {
+    sys.stdout.write(json.dumps({
         "tree": {
             "stages": [{
                 "type": "org.osbuild.rpm",
@@ -109,88 +113,11 @@ def depsolve_dnf4_defines():
                 },
             }],
             "sources": {"curl": srcs["org.osbuild.curl"]},
-            "resolved": {
-                p["name"]: p for p in results.get("packages", [])
-            },
+            "meta": meta,
         }
-    }
+    }))
 
-    sys.stdout.write(
-        json.dumps(out)
-    )
-
-
-def file_from_text():
-    data = json.loads(sys.stdin.read())
-
-    dest = data["tree"]["destination"]
-    hashsum, addr = source_add_inline(data, data["tree"]["text"])
-
-    sys.stdout.write(
-        json.dumps(
-            {
-                "context": data["context"],
-                "tree": {
-                    "type": "org.osbuild.copy",
-                    "inputs": {
-                        f"file-{hashsum}": {
-                            "type": "org.osbuild.files",
-                            "origin": "org.osbuild.source",
-                            "references": [
-                                {"id": addr},
-                            ],
-                        }
-                    },
-                    "options": {
-                        "paths": [
-                            {
-                                "from": f"input://file-{hashsum}/{addr}",
-                                "to": f"tree://{dest}",
-                                "remove_destination": True,
-                            }
-                        ]
-                    },
-                },
-            }
-        )
-    )
-
-
-def file_from_path():
-    data = json.loads(sys.stdin.read())
-
-    dest = data["tree"]["destination"]
-    text = (pathlib.Path(data["context"]["path"]) / data["tree"]["source"]).read_text()
-    hashsum, addr = source_add_inline(data, text)
-
-    sys.stdout.write(
-        json.dumps(
-            {
-                "context": data["context"],
-                "tree": {
-                    "type": "org.osbuild.copy",
-                    "inputs": {
-                        f"file-{hashsum}": {
-                            "type": "org.osbuild.files",
-                            "origin": "org.osbuild.source",
-                            "references": [
-                                {"id": addr},
-                            ],
-                        }
-                    },
-                    "options": {
-                        "paths": [
-                            {
-                                "from": f"input://file-{hashsum}/{addr}",
-                                "to": f"tree://{dest}",
-                                "remove_destination": True,
-                            }
-                        ]
-                    },
-                },
-            }
-        )
-    )
+    return 0
 
 
 def root():
@@ -202,4 +129,4 @@ def root():
     (subparsers.add_parser("file_from_path")).set_defaults(func=file_from_path)
 
     args = parser.parse_args()
-    args.func()
+    return args.func()

@@ -12,13 +12,15 @@ stages:
       - otk.include: ../fragment/fix-bls.yaml
       - otk.include: ../fragment/grub2.yaml
 
+      - - otk.external.otk-make-fstab-stage: ${filesystem}
+
       # General bits, could probably be split out further
       - otk.include: ../fragment/locale.yaml
       - otk.include: ../fragment/keymap.yaml
-      - otk.include: ../fragment/chrony.yaml
+      # - otk.include: ../fragment/chrony.yaml
       - otk.include: ../fragment/sysconfig.yaml
       - otk.include: ../fragment/systemd-logind.yaml
-      - otk.include: ../fragment/cloud-init.yaml
+      # - otk.include: ../fragment/cloud-init.yaml
       - otk.include: ../fragment/modprobe.yaml
       - otk.include: ../fragment/authselect.yaml
       - otk.include: ../fragment/sshd.yaml

@@ -1,0 +1,22 @@
+otk.define:
+  filesystem:
+    otk.external.otk-gen-partition-table:
+      properties:
+        bios: true
+        type: "gpt"
+        default_size: "10 GiB"
+        create:
+          bios_boot_partition: true
+          esp_partition: true
+          esp_partition_size: "2 GiB"
+      partitions:
+        - name: "root"
+          mountpoint: "/"
+          label: "root"
+          size: "7 GiB"
+          type: "ext4"
+        - name: "home"
+          mountpoint: "/home"
+          label: "home"
+          size: "2 GiB"
+          type: "ext4"

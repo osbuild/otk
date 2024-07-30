@@ -1,3 +1,3 @@
 - type: org.osbuild.locale
   options:
-    locale: 1 # ${modify.locale}
+    language: "C.UTF-8"

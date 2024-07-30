@@ -19,13 +19,16 @@ def call(directive: str, tree: Any) -> Any:
     exe = exe_from_directive(directive)
     exe = path_for(exe)
 
-    data = json.dumps(
-        {
-            "tree": {
-                directive: tree,
-            },
-        }
-    )
+    if directive == "otk.external.otk-gen-partition-table" or directive == "otk.external.otk-make-fstab-stage" or directive == "otk.external.otk-make-partition-stages" or directive == "otk.external.otk-make-partition-mounts-devices":
+        data = json.dumps(tree)
+    else:
+        data = json.dumps(
+            {
+                "tree": {
+                    directive: tree,
+                },
+            }
+        )
 
     process = subprocess.run([exe], input=data, encoding="utf8", capture_output=True, check=False)
     if process.returncode != 0:
@@ -34,7 +37,11 @@ def call(directive: str, tree: Any) -> Any:
         raise ExternalFailedError(msg)
 
     res = json.loads(process.stdout)
-    return res["tree"]
+
+    if directive == "otk.external.otk-gen-partition-table" or directive == "otk.external.otk-make-fstab-stage" or directive == "otk.external.otk-make-partition-stages" or directive == "otk.external.otk-make-partition-mounts-devices":
+        return res
+    else:
+        return res["tree"]
 
 
 def exe_from_directive(directive):

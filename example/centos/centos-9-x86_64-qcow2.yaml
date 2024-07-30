@@ -8,8 +8,11 @@ otk.define:
   architecture: "x86_64"
   version: "9"
 
+# Common modifications.
+otk.include.modification: "common/modification.yaml"
+
 # Common information for all CentOS 9 images.
-otk.include: "common/prelude.yaml"
+otk.include.prelude: "common/prelude.yaml"
 
 # A target that generates an [osbuild](https://github.com/osbuild/osbuild)
 # manifest.
@@ -17,7 +20,9 @@ otk.target.osbuild:
   pipelines:
     - otk.include: "pipeline/build.yaml"
     - otk.include: "pipeline/root.yaml"
+    - otk.include: "pipeline/disk.yaml"
     - otk.include: "pipeline/qcow2.yaml"
+  # Meh?
   sources:
     org.osbuild.curl:
       otk.op.join:
@@ -27,8 +32,4 @@ otk.target.osbuild:
 
 # An example target that exports some of the values used in this omnifest and
 # can be generated together with the other targets as metadata.
-# otk.target.toml:
-#   build:
-#     packages: ${packages.build.resolved}
-#   root:
-#     packages: ${packages.root.resolved}
+# otk.target.sbom: ${packages.root.sbom}
