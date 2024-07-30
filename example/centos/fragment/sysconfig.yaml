@@ -1,18 +1,18 @@
-type: org.osbuild.sysconfig
-options:
-  kernel:
-    update_default: true
-    default_kernel: "kernel"
-  network:
-    networking: true
-    no_zero_conf: true
-  network-scripts:
-    ifcfg:
-      eth0:
-        bootproto: "dhcp"
-        device: "eth0"
-        ipv6init: false   # TODO: ami only? should this be a var?
-        onboot: true
-        peerdns: true
-        type: "Ethernet"
-        userctl: true
+- type: org.osbuild.sysconfig
+  options:
+    kernel:
+      update_default: true
+      default_kernel: "kernel"
+    network:
+      networking: true
+      no_zero_conf: true
+    network-scripts:
+      ifcfg:
+        eth0:
+          bootproto: "dhcp"
+          device: "eth0"
+          ipv6init: false   # TODO: ami only? should this be a var?
+          onboot: true
+          peerdns: true
+          type: "Ethernet"
+          userctl: true

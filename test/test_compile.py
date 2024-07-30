@@ -14,8 +14,7 @@ otk.target.osbuild.qcow2:
 EXPECTED_OTK_TREE = """\
 {
   "test": 1,
-  "version": "2",
-  "sources": {}
+  "version": "2"
 }"""
 
 

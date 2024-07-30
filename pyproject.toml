@@ -9,7 +9,7 @@ dependencies = [
 
 [project.scripts]
 otk = "otk.command:root"
-otk_external_osbuild = "otk_external_osbuild.command:root"
+osbuild_depsolve_dnf4_defines = "otk_external_osbuild.command:depsolve_dnf4_defines"
 
 [project.optional-dependencies]
 dev = [

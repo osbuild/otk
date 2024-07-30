@@ -129,12 +129,9 @@ class CommonContext(Context):
 
 class OSBuildContext(Context):
     """Composes in a `GenericContext` while providing support for `osbuild`
-    concepts such as sources."""
-
-    sources: dict[str, list[Any]]
+    concepts."""
 
     def __init__(self, context: CommonContext) -> None:
-        self.sources = {}
         self._context = context
 
     def version(self, v: int) -> None:
