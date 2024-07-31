@@ -52,4 +52,4 @@ def test_integration_happy(tmp_path):
     assert res == {"some": "result"}
 
     inp = fake_external_path.with_suffix(".stdin").read_text()
-    assert json.loads(inp) == {"tree": {fake_directive: fake_tree}}
+    assert json.loads(inp) == {"tree": fake_tree}

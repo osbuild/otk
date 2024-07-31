@@ -21,9 +21,7 @@ def call(directive: str, tree: Any) -> Any:
 
     data = json.dumps(
         {
-            "tree": {
-                directive: tree,
-            },
+            "tree": tree,
         }
     )
 

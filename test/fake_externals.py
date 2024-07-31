@@ -13,7 +13,7 @@ def mirror(tmp_path):
     #!/usr/bin/python3
     import json,sys
     tree=json.loads(sys.stdin.read())
-    print(json.dumps({"tree": tree["tree"]["otk.external.mirror"]}))
+    print(json.dumps({"tree": tree["tree"]}))
     """)
     )
     os.chmod(fake_external_path, 0o755)
