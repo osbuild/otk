@@ -23,10 +23,8 @@ The external gets called with the following JSON:
 ```json
 {
   "tree": {
-    "otk.external.name": {
-      "child": [1],
-      "options": "are here"
-    }
+    "child": [1],
+    "options": "are here"
   }
 }
 ```
@@ -77,7 +75,7 @@ Given the following script called `concat` in `/usr/local/libexec/otk/concat`:
 ```bash
 #!/usr/bin/env bash
 
-output="$(jq -jr '.tree."otk.external.concat".parts[]' <<< "${1}")"
+output="$(jq -jr '.tree.parts[]' <<< "${1}")"
 echo "{\"tree\":{\"output\":\"$output\"}}"
 ```
 
@@ -97,13 +95,11 @@ the script is called with the following data on stdin:
 ```json
 {
   "tree": {
-    "otk.external.concat": {
-      "parts": [
-        "list",
-        "of",
-        "strings"
-      ]
-    }
+    "parts": [
+      "list",
+      "of",
+      "strings"
+    ]
   }
 }
 ```
