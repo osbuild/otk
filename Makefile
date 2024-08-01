@@ -12,7 +12,7 @@ lint: check-pre-commit
 	pre-commit run --all-files
 
 .PHONY: type
-type:
+type: check-pre-commit
 	pre-commit run --all-files mypy
 
 .PHONY: format
