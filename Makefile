@@ -20,8 +20,11 @@ format:
 	@find src test -name '*.py' | xargs autopep8 --in-place
 
 .PHONY: test
-test: lint
+test:
 	@pytest
+
+.PHONY: push-check
+push-check: test lint type
 
 .PHONY: git-diff-check
 git-diff-check:
