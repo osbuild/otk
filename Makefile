@@ -4,7 +4,7 @@ lint:
 
 .PHONY: type
 type:
-	@mypy src/ test/
+	pre-commit run --all-files mypy
 
 .PHONY: format
 format:
