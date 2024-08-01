@@ -4,6 +4,7 @@ RUN \
     microdnf install -y \
         python3-pip \
         python3-pyyaml \
+        python3-toml \
         && microdnf clean all
 
 WORKDIR /src

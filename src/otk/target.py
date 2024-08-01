@@ -3,6 +3,8 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any
 
+import toml
+
 from .context import CommonContext, OSBuildContext
 from .constant import PREFIX_TARGET
 from .error import ParseError
@@ -16,16 +18,6 @@ class Target(ABC):
 
     @abstractmethod
     def as_string(self, context: Any, tree: Any, pretty: bool = True) -> str: ...
-
-
-# NOTE this common target is a bit weird, we probably shouldn't always assume JSON but
-# NOTE it makes development a tad easier until we figure out all our targets
-class CommonTarget(Target):
-    def ensure_valid(self, _tree: Any) -> None:
-        pass
-
-    def as_string(self, context: CommonContext, tree: Any, pretty: bool = True) -> str:
-        return json.dumps(tree, indent=2 if pretty else None)
 
 
 class OSBuildTarget(Target):
@@ -43,3 +35,19 @@ class OSBuildTarget(Target):
         osbuild_tree["sources"] = context.sources
 
         return json.dumps(osbuild_tree, indent=2 if pretty else None)
+
+
+class JSONTarget(Target):
+    def ensure_valid(self, tree: Any) -> None:
+        return None
+
+    def as_string(self, context: CommonContext, tree: Any, pretty: bool = True) -> str:
+        return json.dumps(tree, indent=2 if pretty else None)
+
+
+class TOMLTarget(Target):
+    def ensure_valid(self, tree: Any) -> None:
+        return None
+
+    def as_string(self, context: CommonContext, tree: Any, _pretty: bool = True) -> str:
+        return toml.dumps(tree)
