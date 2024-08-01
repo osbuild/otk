@@ -1,5 +1,14 @@
+
+check-pre-commit:
+	@which pre-commit >/dev/null 2>&1 || { \
+          echo >&2 -e "Please install https://pre-commit.com !\n"; \
+	  echo >&2 "Either with 'pip install pre-commit'"; \
+	  echo >&2 "or your package manager e.g. 'sudo dnf install pre-commit'"; \
+	  exit 1; \
+	}
+
 .PHONY: lint
-lint:
+lint: check-pre-commit
 	pre-commit run --all-files
 	pylint src/ test/*.py
 
