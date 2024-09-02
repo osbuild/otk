@@ -31,6 +31,10 @@ otk.define:
           fs_mntops: defaults
           # XXX: can we derive this?
           part_type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+  # XXX: find a better way
+  fs_options:
+    otk.external.otk-make-partition-mounts-devices:
+      ${filesystem}
 
 otk.target.osbuild:
   pipelines:
@@ -109,38 +113,14 @@ otk.target.osbuild:
                   paths:
                     - from: input://root-tree/
                       to: mount://-/
-                devices:
-                  '-':
-                    type: org.osbuild.loopback
-                    options:
-                      filename: disk.img
-                      start: 2510848
-                      size: 18460639
-                  boot:
-                    type: org.osbuild.loopback
-                    options:
-                      filename: disk.img
-                      start: 413696
-                      size: 2097152
-                  boot-efi:
-                    type: org.osbuild.loopback
-                    options:
-                      filename: disk.img
-                      start: 4096
-                      size: 409600
+                # XXX: fugly, can we do better?
+                # we cannot just do
+                #   otk.external.otk-make-partition-mounts-devices:
+                # here because "otk.external." does not allow siblings
                 mounts:
-                  - name: '-'
-                    type: org.osbuild.xfs
-                    source: '-'
-                    target: /
-                  - name: boot
-                    type: org.osbuild.xfs
-                    source: boot
-                    target: /boot
-                  - name: boot-efi
-                    type: org.osbuild.fat
-                    source: boot-efi
-                    target: /boot/efi
+                  ${fs_options.mounts}
+                devices:
+                  ${fs_options.devices}
               - type: org.osbuild.grub2.inst
                 options:
                   filename: disk.img
