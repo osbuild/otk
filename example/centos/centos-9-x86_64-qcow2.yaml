@@ -10,11 +10,20 @@ otk.define.centos-9-x86_64-qcow2:
     timezone: "America/New_York"
   enabled_services: []
   filesystem:
-    # this will expand to "root: ...\nboot: \n"etc (i.e. a real file-systems) and "kernel_opts_list:
-    # [list_item1, list_item2, ..]"
-    # (i.e. define the partition table as a map of root/boot/boot_efi vars)
-    # *and* it needs to undstand modifications (e.g. adding extra parititions somehow, size contraints)
-    otk.external.osbuild.create_partition_table_defines:
-      total_size: 10G
+    otk.external.otk-gen-partition-table:
+      properties:
+        create:
+          bios_boot_partition: true
+          esp_partition: true
+          esp_partition_size: "2 GiB"
+        type: gpt
+        bios: true
+        default_size: "10 GB"
+      partitions:
+        - name: root
+          mountpoint: /
+          label: root
+          size: "7 GiB"
+          type: "ext4"
 
 otk.include.centos-9-x86_64: "common/centos-9.yaml"
