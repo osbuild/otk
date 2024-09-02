@@ -32,6 +32,7 @@ git-diff-check:
 	@git diff --cached --exit-code
 
 ## Package building
+SRCDIR ?= $(abspath .)
 COMMIT = $(shell (cd "$(SRCDIR)" && git rev-parse HEAD))
 RPM_SPECFILE=rpmbuild/SPECS/otk-$(COMMIT).spec
 RPM_TARBALL=rpmbuild/SOURCES/otk-$(COMMIT).tar.gz
@@ -55,3 +56,16 @@ rpm: git-diff-check $(RPM_SPECFILE) $(RPM_TARBALL)
 	rpmbuild -bb \
 		--define "_topdir $(CURDIR)/rpmbuild" \
 		$(RPM_SPECFILE)
+
+# Note that "external" will most likely in the future build from internal
+# sources instead of pulling of the network
+.PHONY: external
+IMAGES_REF ?= github.com/osbuild/images
+external:
+	mkdir -p "$(SRCDIR)/external"
+	for otk_cmd in gen-partition-table \
+			make-fstab-stage \
+			make-partition-mounts-devices \
+			make-partition-stages; do \
+		GOBIN="$(SRCDIR)/external" go install "$(IMAGES_REF)"/cmd/otk-$${otk_cmd}@latest ; \
+	done
