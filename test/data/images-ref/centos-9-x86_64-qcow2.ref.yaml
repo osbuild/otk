@@ -1,6 +1,6 @@
-# generated via
+# generated via the image repo
 #
-#   cmd/build$ go build && OSBUILD_TESTING_RNG_SEED=0 ./build -config config.json -distro centos-9 -type qcow2
+# $ go build ./cmd/build/ && OSBUILD_TESTING_RNG_SEED=0 ./cmd/build/build -config config.json -distro centos-9 -type qcow2
 #
 # and stripping out the "inputs" and "curl" pieces
 version: "2"
@@ -84,7 +84,7 @@ pipelines:
       - type: org.osbuild.sfdisk
         options:
           label: gpt
-          uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
+          uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           partitions:
             - bootable: true
               size: 2048
@@ -98,11 +98,11 @@ pipelines:
             - size: 2097152
               start: 413696
               type: BC13C2FF-59E6-4262-A352-B275FD6F7172
-              uuid: CB07C243-BC44-4717-853E-28852021225B
+              uuid: ed130be6-c822-49af-83bb-4ea648bb2264
             - size: 18460639
               start: 2510848
               type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-              uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
+              uuid: 9f6173fd-edc9-4dbe-9313-632af556c607
         devices:
           device:
             type: org.osbuild.loopback
