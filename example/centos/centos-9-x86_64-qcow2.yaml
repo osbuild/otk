@@ -1,5 +1,33 @@
 otk.version: 1
 
+otk.define:
+  filesystem:
+    otk.external.otk-gen-partition-table:
+      properties:
+        create:
+          bios_boot_partition: true
+          esp_partition: true
+          esp_partition_size: "2 GiB"
+        type: gpt
+        bios: true
+        default_size: "10 GB"
+      partitions:
+        - name: boot
+          mountpoint: /boot
+          label: boot
+          size: "2 GiB"
+          type: "xfs"
+          # XXX: make default if empty
+          fs_mntops: defaults
+        - name: root
+          mountpoint: /
+          label: root
+          type: "xfs"
+          # XXX: can/should we be able to leave this empy?
+          size: "5 GiB"
+          # XXX: make default if empty
+          fs_mntops: defaults
+
 otk.target.osbuild:
   pipelines:
     - name: build
@@ -16,7 +44,7 @@ otk.target.osbuild:
       stages:
         - type: org.osbuild.kernel-cmdline
           options:
-            root_fs_uuid: ebe365c5-3a5d-4c2c-9884-ab3498b60b58
+            root_fs_uuid: d8bb61b8-81cf-4c85-937b-69439a23dc5e
             kernel_opts: console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0
         - type: org.osbuild.rpm
         - type: org.osbuild.fix-bls
@@ -36,26 +64,12 @@ otk.target.osbuild:
             network:
               networking: true
               no_zero_conf: true
-        - type: org.osbuild.fstab
-          options:
-            filesystems:
-              - uuid: ebe365c5-3a5d-4c2c-9884-ab3498b60b58
-                vfs_type: xfs
-                path: /
-                options: defaults
-              - uuid: 0d1136ac-3529-40c8-a05e-7dd0448d8616
-                vfs_type: xfs
-                path: /boot
-                options: defaults
-              - uuid: 7B77-95E7
-                vfs_type: vfat
-                path: /boot/efi
-                options: defaults,uid=0,gid=0,umask=077,shortname=winnt
-                passno: 2
+        - otk.external.otk-make-fstab-stage:
+            ${filesystem}
         - type: org.osbuild.grub2
           options:
-            root_fs_uuid: ebe365c5-3a5d-4c2c-9884-ab3498b60b58
-            boot_fs_uuid: 0d1136ac-3529-40c8-a05e-7dd0448d8616
+            root_fs_uuid: d8bb61b8-81cf-4c85-937b-69439a23dc5e
+            boot_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
             kernel_opts: console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0
             legacy: i386-pc
             uefi:
@@ -119,7 +133,7 @@ otk.target.osbuild:
                 lock: true
         - type: org.osbuild.mkfs.xfs
           options:
-            uuid: 0d1136ac-3529-40c8-a05e-7dd0448d8616
+            uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
             label: boot
           devices:
             device:
@@ -131,7 +145,7 @@ otk.target.osbuild:
                 lock: true
         - type: org.osbuild.mkfs.xfs
           options:
-            uuid: ebe365c5-3a5d-4c2c-9884-ab3498b60b58
+            uuid: d8bb61b8-81cf-4c85-937b-69439a23dc5e
             label: root
           devices:
             device:

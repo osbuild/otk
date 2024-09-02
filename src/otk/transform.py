@@ -190,7 +190,6 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
             # for any other type, just set the value to the key
             ctx.define(state.define_subkey(key), value)
 
-
 def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
     """
     Load a yaml file and send it to resolve() for processing.
