@@ -45,6 +45,8 @@ def path_for(exe):
         "/usr/libexec/otk/external",
         "/usr/local/lib/otk/external",
         "/usr/lib/otk/external",
+        # local developer case
+        "./externals",
     ]
 
     env = os.getenv("OTK_EXTERNAL_PATH", None)
