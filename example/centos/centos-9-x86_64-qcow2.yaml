@@ -1,4 +1,4 @@
-otk.version: 1
+otk.version: "1"
 
 otk.define:
   filesystem:
