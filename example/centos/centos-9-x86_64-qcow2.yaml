@@ -3,7 +3,7 @@ otk.version: "1"
 otk.define:
   filesystem:
     modifications:
-      # empty
+      # XXX: find a better way to deal with empty modifications
 otk.include: "common/gen-partition-table-x86_64.yaml"
 
 otk.target.osbuild:
