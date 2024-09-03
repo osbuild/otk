@@ -113,19 +113,7 @@ otk.target.osbuild:
               PasswordAuthentication: false
         - otk.external.otk-make-fstab-stage:
             ${filesystem}
-        - type: org.osbuild.grub2
-          options:
-            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
-            boot_fs_uuid: ${filesystem.const.partition_map.boot.uuid}
-            kernel_opts: ${kernel_commandline}
-            legacy: i386-pc
-            uefi:
-              vendor: centos
-              unified: true
-            saved_entry: ffffffffffffffffffffffffffffffff-5.14.0-503.el9.x86_64
-            write_cmdline: false
-            config:
-              default: saved
+        - otk.include: "fragment/grub2.yaml"
         - type: org.osbuild.systemd
           options:
             enabled_services:
@@ -169,19 +157,6 @@ otk.target.osbuild:
                   ${fs_options.mounts}
                 devices:
                   ${fs_options.devices}
-              - type: org.osbuild.grub2.inst
-                options:
-                  filename: ${filesystem.const.filename}
-                  platform: i386-pc
-                  location: 2048
-                  core:
-                    type: mkimage
-                    partlabel: gpt
-                    filesystem: xfs
-                  prefix:
-                    type: partition
-                    partlabel: gpt
-                    number: 2
-                    path: /grub2
+              - otk.include: "fragment/grub2-inst.yaml"
   sources:
     org.osbuild.curl:

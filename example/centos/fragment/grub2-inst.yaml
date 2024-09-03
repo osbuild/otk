@@ -1,0 +1,19 @@
+type: org.osbuild.grub2.inst
+options:
+  filename: ${filesystem.const.filename}
+  # XXX: get via define
+  platform: i386-pc
+  # XXX: get via define
+  location: 2048
+  core:
+    type: mkimage
+    # get via define
+    partlabel: gpt
+    # get via define
+    filesystem: xfs
+  prefix:
+    type: partition
+    partlabel: gpt
+    # XXX: get via define
+    number: 2
+    path: /grub2

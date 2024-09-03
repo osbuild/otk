@@ -146,7 +146,7 @@ pipelines:
           uefi:
             vendor: centos
             unified: true
-          saved_entry: ffffffffffffffffffffffffffffffff-5.14.0-503.el9.x86_64
+          saved_entry: ffffffffffffffffffffffffffffffff-5.14.0-496.el9.x86_64
           write_cmdline: false
           config:
             default: saved
