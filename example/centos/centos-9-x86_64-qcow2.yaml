@@ -7,7 +7,7 @@ otk.define:
   kernel_commandline: "console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0"
   filesystem:
     modifications:
-      fs_type: xfs
+      # empty
 otk.include: "common/gen-partition-table-x86_64.yaml"
 
 otk.target.osbuild:

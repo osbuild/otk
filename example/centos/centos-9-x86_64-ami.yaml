@@ -8,7 +8,6 @@ otk.define:
   filesystem:
     modifications:
       filename: "image.raw"
-      fs_type: "xfs"
 otk.include: "common/gen-partition-table-x86_64.yaml"
 
 otk.target.osbuild:

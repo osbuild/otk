@@ -47,8 +47,8 @@ pipelines:
               passno: 2
       - type: org.osbuild.grub2
         options:
-          root_fs_uuid: 461add2b-f02a-46d8-9254-884b6ee73ebe
-          boot_fs_uuid: b8e03a0f-d5d3-4278-8faf-62a677f69865
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           kernel_opts: ro
           uefi:
             vendor: fedora
@@ -129,7 +129,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.ext4
         options:
-          uuid: b8e03a0f-d5d3-4278-8faf-62a677f69865
+          uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           label: boot
         devices:
           device:
@@ -141,7 +141,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.ext4
         options:
-          uuid: 461add2b-f02a-46d8-9254-884b6ee73ebe
+          uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           label: root
         devices:
           device:
