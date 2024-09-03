@@ -41,33 +41,7 @@ otk.target.osbuild:
         - type: org.osbuild.selinux
           options:
             file_contexts: etc/selinux/targeted/contexts/files/file_contexts
-    - name: image
-      build: name:build
-      stages:
-        otk.op.join:
-          values:
-            - otk.external.otk-make-partition-stages:
-                ${filesystem}
-            - - type: org.osbuild.copy
-                inputs:
-                  root-tree:
-                    type: org.osbuild.tree
-                    origin: org.osbuild.pipeline
-                    references:
-                      - name:os
-                options:
-                  paths:
-                    - from: input://root-tree/
-                      to: mount://-/
-                # XXX: fugly, can we do better?
-                # we cannot just do
-                #   otk.external.otk-make-partition-mounts-devices:
-                # here because "otk.external." does not allow siblings
-                mounts:
-                  ${fs_options.mounts}
-                devices:
-                  ${fs_options.devices}
-              - otk.include: "fragment/grub2-inst.yaml"
+    - otk.include: "pipeline/image.yaml"
     - name: qcow2
       build: name:build
       stages:
