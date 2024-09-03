@@ -2,46 +2,9 @@ otk.version: "1"
 
 otk.define:
   filesystem:
-    otk.external.otk-gen-partition-table:
-      modifications:
-        filename: "image.raw"
-      properties:
-        create:
-          bios_boot_partition: true
-          esp_partition: true
-          esp_partition_size: "200 MiB"
-        type: gpt
-        bios: true
-        default_size: "10 GiB"
-        uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
-      partitions:
-        - name: boot
-          mountpoint: /boot
-          label: boot
-          size: "1 GiB"
-          type: "xfs"
-          # XXX: make default if empty
-          fs_mntops: defaults
-          # XXX can we derive this?
-          part_type: BC13C2FF-59E6-4262-A352-B275FD6F7172
-          # XXX: yes we use hardcoded uuids
-          part_uuid: CB07C243-BC44-4717-853E-28852021225B
-        - name: root
-          mountpoint: /
-          label: root
-          type: "xfs"
-          # XXX: can/should we be able to leave this empy?
-          size: "5 GiB"
-          # XXX: make default if empty
-          fs_mntops: defaults
-          # XXX: can we derive this?
-          part_type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-          # XXX: yes we use hardcoded uuids
-          part_uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
-  # XXX: find a better way
-  fs_options:
-    otk.external.otk-make-partition-mounts-devices:
-      ${filesystem}
+    modifications:
+      filename: "image.raw"
+otk.include: "common/gen-partition-table-x86_64.yaml"
 
 otk.target.osbuild:
   pipelines:
