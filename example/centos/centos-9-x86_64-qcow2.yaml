@@ -83,6 +83,7 @@ otk.target.osbuild:
             uefi:
               vendor: centos
               unified: true
+            # XXX: get from rpm stage
             saved_entry: ffffffffffffffffffffffffffffffff-5.14.0-496.el9.x86_64
             write_cmdline: false
             config:
@@ -121,8 +122,9 @@ otk.target.osbuild:
                   ${fs_options.devices}
               - type: org.osbuild.grub2.inst
                 options:
-                  filename: disk.img
+                  filename: ${filesystem.const.filename}
                   platform: i386-pc
+                  # XXX: export from ${filesystem} somehow?
                   location: 2048
                   core:
                     type: mkimage
@@ -143,8 +145,9 @@ otk.target.osbuild:
               origin: org.osbuild.pipeline
               references:
                 name:image:
-                  file: disk.img
+                  file: ${filesystem.const.filename}
           options:
+            # XXX: provide a way to derive the name from the filesystem one?
             filename: disk.qcow2
             format:
               type: qcow2
