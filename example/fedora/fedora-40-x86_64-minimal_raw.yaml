@@ -32,6 +32,8 @@ otk.target.osbuild:
             zone: UTC
         - otk.external.otk-make-fstab-stage:
             ${filesystem}
+        # cannot use "fragment/grub2.yaml" because "timeout"/'legacy': 'i386-pc'
+        # are set/unset in fedora/centos
         - type: org.osbuild.grub2
           options:
             root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
