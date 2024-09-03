@@ -1,6 +1,7 @@
 otk.version: "1"
 
 otk.define:
+  kernel_commandline: "console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295"
   filesystem:
     modifications:
       filename: "image.raw"
@@ -12,10 +13,7 @@ otk.target.osbuild:
     - name: os
       build: name:build
       stages:
-        - type: org.osbuild.kernel-cmdline
-          options:
-            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
-            kernel_opts: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
+        - otk.include: "fragment/kernel-cmdline.yaml"
         - type: org.osbuild.rpm
         - type: org.osbuild.fix-bls
           options:
@@ -119,7 +117,7 @@ otk.target.osbuild:
           options:
             root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
             boot_fs_uuid: ${filesystem.const.partition_map.boot.uuid}
-            kernel_opts: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
+            kernel_opts: ${kernel_commandline}
             legacy: i386-pc
             uefi:
               vendor: centos
