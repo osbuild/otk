@@ -2,6 +2,8 @@
 #
 # $ go build ./cmd/build/ && OSBUILD_TESTING_RNG_SEED=0 ./cmd/build/build -config config.json -distro centos-9 -type qcow2
 # $ $GOPATH/bin/yq -P < centos_9-x86_64-ami-/manifest.json > centos_9-x86_64-ami-/manifest.yaml
+# mange UUIDs as the generate code creates different ones from images (but
+# still predictable)
 #
 # and stripping out the "inputs" and "curl" pieces
 version: "2"
@@ -109,11 +111,11 @@ pipelines:
       - type: org.osbuild.fstab
         options:
           filesystems:
-            - uuid: 661c344e-496c-45ac-bf0b-87ea963ab1d3
+            - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
               vfs_type: xfs
               path: /
               options: defaults
-            - uuid: 9ba5baf4-b495-4dc6-943e-3734f4fa6707
+            - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
               vfs_type: xfs
               path: /boot
               options: defaults
@@ -124,8 +126,8 @@ pipelines:
               passno: 2
       - type: org.osbuild.grub2
         options:
-          root_fs_uuid: 661c344e-496c-45ac-bf0b-87ea963ab1d3
-          boot_fs_uuid: 9ba5baf4-b495-4dc6-943e-3734f4fa6707
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           kernel_opts: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
           legacy: i386-pc
           uefi:
@@ -200,7 +202,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.xfs
         options:
-          uuid: 9ba5baf4-b495-4dc6-943e-3734f4fa6707
+          uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           label: boot
         devices:
           device:
@@ -212,7 +214,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.xfs
         options:
-          uuid: 661c344e-496c-45ac-bf0b-87ea963ab1d3
+          uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           label: root
         devices:
           device:

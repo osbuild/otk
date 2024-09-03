@@ -1,5 +1,48 @@
 otk.version: "1"
 
+otk.define:
+  filesystem:
+    otk.external.otk-gen-partition-table:
+      modifications:
+        filename: "image.raw"
+      properties:
+        create:
+          bios_boot_partition: true
+          esp_partition: true
+          esp_partition_size: "200 MiB"
+        type: gpt
+        bios: true
+        default_size: "10 GiB"
+        uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
+      partitions:
+        - name: boot
+          mountpoint: /boot
+          label: boot
+          size: "1 GiB"
+          type: "xfs"
+          # XXX: make default if empty
+          fs_mntops: defaults
+          # XXX can we derive this?
+          part_type: BC13C2FF-59E6-4262-A352-B275FD6F7172
+          # XXX: yes we use hardcoded uuids
+          part_uuid: CB07C243-BC44-4717-853E-28852021225B
+        - name: root
+          mountpoint: /
+          label: root
+          type: "xfs"
+          # XXX: can/should we be able to leave this empy?
+          size: "5 GiB"
+          # XXX: make default if empty
+          fs_mntops: defaults
+          # XXX: can we derive this?
+          part_type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+          # XXX: yes we use hardcoded uuids
+          part_uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
+  # XXX: find a better way
+  fs_options:
+    otk.external.otk-make-partition-mounts-devices:
+      ${filesystem}
+
 otk.target.osbuild:
   pipelines:
     - name: build
@@ -102,26 +145,12 @@ otk.target.osbuild:
           options:
             config:
               PasswordAuthentication: false
-        - type: org.osbuild.fstab
-          options:
-            filesystems:
-              - uuid: 661c344e-496c-45ac-bf0b-87ea963ab1d3
-                vfs_type: xfs
-                path: /
-                options: defaults
-              - uuid: 9ba5baf4-b495-4dc6-943e-3734f4fa6707
-                vfs_type: xfs
-                path: /boot
-                options: defaults
-              - uuid: 7B77-95E7
-                vfs_type: vfat
-                path: /boot/efi
-                options: defaults,uid=0,gid=0,umask=077,shortname=winnt
-                passno: 2
+        - otk.external.otk-make-fstab-stage:
+            ${filesystem}
         - type: org.osbuild.grub2
           options:
-            root_fs_uuid: 661c344e-496c-45ac-bf0b-87ea963ab1d3
-            boot_fs_uuid: 9ba5baf4-b495-4dc6-943e-3734f4fa6707
+            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
+            boot_fs_uuid: ${filesystem.const.partition_map.boot.uuid}
             kernel_opts: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
             legacy: i386-pc
             uefi:
@@ -151,129 +180,42 @@ otk.target.osbuild:
     - name: image
       build: name:build
       stages:
-        - type: org.osbuild.truncate
-          options:
-            filename: image.raw
-            size: "10737418240"
-        - type: org.osbuild.sfdisk
-          options:
-            label: gpt
-            uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
-            partitions:
-              - bootable: true
-                size: 2048
-                start: 2048
-                type: 21686148-6449-6E6F-744E-656564454649
-                uuid: FAC7F1FB-3E8D-4137-A512-961DE09A5549
-              - size: 409600
-                start: 4096
-                type: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
-                uuid: 68B2905B-DF3E-4FB3-80FA-49D1E773AA33
-              - size: 2097152
-                start: 413696
-                type: BC13C2FF-59E6-4262-A352-B275FD6F7172
-                uuid: CB07C243-BC44-4717-853E-28852021225B
-              - size: 18460639
-                start: 2510848
-                type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-                uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
-          devices:
-            device:
-              type: org.osbuild.loopback
-              options:
-                filename: image.raw
-                lock: true
-        - type: org.osbuild.mkfs.fat
-          options:
-            volid: 7B7795E7
-          devices:
-            device:
-              type: org.osbuild.loopback
-              options:
-                filename: image.raw
-                start: 4096
-                size: 409600
-                lock: true
-        - type: org.osbuild.mkfs.xfs
-          options:
-            uuid: 9ba5baf4-b495-4dc6-943e-3734f4fa6707
-            label: boot
-          devices:
-            device:
-              type: org.osbuild.loopback
-              options:
-                filename: image.raw
-                start: 413696
-                size: 2097152
-                lock: true
-        - type: org.osbuild.mkfs.xfs
-          options:
-            uuid: 661c344e-496c-45ac-bf0b-87ea963ab1d3
-            label: root
-          devices:
-            device:
-              type: org.osbuild.loopback
-              options:
-                filename: image.raw
-                start: 2510848
-                size: 18460639
-                lock: true
-        - type: org.osbuild.copy
-          inputs:
-            root-tree:
-              type: org.osbuild.tree
-              origin: org.osbuild.pipeline
-              references:
-                - name:os
-          options:
-            paths:
-              - from: input://root-tree/
-                to: mount://-/
-          devices:
-            '-':
-              type: org.osbuild.loopback
-              options:
-                filename: image.raw
-                start: 2510848
-                size: 18460639
-            boot:
-              type: org.osbuild.loopback
-              options:
-                filename: image.raw
-                start: 413696
-                size: 2097152
-            boot-efi:
-              type: org.osbuild.loopback
-              options:
-                filename: image.raw
-                start: 4096
-                size: 409600
-          mounts:
-            - name: '-'
-              type: org.osbuild.xfs
-              source: '-'
-              target: /
-            - name: boot
-              type: org.osbuild.xfs
-              source: boot
-              target: /boot
-            - name: boot-efi
-              type: org.osbuild.fat
-              source: boot-efi
-              target: /boot/efi
-        - type: org.osbuild.grub2.inst
-          options:
-            filename: image.raw
-            platform: i386-pc
-            location: 2048
-            core:
-              type: mkimage
-              partlabel: gpt
-              filesystem: xfs
-            prefix:
-              type: partition
-              partlabel: gpt
-              number: 2
-              path: /grub2
+        otk.op.join:
+          values:
+            - otk.external.otk-make-partition-stages:
+                ${filesystem}
+            - - type: org.osbuild.copy
+                inputs:
+                  root-tree:
+                    type: org.osbuild.tree
+                    origin: org.osbuild.pipeline
+                    references:
+                      - name:os
+                options:
+                  paths:
+                    - from: input://root-tree/
+                      to: mount://-/
+                # XXX: fugly, can we do better?
+                # we cannot just do
+                #   otk.external.otk-make-partition-mounts-devices:
+                # here because "otk.external." does not allow siblings
+                mounts:
+                  ${fs_options.mounts}
+                devices:
+                  ${fs_options.devices}
+              - type: org.osbuild.grub2.inst
+                options:
+                  filename: ${filesystem.const.filename}
+                  platform: i386-pc
+                  location: 2048
+                  core:
+                    type: mkimage
+                    partlabel: gpt
+                    filesystem: xfs
+                  prefix:
+                    type: partition
+                    partlabel: gpt
+                    number: 2
+                    path: /grub2
   sources:
     org.osbuild.curl:

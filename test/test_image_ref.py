@@ -9,14 +9,15 @@ from otk.command import run
 
 
 @pytest.mark.parametrize("ref_yaml",
-                         [path for path in (pathlib.Path(__file__).parent / "data/images-ref").glob("*.yaml")])
+                         [str(path) for path in (pathlib.Path(__file__).parent / "data/images-ref").glob("*.yaml")])
 def test_images_ref(tmp_path, ref_yaml):
     os.environ["OSBUILD_TESTING_RNG_SEED"] = "0"
 
-    with ref_yaml.open() as fp:
+    ref_yaml_path = pathlib.Path(ref_yaml)
+    with ref_yaml_path.open() as fp:
         ref_manifest = yaml.safe_load(fp)
 
-    src_yaml = pathlib.Path("example/centos") / ref_yaml.name
+    src_yaml = pathlib.Path("example/centos") / ref_yaml_path.name
     manifest_json = tmp_path / "manifest.json"
     run(["compile",
          "-o", os.fspath(manifest_json),
