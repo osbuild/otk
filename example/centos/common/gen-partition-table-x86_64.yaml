@@ -17,7 +17,7 @@ otk.define:
           mountpoint: /boot
           label: boot
           size: "1 GiB"
-          type: "xfs"
+          type: ${filesystem.modifications.fs_type}
           # XXX: make default if empty
           fs_mntops: defaults
           # XXX can we derive this?
@@ -27,7 +27,7 @@ otk.define:
         - name: root
           mountpoint: /
           label: root
-          type: "xfs"
+          type: ${filesystem.modifications.fs_type}
           # XXX: can/should we be able to leave this empy?
           size: "5 GiB"
           # XXX: make default if empty

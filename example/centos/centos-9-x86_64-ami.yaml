@@ -1,10 +1,14 @@
 otk.version: "1"
 
 otk.define:
+  # XXX: de-dup
+  distro: centos
+  version: 9
   kernel_commandline: "console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295"
   filesystem:
     modifications:
       filename: "image.raw"
+      fs_type: "xfs"
 otk.include: "common/gen-partition-table-x86_64.yaml"
 
 otk.target.osbuild:

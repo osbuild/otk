@@ -1,6 +1,6 @@
 
 name: build
-runner: org.osbuild.centos9
+runner: org.osbuild.${distro}${version}
 stages:
   # XXX: fill rpm
   - type: org.osbuild.rpm

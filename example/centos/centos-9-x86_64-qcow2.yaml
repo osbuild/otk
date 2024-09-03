@@ -1,10 +1,13 @@
 otk.version: "1"
 
 otk.define:
+  # XXX: dedup
+  distro: centos
+  version: 9
   kernel_commandline: "console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0"
   filesystem:
     modifications:
-      # XXX: find a better way to deal with empty modifications
+      fs_type: xfs
 otk.include: "common/gen-partition-table-x86_64.yaml"
 
 otk.target.osbuild:
