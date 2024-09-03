@@ -12,6 +12,19 @@ pipelines:
     runner: org.osbuild.centos9
     stages:
       - type: org.osbuild.rpm
+      - type: org.osbuild.selinux
+        options:
+          file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+          labels:
+            /usr/bin/cp: system_u:object_r:install_exec_t:s0
+  - name: os
+    build: name:build
+    stages:
+      - type: org.osbuild.kernel-cmdline
+        options:
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          kernel_opts: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
+      - type: org.osbuild.rpm
       - type: org.osbuild.fix-bls
         options:
           prefix: ""
