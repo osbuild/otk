@@ -1,0 +1,68 @@
+#!/usr/bin/python3
+# pylint: disable=invalid-name
+
+import json
+import os
+import pathlib
+import subprocess
+import sys
+import tempfile
+
+import yaml
+
+
+# see https://github.com/yaml/pyyaml/issues/234#issuecomment-765894586
+class Dumper(yaml.Dumper):  # pylint: disable=too-many-ancestors
+    def increase_indent(self, flow: bool = False, indentless: bool = False) -> None:
+        return super().increase_indent(flow=flow, indentless=False)
+
+
+def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver: str, arch: str, img_type: str) -> None:
+    # pylint: disable=consider-using-with
+    empty_config = tempfile.NamedTemporaryFile()
+    empty_config.write(b'{"name": "empty"}')
+    empty_config.flush()
+
+    # ideally we would just generate all manifests on the fly but today
+    # that requires a git checkout of "images". with something like
+    # https://github.com/osbuild/images/pull/902 we could automate this
+    # here and just call the remote binary via "go run"
+    env = os.environ.copy()
+    env["OSBUILD_TESTING_RNG_SEED"] = "0"
+    distro = f"{distro_name}-{distro_ver}"
+    manifest_path = pathlib.Path.cwd() / distro_name / distro_ver / arch / img_type
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.check_call([
+        "cmd/gen-manifests/gen-manifests",
+        "-output", manifest_path,
+        "-packages=False", "-commits=False",
+        "-containers=False", "-metadata=False",
+        "-distros", distro,
+        "-arches", arch,
+        "-types", img_type,
+        "-config", empty_config.name,
+    ], cwd=images_base_dir, env=env)
+    generated = list(manifest_path.glob("*.json"))
+    if len(generated) != 1:
+        raise ValueError(f"unexpected number of generated manifests: {generated}")
+    with open(generated[0], encoding="utf8") as fp:
+        manifest = json.load(fp)
+    yaml_path = generated[0].with_suffix(".yaml")
+    with yaml_path.open("w", encoding="utf8") as fp:
+        yaml.dump(manifest, fp, Dumper=Dumper)
+    print(f"image generated in {yaml_path}")
+
+
+def run():
+    # TODO: add argparse
+    if len(sys.argv) < 5:
+        # TODO: remove images-git-checkout parameter and use something
+        # like "go run github.com/osbuild/images/cmd/build@latest" but
+        # this needs something like https://github.com/osbuild/images/pull/902
+        print("need <image-git-checkout> <distoname> <distrover> <arch> <img_type> argument", file=sys.stderr)
+        sys.exit(1)
+    generate_reference_image(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+
+
+if __name__ == "__main__":
+    run()
