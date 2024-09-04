@@ -9,7 +9,9 @@ dependencies = [
 
 [project.scripts]
 otk = "otk.command:root"
-otk_external_osbuild = "otk_external_osbuild.command:root"
+osbuild-depsolve-dnf4 = "otk_external_osbuild.command.depsolve_dnf4:root"
+osbuild-depsolve-dnf4-gen-rpm-stage = "otk_external_osbuild.command.depsolve_dnf4_gen_rpm_stage:root"
+osbuild-depsolve-dnf4-gen-curl-source = "otk_external_osbuild.command.depsolve_dnf4_gen_curl_source:root"
 
 [project.optional-dependencies]
 dev = [
