@@ -30,5 +30,6 @@ jobs:
         run: PYTHONPATH=./src pytest
       - name: Validate OTK configuration
         run: |
-          otk -v validate example/fedora/minimal-40-aarch64.yaml
-          otk -v validate example/fedora/minimal-40-x86_64.yaml
+          for f in example/*/*.yaml; do
+            otk -v validate "$f"
+          done
