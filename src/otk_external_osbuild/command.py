@@ -7,7 +7,6 @@ import sys
 import json
 import hashlib
 import base64
-import pathlib
 import subprocess
 
 import argparse
@@ -113,86 +112,11 @@ def depsolve_dnf4():
     )
 
 
-def file_from_text():
-    data = json.loads(sys.stdin.read())
-
-    dest = data["tree"]["destination"]
-    hashsum, addr = source_add_inline(data, data["tree"]["text"])
-
-    sys.stdout.write(
-        json.dumps(
-            {
-                "context": data["context"],
-                "tree": {
-                    "type": "org.osbuild.copy",
-                    "inputs": {
-                        f"file-{hashsum}": {
-                            "type": "org.osbuild.files",
-                            "origin": "org.osbuild.source",
-                            "references": [
-                                {"id": addr},
-                            ],
-                        }
-                    },
-                    "options": {
-                        "paths": [
-                            {
-                                "from": f"input://file-{hashsum}/{addr}",
-                                "to": f"tree://{dest}",
-                                "remove_destination": True,
-                            }
-                        ]
-                    },
-                },
-            }
-        )
-    )
-
-
-def file_from_path():
-    data = json.loads(sys.stdin.read())
-
-    dest = data["tree"]["destination"]
-    text = (pathlib.Path(data["context"]["path"]) / data["tree"]["source"]).read_text()
-    hashsum, addr = source_add_inline(data, text)
-
-    sys.stdout.write(
-        json.dumps(
-            {
-                "context": data["context"],
-                "tree": {
-                    "type": "org.osbuild.copy",
-                    "inputs": {
-                        f"file-{hashsum}": {
-                            "type": "org.osbuild.files",
-                            "origin": "org.osbuild.source",
-                            "references": [
-                                {"id": addr},
-                            ],
-                        }
-                    },
-                    "options": {
-                        "paths": [
-                            {
-                                "from": f"input://file-{hashsum}/{addr}",
-                                "to": f"tree://{dest}",
-                                "remove_destination": True,
-                            }
-                        ]
-                    },
-                },
-            }
-        )
-    )
-
-
 def root():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
     (subparsers.add_parser("depsolve_dnf4")).set_defaults(func=depsolve_dnf4)
-    (subparsers.add_parser("file_from_text")).set_defaults(func=file_from_text)
-    (subparsers.add_parser("file_from_path")).set_defaults(func=file_from_path)
 
     args = parser.parse_args()
     args.func()
