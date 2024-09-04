@@ -1,0 +1,419 @@
+pipelines:
+  - name: build
+    runner: org.osbuild.fedora40
+    stages:
+      - inputs:
+          packages:
+            origin: org.osbuild.source
+            references:
+              - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
+              - id: sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0
+              - id: sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a
+              - id: sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d
+              - id: sha256:e0031c189e34e10d9c202fa8d75f72d3296a239164fe6b07e7dc206c7b723d98
+              - id: sha256:c1cc69e61c0f1c7ade8df0f2994e582e7c1f2c57d1ec192a0baf9f96b7739d9d
+              - id: sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15
+              - id: sha256:3745e8dd111be6023e8fc59dfb541e0de5a9432489285b0c85e1ddf394624c9f
+              - id: sha256:9e7ab438597fee20e16e8e441bed0ce966bd59e0fb993fa7c94be31fb1384d88
+              - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
+              - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
+              - id: sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15
+              - id: sha256:3745e8dd111be6023e8fc59dfb541e0de5a9432489285b0c85e1ddf394624c9f
+              - id: sha256:9e7ab438597fee20e16e8e441bed0ce966bd59e0fb993fa7c94be31fb1384d88
+              - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
+              - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
+              - id: sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a
+            type: org.osbuild.files
+        options:
+          gpgkeys:
+            - '-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+
+              mQINBGPQTCwBEADFUL0EQLzwpKHtlPkacVI156F2LnWp6K69g/6yzllidHI3b7EV
+
+              QgQ9/Kdou6wNuOahNKa6WcEi6grEXexD7pAcu4xdRUp79XxQy5pC7Aq2/Dwf0vRL
+
+              2y0kqof+C7iSzhHsfLoaqKKeh2njAo1KLZXYTHAWAMbXEyO/FJevaHLXe2+yYd7j
+
+              luD58gyXgGDXXJ2lymLqs2jobjWdmGPNZGFl36RP3Dnk0FpbdH78kyIIsc2foYuF
+
+              00rnuumwCtK3V58VOZo6IkaYk2irdyeetmJjVHwLHwJB3EaAwGy9Z2oAH3LxxFfk
+
+              rQb0DH0Nzb3fpEziopOOqSi+6guV4RHUKAkCUMu+Mo5XwFVPUAIfNRTVqoIaEasC
+
+              WO26lhkB87wwIvyb/TPGSeh6laHPRf0QOUOLkugdkSHoaJFWoTCcu9Y4aeDpf+ZQ
+
+              fMVmkJNRS1tXONgz+pDk1rro/tNrkusYG18xjvSZTB0P0C4b4+jgK5l7me0NU6G3
+
+              Ww/hIng5lxWfXgE9bpxlN834v1xy5Z3v17guJu1ec/jzKzQQ4356wyegXURjYoWe
+
+              awcnK1S+9gxivnkOk1bGLNxrEh5vB6PDcI1VQ1ECH50EHyvE1IXJDaaStdAkacv2
+
+              qHcd15CnlBW1LYFj0CHs/sGu9FD0iSF95OVRX4gjg9Wa4f8KvtEO/f+FeQARAQAB
+
+              tDFGZWRvcmEgKDQwKSA8ZmVkb3JhLTQwLXByaW1hcnlAZmVkb3JhcHJvamVjdC5v
+
+              cmc+iQJOBBMBCAA4FiEEEV35rvhXhT7oRF0KBydwfqFbecwFAmPQTCwCGw8FCwkI
+
+              BwIGFQoJCAsCBBYCAwECHgECF4AACgkQBydwfqFbecxJOw//XaoJG3zN01bVM63H
+
+              nFmMW/EnLzKrZqH8ZNq8CP9ycoc4q8SYcMprHKG9jufzj5/FhtpYecp3kBMpSYHt
+
+              Vu46LS9NajJDwdfvUMezVbieNIQ8icTR5s5IUYFlc47eG6PRe3k0n5fOPcIb6q82
+
+              byrK3dQnanOcVdoGU7QO9LAAHO9hg0zgZa0MxQAlDQov3dZcr7u7qGcQmU5JzcRS
+
+              JgfDxHxDuMjmq6Kd0/UwD00kd2ptZgRls0ntXdm9CZGtQ/Q0baJ3eRzccpd/8bxy
+
+              RWF9MnOdmV6ojcFKYECjEzcuheUlcKQH9rLkeBSfgrIlK3L7LG8bg5ouZLdx17rQ
+
+              XABNQGmJTaGAiEnS/48G3roMS8R7fhUljcKr6t63QQQJ2qWdPvI6EMC2xKZsLHK4
+
+              XiUvrmJpUprvEQSKBUOf/2zuXDBshtAnoKh7h5aG+TvozL4yNG5DKpSH3MRj1E43
+
+              KoMsP/GN/X5h+vJnvhiCWxNMPP81Op0czBAgukBm627FTnsvieJOOrzyxb1s75+W
+
+              56gJombmhzUfzr88AYY9mFy7diTw/oldDZcfwa8rvOAGJVDlyr2hqkLoGl+5jPex
+
+              slt3NF4caE/wP9wPMgFRkmMOr8eiRhjlWLrO6mQdBp7Qsj3kEXioP+CZ1cv/sbaK
+
+              4DM7VidB4PLrMFQMaf0LpjpC2DM=
+
+              =wOl2
+
+              -----END PGP PUBLIC KEY BLOCK-----'
+        type: org.osbuild.rpm
+      - options:
+          file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+          labels:
+            /usr/bin/cp: system_u:object_r:install_exec_t:s0
+        type: org.osbuild.selinux
+  - build: name:build
+    name: os
+    stages:
+      - options:
+          kernel_opts: ro
+          root_fs_uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
+        type: org.osbuild.kernel-cmdline
+      - inputs:
+          packages:
+            origin: org.osbuild.source
+            references:
+              - id: sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00
+              - id: sha256:e2f24de304a49d3d3c1261466376ab341c3834eb683d806cb534587f4fd48f8d
+              - id: sha256:dbf9956aa9c5ccd4c6d92f0550e959f58bb815fb570c305e9d93645eee2082d4
+              - id: sha256:9370ee4e95b7172989b9fd3f81860093529113ba42b69be340467d87a94bb253
+              - id: sha256:6923dd1bc0460082c5d55a831908c24a282860b7f1cd6c2b79cf1bc8857c639c
+              - id: sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15
+              - id: sha256:3745e8dd111be6023e8fc59dfb541e0de5a9432489285b0c85e1ddf394624c9f
+              - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
+              - id: sha256:443ad85c108c8acb279fc373255ff3444e54cc07c0af87a62962f0adcedd152a
+              - id: sha256:f4273aed83076f85fdab08afe889a0d6d8e363c676fcd2972f8665fd1ef71cd9
+              - id: sha256:690674223d17be8d11986a73e422c435b29788b99344aa7705076848e59bf944
+              - id: sha256:f19322aff95a0dab072e7d976be364f553e46efd51e1a602adae348b7c38af29
+              - id: sha256:cc6a02963fb4d1a2974e58cb463b61430aa28e3ddfe44564ef7524db95c0324d
+              - id: sha256:c6901c753d002dc687294351488f7f32d417c7d7620dcd985087188654ebf5f0
+              - id: sha256:2d7ad6dafb3919522d425e546ac189f12e7a5096bc570cec344a32dbd17bd526
+            type: org.osbuild.files
+        options:
+          gpgkeys:
+            - '-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+
+              mQINBGPQTCwBEADFUL0EQLzwpKHtlPkacVI156F2LnWp6K69g/6yzllidHI3b7EV
+
+              QgQ9/Kdou6wNuOahNKa6WcEi6grEXexD7pAcu4xdRUp79XxQy5pC7Aq2/Dwf0vRL
+
+              2y0kqof+C7iSzhHsfLoaqKKeh2njAo1KLZXYTHAWAMbXEyO/FJevaHLXe2+yYd7j
+
+              luD58gyXgGDXXJ2lymLqs2jobjWdmGPNZGFl36RP3Dnk0FpbdH78kyIIsc2foYuF
+
+              00rnuumwCtK3V58VOZo6IkaYk2irdyeetmJjVHwLHwJB3EaAwGy9Z2oAH3LxxFfk
+
+              rQb0DH0Nzb3fpEziopOOqSi+6guV4RHUKAkCUMu+Mo5XwFVPUAIfNRTVqoIaEasC
+
+              WO26lhkB87wwIvyb/TPGSeh6laHPRf0QOUOLkugdkSHoaJFWoTCcu9Y4aeDpf+ZQ
+
+              fMVmkJNRS1tXONgz+pDk1rro/tNrkusYG18xjvSZTB0P0C4b4+jgK5l7me0NU6G3
+
+              Ww/hIng5lxWfXgE9bpxlN834v1xy5Z3v17guJu1ec/jzKzQQ4356wyegXURjYoWe
+
+              awcnK1S+9gxivnkOk1bGLNxrEh5vB6PDcI1VQ1ECH50EHyvE1IXJDaaStdAkacv2
+
+              qHcd15CnlBW1LYFj0CHs/sGu9FD0iSF95OVRX4gjg9Wa4f8KvtEO/f+FeQARAQAB
+
+              tDFGZWRvcmEgKDQwKSA8ZmVkb3JhLTQwLXByaW1hcnlAZmVkb3JhcHJvamVjdC5v
+
+              cmc+iQJOBBMBCAA4FiEEEV35rvhXhT7oRF0KBydwfqFbecwFAmPQTCwCGw8FCwkI
+
+              BwIGFQoJCAsCBBYCAwECHgECF4AACgkQBydwfqFbecxJOw//XaoJG3zN01bVM63H
+
+              nFmMW/EnLzKrZqH8ZNq8CP9ycoc4q8SYcMprHKG9jufzj5/FhtpYecp3kBMpSYHt
+
+              Vu46LS9NajJDwdfvUMezVbieNIQ8icTR5s5IUYFlc47eG6PRe3k0n5fOPcIb6q82
+
+              byrK3dQnanOcVdoGU7QO9LAAHO9hg0zgZa0MxQAlDQov3dZcr7u7qGcQmU5JzcRS
+
+              JgfDxHxDuMjmq6Kd0/UwD00kd2ptZgRls0ntXdm9CZGtQ/Q0baJ3eRzccpd/8bxy
+
+              RWF9MnOdmV6ojcFKYECjEzcuheUlcKQH9rLkeBSfgrIlK3L7LG8bg5ouZLdx17rQ
+
+              XABNQGmJTaGAiEnS/48G3roMS8R7fhUljcKr6t63QQQJ2qWdPvI6EMC2xKZsLHK4
+
+              XiUvrmJpUprvEQSKBUOf/2zuXDBshtAnoKh7h5aG+TvozL4yNG5DKpSH3MRj1E43
+
+              KoMsP/GN/X5h+vJnvhiCWxNMPP81Op0czBAgukBm627FTnsvieJOOrzyxb1s75+W
+
+              56gJombmhzUfzr88AYY9mFy7diTw/oldDZcfwa8rvOAGJVDlyr2hqkLoGl+5jPex
+
+              slt3NF4caE/wP9wPMgFRkmMOr8eiRhjlWLrO6mQdBp7Qsj3kEXioP+CZ1cv/sbaK
+
+              4DM7VidB4PLrMFQMaf0LpjpC2DM=
+
+              =wOl2
+
+              -----END PGP PUBLIC KEY BLOCK-----'
+        type: org.osbuild.rpm
+      - options:
+          prefix: ''
+        type: org.osbuild.fix-bls
+      - options:
+          language: en_US
+        type: org.osbuild.locale
+      - options:
+          hostname: localhost.localdomain
+        type: org.osbuild.hostname
+      - options:
+          zone: UTC
+        type: org.osbuild.timezone
+      - options:
+          filesystems:
+            - options: defaults
+              path: /
+              uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
+              vfs_type: ext4
+            - options: defaults
+              path: /boot
+              uuid: 183791e1-f506-4579-973c-1af91a080f19
+              vfs_type: ext4
+            - options: defaults,uid=0,gid=0,umask=077,shortname=winnt
+              passno: 2
+              path: /boot/efi
+              uuid: 7B77-95E7
+              vfs_type: vfat
+        type: org.osbuild.fstab
+      - options:
+          boot_fs_uuid: 183791e1-f506-4579-973c-1af91a080f19
+          config:
+            default: saved
+            timeout: 5
+          kernel_opts: ro
+          root_fs_uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
+          saved_entry: ffffffffffffffffffffffffffffffff-0-0.noarch
+          uefi:
+            unified: true
+            vendor: fedora
+          write_cmdline: false
+        type: org.osbuild.grub2
+      - inputs:
+          file-5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e:
+            origin: org.osbuild.source
+            references:
+              - id: sha256:5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e
+            type: org.osbuild.files
+        options:
+          paths:
+            - from: input://file-5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e/sha256:5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e
+              remove_destination: true
+              to: tree:///root/anaconda-ks.cfg
+        type: org.osbuild.copy
+      - options:
+          items:
+            /root/anaconda-ks.cfg:
+              group: root
+              user: root
+        type: org.osbuild.chown
+      - options:
+          enabled_services:
+            - NetworkManager.service
+            - firewalld.service
+            - initial-setup.service
+            - sshd.service
+        type: org.osbuild.systemd
+      - options:
+          file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+        type: org.osbuild.selinux
+  - build: name:build
+    name: image
+    stages:
+      - options:
+          filename: disk.img
+          size: '4515168256'
+        type: org.osbuild.truncate
+      - devices:
+          device:
+            options:
+              filename: disk.img
+              lock: true
+            type: org.osbuild.loopback
+        options:
+          label: gpt
+          partitions:
+            - size: 409600
+              start: 18432
+              type: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
+              uuid: 68B2905B-DF3E-4FB3-80FA-49D1E773AA33
+            - size: 2097152
+              start: 428032
+              type: BC13C2FF-59E6-4262-A352-B275FD6F7172
+              uuid: CB07C243-BC44-4717-853E-28852021225B
+            - size: 6293471
+              start: 2525184
+              type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+              uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
+          uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
+        type: org.osbuild.sfdisk
+      - devices:
+          device:
+            options:
+              filename: disk.img
+              lock: true
+              size: 409600
+              start: 18432
+            type: org.osbuild.loopback
+        options:
+          volid: 7B7795E7
+        type: org.osbuild.mkfs.fat
+      - devices:
+          device:
+            options:
+              filename: disk.img
+              lock: true
+              size: 2097152
+              start: 428032
+            type: org.osbuild.loopback
+        options:
+          label: boot
+          uuid: 183791e1-f506-4579-973c-1af91a080f19
+        type: org.osbuild.mkfs.ext4
+      - devices:
+          device:
+            options:
+              filename: disk.img
+              lock: true
+              size: 6293471
+              start: 2525184
+            type: org.osbuild.loopback
+        options:
+          label: root
+          uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
+        type: org.osbuild.mkfs.ext4
+      - devices:
+          '-':
+            options:
+              filename: disk.img
+              size: 6293471
+              start: 2525184
+            type: org.osbuild.loopback
+          boot:
+            options:
+              filename: disk.img
+              size: 2097152
+              start: 428032
+            type: org.osbuild.loopback
+          boot-efi:
+            options:
+              filename: disk.img
+              size: 409600
+              start: 18432
+            type: org.osbuild.loopback
+        inputs:
+          root-tree:
+            origin: org.osbuild.pipeline
+            references:
+              - name:os
+            type: org.osbuild.tree
+        mounts:
+          - name: '-'
+            source: '-'
+            target: /
+            type: org.osbuild.ext4
+          - name: boot
+            source: boot
+            target: /boot
+            type: org.osbuild.ext4
+          - name: boot-efi
+            source: boot-efi
+            target: /boot/efi
+            type: org.osbuild.fat
+        options:
+          paths:
+            - from: input://root-tree/
+              to: mount://-/
+        type: org.osbuild.copy
+  - build: name:build
+    name: xz
+    stages:
+      - inputs:
+          file:
+            origin: org.osbuild.pipeline
+            references:
+              name:image:
+                file: disk.img
+            type: org.osbuild.files
+        options:
+          filename: disk.raw.xz
+        type: org.osbuild.xz
+sources:
+  org.osbuild.curl:
+    items:
+      sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15:
+        url: https://example.com/repo/packages/dosfstools
+      sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d:
+        url: https://example.com/repo/packages/glibc
+      sha256:2d7ad6dafb3919522d425e546ac189f12e7a5096bc570cec344a32dbd17bd526:
+        url: https://example.com/repo/packages/iwlwifi-mvm-firmware
+      sha256:3745e8dd111be6023e8fc59dfb541e0de5a9432489285b0c85e1ddf394624c9f:
+        url: https://example.com/repo/packages/e2fsprogs
+      sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0:
+        url: https://example.com/repo/packages/coreutils
+      sha256:443ad85c108c8acb279fc373255ff3444e54cc07c0af87a62962f0adcedd152a:
+        url: https://example.com/repo/packages/@core
+      sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00:
+        url: https://example.com/repo/packages/dracut-config-generic
+      sha256:690674223d17be8d11986a73e422c435b29788b99344aa7705076848e59bf944:
+        url: https://example.com/repo/packages/libxkbcommon
+      sha256:6923dd1bc0460082c5d55a831908c24a282860b7f1cd6c2b79cf1bc8857c639c:
+        url: https://example.com/repo/packages/kernel
+      sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a:
+        url: https://example.com/repo/packages/xz
+      sha256:9370ee4e95b7172989b9fd3f81860093529113ba42b69be340467d87a94bb253:
+        url: https://example.com/repo/packages/shim-x64
+      sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700:
+        url: https://example.com/repo/packages/policycoreutils
+      sha256:9e7ab438597fee20e16e8e441bed0ce966bd59e0fb993fa7c94be31fb1384d88:
+        url: https://example.com/repo/packages/rpm
+      sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528:
+        url: https://example.com/repo/packages/selinux-policy-targeted
+      sha256:c1cc69e61c0f1c7ade8df0f2994e582e7c1f2c57d1ec192a0baf9f96b7739d9d:
+        url: https://example.com/repo/packages/python3
+      sha256:c6901c753d002dc687294351488f7f32d417c7d7620dcd985087188654ebf5f0:
+        url: https://example.com/repo/packages/realtek-firmware
+      sha256:cc6a02963fb4d1a2974e58cb463b61430aa28e3ddfe44564ef7524db95c0324d:
+        url: https://example.com/repo/packages/brcmfmac-firmware
+      sha256:dbf9956aa9c5ccd4c6d92f0550e959f58bb815fb570c305e9d93645eee2082d4:
+        url: https://example.com/repo/packages/grub2-efi-x64
+      sha256:e0031c189e34e10d9c202fa8d75f72d3296a239164fe6b07e7dc206c7b723d98:
+        url: https://example.com/repo/packages/systemd
+      sha256:e2f24de304a49d3d3c1261466376ab341c3834eb683d806cb534587f4fd48f8d:
+        url: https://example.com/repo/packages/efibootmgr
+      sha256:f19322aff95a0dab072e7d976be364f553e46efd51e1a602adae348b7c38af29:
+        url: https://example.com/repo/packages/NetworkManager-wifi
+      sha256:f4273aed83076f85fdab08afe889a0d6d8e363c676fcd2972f8665fd1ef71cd9:
+        url: https://example.com/repo/packages/initial-setup
+  org.osbuild.inline:
+    items:
+      sha256:5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e:
+        data: IyBSdW4gaW5pdGlhbC1zZXR1cCBvbiBmaXJzdCBib290CiMgQ3JlYXRlZCBieSBvc2J1aWxkCmZpcnN0Ym9vdCAtLXJlY29uZmlnCg==
+        encoding: base64
+version: '2'
