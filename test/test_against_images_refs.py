@@ -10,7 +10,7 @@ from otk.command import run
 TEST_DATA_PATH = pathlib.Path(__file__).parent / "data"
 
 
-class TestCase:
+class _TestCase:
     def __init__(self, base, ref_yaml_path):
         self.ref_yaml_path = ref_yaml_path
         rel = self.ref_yaml_path.relative_to(base)
@@ -29,7 +29,7 @@ def reference_manifests():
     tc = []
     base = TEST_DATA_PATH / "images-ref"
     for path in base.glob("*/*/*/*/*.yaml"):
-        tc.append(TestCase(base, path))
+        tc.append(_TestCase(base, path))
     return tc
 
 
