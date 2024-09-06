@@ -9,15 +9,16 @@ import subprocess
 import os
 from typing import Any
 
+from .context import CommonContext
 from .constant import PREFIX_EXTERNAL
 from .error import ExternalFailedError
 
 log = logging.getLogger(__name__)
 
 
-def call(directive: str, tree: Any) -> Any:
+def call(ctx: CommonContext, directive: str, tree: Any) -> Any:
     exe = exe_from_directive(directive)
-    exe = path_for(exe)
+    exe = path_for(ctx.libdir, exe)
 
     data = json.dumps(
         {
@@ -39,7 +40,7 @@ def exe_from_directive(directive):
     return directive.removeprefix(PREFIX_EXTERNAL)
 
 
-def path_for(exe):
+def path_for(libdir, exe):
     paths = [
         "/usr/local/libexec/otk/external",
         "/usr/libexec/otk/external",
@@ -48,9 +49,11 @@ def path_for(exe):
     ]
 
     env = os.getenv("OTK_EXTERNAL_PATH", None)
-
     if env is not None:
         paths = [env] + paths
+
+    if libdir:
+        paths = [pathlib.Path(libdir) / "external" ] + paths
 
     for pathname in paths:
         path = pathlib.Path(pathname) / exe

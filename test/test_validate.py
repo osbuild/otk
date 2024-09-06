@@ -10,7 +10,7 @@ from otk.command import validate
     [
         # "GENERATE" is a placeholder to append "tmp_path" from pytest
         (
-            argparse.Namespace(input="GENERATE", output="GENERATE", target=None),
+            argparse.Namespace(input="GENERATE", output="GENERATE", target=None, libdir=""),
             """otk.version: 1
 otk.target.osbuild.qcow2: { test: 1 }
 """,
@@ -18,7 +18,7 @@ otk.target.osbuild.qcow2: { test: 1 }
             None,
         ),
         (
-            argparse.Namespace(input="GENERATE", output=None, target=None),
+            argparse.Namespace(input="GENERATE", output=None, target=None, libdir=""),
             """otk.version: 1
 otk.target.osbuild.qcow2: { test: 1 }
 """,
@@ -26,7 +26,7 @@ otk.target.osbuild.qcow2: { test: 1 }
             None,
         ),
         (
-            argparse.Namespace(input="GENERATE", output="GENERATE", target=None),
+            argparse.Namespace(input="GENERATE", output="GENERATE", target=None, libdir=""),
             """otk.version: 1
 otk.target.osbuild.qcow2: { test: 1 }
 otk.target.osbuild.ami: { test: 2 }

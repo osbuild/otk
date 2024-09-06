@@ -1,5 +1,6 @@
 import argparse
 import logging
+import os
 import pathlib
 import sys
 from typing import List
@@ -66,7 +67,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # a full run so that resolving includes works correctly.
     warn_duplicated_defs = any(arg in getattr(arguments, "warn", [])
                                for arg in ["duplicate-definition", "all"])
-    doc = Omnifest(path, target=target_requested, warn_duplicated_defs=warn_duplicated_defs)
+    doc = Omnifest(path, target=target_requested, warn_duplicated_defs=warn_duplicated_defs, libdir=arguments.libdir)
 
     # and then output by writing to the output
     if not dry_run:
@@ -104,6 +105,12 @@ def parser_create() -> argparse.ArgumentParser:
         action='append',
         default=[],
         help="Enable warnings, use 'all' to get all or enable specific warnings. Can be passed multiple times.",
+    )
+    parser.add_argument(
+        "-l",
+        "--libdir",
+        type=os.path.abspath,
+        help="Directory containing externals",
     )
 
     # get a subparser action

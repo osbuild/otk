@@ -46,21 +46,28 @@ class CommonContext(Context):
     _target_requested: str
     _version: Optional[int]
     _variables: dict[str, Any]
+    _libdir: str
 
     def __init__(
         self,
         *,
         target_requested: str = "",
         warn_duplicated_defs: bool = False,
+        libdir: str = "",
     ) -> None:
         self._version = None
         self._variables = {}
         self._target_requested = target_requested
         self.warn_duplicated_defs = warn_duplicated_defs
+        self._libdir = libdir
 
     @property
     def target_requested(self) -> str:
         return self._target_requested
+
+    @property
+    def libdir(self) -> str:
+        return self._libdir
 
     def version(self, v: int) -> None:
         # Set the context version, duplicate definitions with different
