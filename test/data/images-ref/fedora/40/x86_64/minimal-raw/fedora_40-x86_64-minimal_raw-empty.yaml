@@ -1,9 +1,12 @@
+version: '2'
 pipelines:
   - name: build
     runner: org.osbuild.fedora40
     stages:
-      - inputs:
+      - type: org.osbuild.rpm
+        inputs:
           packages:
+            type: org.osbuild.files
             origin: org.osbuild.source
             references:
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
@@ -23,7 +26,6 @@ pipelines:
               - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a
-            type: org.osbuild.files
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -82,21 +84,22 @@ pipelines:
               =wOl2
 
               -----END PGP PUBLIC KEY BLOCK-----'
-        type: org.osbuild.rpm
-      - options:
+      - type: org.osbuild.selinux
+        options:
           file_contexts: etc/selinux/targeted/contexts/files/file_contexts
           labels:
             /usr/bin/cp: system_u:object_r:install_exec_t:s0
-        type: org.osbuild.selinux
-  - build: name:build
-    name: os
+  - name: os
+    build: name:build
     stages:
-      - options:
-          kernel_opts: ro
+      - type: org.osbuild.kernel-cmdline
+        options:
           root_fs_uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
-        type: org.osbuild.kernel-cmdline
-      - inputs:
+          kernel_opts: ro
+      - type: org.osbuild.rpm
+        inputs:
           packages:
+            type: org.osbuild.files
             origin: org.osbuild.source
             references:
               - id: sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00
@@ -114,7 +117,6 @@ pipelines:
               - id: sha256:cc6a02963fb4d1a2974e58cb463b61430aa28e3ddfe44564ef7524db95c0324d
               - id: sha256:c6901c753d002dc687294351488f7f32d417c7d7620dcd985087188654ebf5f0
               - id: sha256:2d7ad6dafb3919522d425e546ac189f12e7a5096bc570cec344a32dbd17bd526
-            type: org.osbuild.files
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -173,91 +175,86 @@ pipelines:
               =wOl2
 
               -----END PGP PUBLIC KEY BLOCK-----'
-        type: org.osbuild.rpm
-      - options:
+      - type: org.osbuild.fix-bls
+        options:
           prefix: ''
-        type: org.osbuild.fix-bls
-      - options:
+      - type: org.osbuild.locale
+        options:
           language: en_US
-        type: org.osbuild.locale
-      - options:
+      - type: org.osbuild.hostname
+        options:
           hostname: localhost.localdomain
-        type: org.osbuild.hostname
-      - options:
+      - type: org.osbuild.timezone
+        options:
           zone: UTC
-        type: org.osbuild.timezone
-      - options:
+      - type: org.osbuild.fstab
+        options:
           filesystems:
-            - options: defaults
+            - uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
+              vfs_type: ext4
               path: /
-              uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
+              options: defaults
+            - uuid: 183791e1-f506-4579-973c-1af91a080f19
               vfs_type: ext4
-            - options: defaults
               path: /boot
-              uuid: 183791e1-f506-4579-973c-1af91a080f19
-              vfs_type: ext4
-            - options: defaults,uid=0,gid=0,umask=077,shortname=winnt
-              passno: 2
-              path: /boot/efi
-              uuid: 7B77-95E7
+              options: defaults
+            - uuid: 7B77-95E7
               vfs_type: vfat
-        type: org.osbuild.fstab
-      - options:
+              path: /boot/efi
+              options: defaults,uid=0,gid=0,umask=077,shortname=winnt
+              passno: 2
+      - type: org.osbuild.grub2
+        options:
+          root_fs_uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
           boot_fs_uuid: 183791e1-f506-4579-973c-1af91a080f19
+          kernel_opts: ro
+          uefi:
+            vendor: fedora
+            unified: true
+          saved_entry: ffffffffffffffffffffffffffffffff-0-0.noarch
+          write_cmdline: false
           config:
             default: saved
             timeout: 5
-          kernel_opts: ro
-          root_fs_uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
-          saved_entry: ffffffffffffffffffffffffffffffff-0-0.noarch
-          uefi:
-            unified: true
-            vendor: fedora
-          write_cmdline: false
-        type: org.osbuild.grub2
-      - inputs:
+      - type: org.osbuild.copy
+        inputs:
           file-5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e:
+            type: org.osbuild.files
             origin: org.osbuild.source
             references:
               - id: sha256:5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e
-            type: org.osbuild.files
         options:
           paths:
             - from: input://file-5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e/sha256:5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e
-              remove_destination: true
               to: tree:///root/anaconda-ks.cfg
-        type: org.osbuild.copy
-      - options:
+              remove_destination: true
+      - type: org.osbuild.chown
+        options:
           items:
             /root/anaconda-ks.cfg:
-              group: root
               user: root
-        type: org.osbuild.chown
-      - options:
+              group: root
+      - type: org.osbuild.systemd
+        options:
           enabled_services:
             - NetworkManager.service
             - firewalld.service
             - initial-setup.service
             - sshd.service
-        type: org.osbuild.systemd
-      - options:
+      - type: org.osbuild.selinux
+        options:
           file_contexts: etc/selinux/targeted/contexts/files/file_contexts
-        type: org.osbuild.selinux
-  - build: name:build
-    name: image
+  - name: image
+    build: name:build
     stages:
-      - options:
+      - type: org.osbuild.truncate
+        options:
           filename: disk.img
           size: '4515168256'
-        type: org.osbuild.truncate
-      - devices:
-          device:
-            options:
-              filename: disk.img
-              lock: true
-            type: org.osbuild.loopback
+      - type: org.osbuild.sfdisk
         options:
           label: gpt
+          uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
           partitions:
             - size: 409600
               start: 18432
@@ -271,99 +268,103 @@ pipelines:
               start: 2525184
               type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
               uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
-          uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
-        type: org.osbuild.sfdisk
-      - devices:
+        devices:
           device:
+            type: org.osbuild.loopback
             options:
               filename: disk.img
               lock: true
-              size: 409600
-              start: 18432
-            type: org.osbuild.loopback
+      - type: org.osbuild.mkfs.fat
         options:
           volid: 7B7795E7
-        type: org.osbuild.mkfs.fat
-      - devices:
+        devices:
           device:
-            options:
-              filename: disk.img
-              lock: true
-              size: 2097152
-              start: 428032
             type: org.osbuild.loopback
-        options:
-          label: boot
-          uuid: 183791e1-f506-4579-973c-1af91a080f19
-        type: org.osbuild.mkfs.ext4
-      - devices:
-          device:
             options:
               filename: disk.img
-              lock: true
-              size: 6293471
-              start: 2525184
-            type: org.osbuild.loopback
-        options:
-          label: root
-          uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
-        type: org.osbuild.mkfs.ext4
-      - devices:
-          '-':
-            options:
-              filename: disk.img
-              size: 6293471
-              start: 2525184
-            type: org.osbuild.loopback
-          boot:
-            options:
-              filename: disk.img
-              size: 2097152
-              start: 428032
-            type: org.osbuild.loopback
-          boot-efi:
-            options:
-              filename: disk.img
-              size: 409600
               start: 18432
+              size: 409600
+              lock: true
+      - type: org.osbuild.mkfs.ext4
+        options:
+          uuid: 183791e1-f506-4579-973c-1af91a080f19
+          label: boot
+        devices:
+          device:
             type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 428032
+              size: 2097152
+              lock: true
+      - type: org.osbuild.mkfs.ext4
+        options:
+          uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
+          label: root
+        devices:
+          device:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 2525184
+              size: 6293471
+              lock: true
+      - type: org.osbuild.copy
         inputs:
           root-tree:
+            type: org.osbuild.tree
             origin: org.osbuild.pipeline
             references:
               - name:os
-            type: org.osbuild.tree
-        mounts:
-          - name: '-'
-            source: '-'
-            target: /
-            type: org.osbuild.ext4
-          - name: boot
-            source: boot
-            target: /boot
-            type: org.osbuild.ext4
-          - name: boot-efi
-            source: boot-efi
-            target: /boot/efi
-            type: org.osbuild.fat
         options:
           paths:
             - from: input://root-tree/
               to: mount://-/
-        type: org.osbuild.copy
-  - build: name:build
-    name: xz
+        devices:
+          '-':
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 2525184
+              size: 6293471
+          boot:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 428032
+              size: 2097152
+          boot-efi:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 18432
+              size: 409600
+        mounts:
+          - name: '-'
+            type: org.osbuild.ext4
+            source: '-'
+            target: /
+          - name: boot
+            type: org.osbuild.ext4
+            source: boot
+            target: /boot
+          - name: boot-efi
+            type: org.osbuild.fat
+            source: boot-efi
+            target: /boot/efi
+  - name: xz
+    build: name:build
     stages:
-      - inputs:
+      - type: org.osbuild.xz
+        inputs:
           file:
+            type: org.osbuild.files
             origin: org.osbuild.pipeline
             references:
               name:image:
                 file: disk.img
-            type: org.osbuild.files
         options:
           filename: disk.raw.xz
-        type: org.osbuild.xz
 sources:
   org.osbuild.curl:
     items:
@@ -414,6 +415,5 @@ sources:
   org.osbuild.inline:
     items:
       sha256:5ef477a297674dc16b6d212f37875f579a51370d9794a36e57cf0ad91562774e:
-        data: IyBSdW4gaW5pdGlhbC1zZXR1cCBvbiBmaXJzdCBib290CiMgQ3JlYXRlZCBieSBvc2J1aWxkCmZpcnN0Ym9vdCAtLXJlY29uZmlnCg==
         encoding: base64
-version: '2'
+        data: IyBSdW4gaW5pdGlhbC1zZXR1cCBvbiBmaXJzdCBib290CiMgQ3JlYXRlZCBieSBvc2J1aWxkCmZpcnN0Ym9vdCAtLXJlY29uZmlnCg==
