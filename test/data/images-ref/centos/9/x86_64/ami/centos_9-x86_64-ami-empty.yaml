@@ -1,9 +1,12 @@
+version: '2'
 pipelines:
   - name: build
     runner: org.osbuild.centos9
     stages:
-      - inputs:
+      - type: org.osbuild.rpm
+        inputs:
           packages:
+            type: org.osbuild.files
             origin: org.osbuild.source
             references:
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
@@ -27,7 +30,6 @@ pipelines:
               - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:48af68b2888775d102da39bebbe05cf07bca2f2ab9f1103dd19359d64083c70b
-            type: org.osbuild.files
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -86,21 +88,22 @@ pipelines:
               =kkH7
 
               -----END PGP PUBLIC KEY BLOCK-----'
-        type: org.osbuild.rpm
-      - options:
+      - type: org.osbuild.selinux
+        options:
           file_contexts: etc/selinux/targeted/contexts/files/file_contexts
           labels:
             /usr/bin/cp: system_u:object_r:install_exec_t:s0
-        type: org.osbuild.selinux
-  - build: name:build
-    name: os
+  - name: os
+    build: name:build
     stages:
-      - options:
-          kernel_opts: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
+      - type: org.osbuild.kernel-cmdline
+        options:
           root_fs_uuid: 1d5b4d74-fd75-4ba1-a6e1-f1737dd4cdd1
-        type: org.osbuild.kernel-cmdline
-      - inputs:
+          kernel_opts: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
+      - type: org.osbuild.rpm
+        inputs:
           packages:
+            type: org.osbuild.files
             origin: org.osbuild.source
             references:
               - id: sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00
@@ -131,7 +134,6 @@ pipelines:
               - id: sha256:8ff8d40e4a4c726df40795e3134432ac66f7d055d54639c1026e341b6d2bd6e7
               - id: sha256:aba407b81ed016841ea552feadaf0663c7804a64554ba55d3109b3dc8198cdcb
               - id: sha256:90aebae315675cbf04612de4f7d5874850f48e0b8dd82becbeaa47ca93f5ebfb
-            type: org.osbuild.files
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -190,35 +192,35 @@ pipelines:
               =kkH7
 
               -----END PGP PUBLIC KEY BLOCK-----'
-        type: org.osbuild.rpm
-      - options:
+      - type: org.osbuild.fix-bls
+        options:
           prefix: ''
-        type: org.osbuild.fix-bls
-      - options:
+      - type: org.osbuild.locale
+        options:
           language: en_US.UTF-8
-        type: org.osbuild.locale
-      - options:
+      - type: org.osbuild.keymap
+        options:
           keymap: us
           x11-keymap:
             layouts:
               - us
-        type: org.osbuild.keymap
-      - options:
+      - type: org.osbuild.timezone
+        options:
           zone: UTC
-        type: org.osbuild.timezone
-      - options:
-          leapsectz: ''
+      - type: org.osbuild.chrony
+        options:
           servers:
             - hostname: 169.254.169.123
-              iburst: true
-              maxpoll: 4
               minpoll: 4
+              maxpoll: 4
+              iburst: true
               prefer: true
-        type: org.osbuild.chrony
-      - options:
+          leapsectz: ''
+      - type: org.osbuild.sysconfig
+        options:
           kernel:
-            default_kernel: kernel
             update_default: true
+            default_kernel: kernel
           network:
             networking: true
             no_zero_conf: true
@@ -232,92 +234,91 @@ pipelines:
                 peerdns: true
                 type: Ethernet
                 userctl: true
-        type: org.osbuild.sysconfig
-      - options:
+      - type: org.osbuild.systemd-logind
+        options:
+          filename: 00-getty-fixes.conf
           config:
             Login:
               NAutoVTs: 0
-          filename: 00-getty-fixes.conf
-        type: org.osbuild.systemd-logind
-      - options:
+      - type: org.osbuild.cloud-init
+        options:
+          filename: 00-rhel-default-user.cfg
           config:
             system_info:
               default_user:
                 name: ec2-user
-          filename: 00-rhel-default-user.cfg
-        type: org.osbuild.cloud-init
-      - options:
+      - type: org.osbuild.modprobe
+        options:
+          filename: blacklist-nouveau.conf
           commands:
             - command: blacklist
               modulename: nouveau
-          filename: blacklist-nouveau.conf
-        type: org.osbuild.modprobe
-      - options:
+      - type: org.osbuild.modprobe
+        options:
+          filename: blacklist-amdgpu.conf
           commands:
             - command: blacklist
               modulename: amdgpu
-          filename: blacklist-amdgpu.conf
-        type: org.osbuild.modprobe
-      - options:
+      - type: org.osbuild.dracut.conf
+        options:
+          filename: sgdisk.conf
           config:
             install_items:
               - sgdisk
-          filename: sgdisk.conf
-        type: org.osbuild.dracut.conf
-      - options:
+      - type: org.osbuild.dracut.conf
+        options:
+          filename: ec2.conf
           config:
             add_drivers:
               - nvme
               - xen-blkfront
-          filename: ec2.conf
-        type: org.osbuild.dracut.conf
-      - options:
+      - type: org.osbuild.systemd.unit
+        options:
+          unit: nm-cloud-setup.service
+          dropin: 10-rh-enable-for-ec2.conf
           config:
             Service:
               Environment:
                 - key: NM_CLOUD_SETUP_EC2
                   value: 'yes'
-          dropin: 10-rh-enable-for-ec2.conf
-          unit: nm-cloud-setup.service
-        type: org.osbuild.systemd.unit
-      - options:
+      - type: org.osbuild.authselect
+        options:
           profile: sssd
-        type: org.osbuild.authselect
-      - options:
+      - type: org.osbuild.sshd.config
+        options:
           config:
             PasswordAuthentication: false
-        type: org.osbuild.sshd.config
-      - options:
+      - type: org.osbuild.fstab
+        options:
           filesystems:
-            - options: defaults
+            - uuid: 1d5b4d74-fd75-4ba1-a6e1-f1737dd4cdd1
+              vfs_type: xfs
               path: /
-              uuid: 1d5b4d74-fd75-4ba1-a6e1-f1737dd4cdd1
+              options: defaults
+            - uuid: 44019259-d936-49a3-a807-063467c4551a
               vfs_type: xfs
-            - options: defaults
               path: /boot
-              uuid: 44019259-d936-49a3-a807-063467c4551a
-              vfs_type: xfs
-            - options: defaults,uid=0,gid=0,umask=077,shortname=winnt
-              passno: 2
-              path: /boot/efi
-              uuid: 7B77-95E7
+              options: defaults
+            - uuid: 7B77-95E7
               vfs_type: vfat
-        type: org.osbuild.fstab
-      - options:
+              path: /boot/efi
+              options: defaults,uid=0,gid=0,umask=077,shortname=winnt
+              passno: 2
+      - type: org.osbuild.grub2
+        options:
+          root_fs_uuid: 1d5b4d74-fd75-4ba1-a6e1-f1737dd4cdd1
           boot_fs_uuid: 44019259-d936-49a3-a807-063467c4551a
-          config:
-            default: saved
           kernel_opts: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
           legacy: i386-pc
-          root_fs_uuid: 1d5b4d74-fd75-4ba1-a6e1-f1737dd4cdd1
-          saved_entry: ffffffffffffffffffffffffffffffff-0-0.noarch
           uefi:
-            unified: true
             vendor: centos
+            unified: true
+          saved_entry: ffffffffffffffffffffffffffffffff-0-0.noarch
           write_cmdline: false
-        type: org.osbuild.grub2
-      - options:
-          default_target: multi-user.target
+          config:
+            default: saved
+      - type: org.osbuild.systemd
+        options:
           enabled_services:
             - sshd
             - NetworkManager
@@ -329,25 +330,21 @@ pipelines:
             - cloud-final
             - reboot.target
             - tuned
-        type: org.osbuild.systemd
-      - options:
+          default_target: multi-user.target
+      - type: org.osbuild.selinux
+        options:
           file_contexts: etc/selinux/targeted/contexts/files/file_contexts
-        type: org.osbuild.selinux
-  - build: name:build
-    name: image
+  - name: image
+    build: name:build
     stages:
-      - options:
+      - type: org.osbuild.truncate
+        options:
           filename: image.raw
           size: '10737418240'
-        type: org.osbuild.truncate
-      - devices:
-          device:
-            options:
-              filename: image.raw
-              lock: true
-            type: org.osbuild.loopback
+      - type: org.osbuild.sfdisk
         options:
           label: gpt
+          uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
           partitions:
             - bootable: true
               size: 2048
@@ -366,100 +363,104 @@ pipelines:
               start: 2510848
               type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
               uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
-          uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
-        type: org.osbuild.sfdisk
-      - devices:
+        devices:
           device:
+            type: org.osbuild.loopback
             options:
               filename: image.raw
               lock: true
-              size: 409600
-              start: 4096
-            type: org.osbuild.loopback
+      - type: org.osbuild.mkfs.fat
         options:
           volid: 7B7795E7
-        type: org.osbuild.mkfs.fat
-      - devices:
+        devices:
           device:
-            options:
-              filename: image.raw
-              lock: true
-              size: 2097152
-              start: 413696
             type: org.osbuild.loopback
-        options:
-          label: boot
-          uuid: 44019259-d936-49a3-a807-063467c4551a
-        type: org.osbuild.mkfs.xfs
-      - devices:
-          device:
             options:
               filename: image.raw
-              lock: true
-              size: 18460639
-              start: 2510848
-            type: org.osbuild.loopback
-        options:
-          label: root
-          uuid: 1d5b4d74-fd75-4ba1-a6e1-f1737dd4cdd1
-        type: org.osbuild.mkfs.xfs
-      - devices:
-          '-':
-            options:
-              filename: image.raw
-              size: 18460639
-              start: 2510848
-            type: org.osbuild.loopback
-          boot:
-            options:
-              filename: image.raw
-              size: 2097152
-              start: 413696
-            type: org.osbuild.loopback
-          boot-efi:
-            options:
-              filename: image.raw
-              size: 409600
               start: 4096
+              size: 409600
+              lock: true
+      - type: org.osbuild.mkfs.xfs
+        options:
+          uuid: 44019259-d936-49a3-a807-063467c4551a
+          label: boot
+        devices:
+          device:
             type: org.osbuild.loopback
+            options:
+              filename: image.raw
+              start: 413696
+              size: 2097152
+              lock: true
+      - type: org.osbuild.mkfs.xfs
+        options:
+          uuid: 1d5b4d74-fd75-4ba1-a6e1-f1737dd4cdd1
+          label: root
+        devices:
+          device:
+            type: org.osbuild.loopback
+            options:
+              filename: image.raw
+              start: 2510848
+              size: 18460639
+              lock: true
+      - type: org.osbuild.copy
         inputs:
           root-tree:
+            type: org.osbuild.tree
             origin: org.osbuild.pipeline
             references:
               - name:os
-            type: org.osbuild.tree
-        mounts:
-          - name: '-'
-            source: '-'
-            target: /
-            type: org.osbuild.xfs
-          - name: boot
-            source: boot
-            target: /boot
-            type: org.osbuild.xfs
-          - name: boot-efi
-            source: boot-efi
-            target: /boot/efi
-            type: org.osbuild.fat
         options:
           paths:
             - from: input://root-tree/
               to: mount://-/
-        type: org.osbuild.copy
-      - options:
-          core:
-            filesystem: xfs
-            partlabel: gpt
-            type: mkimage
+        devices:
+          '-':
+            type: org.osbuild.loopback
+            options:
+              filename: image.raw
+              start: 2510848
+              size: 18460639
+          boot:
+            type: org.osbuild.loopback
+            options:
+              filename: image.raw
+              start: 413696
+              size: 2097152
+          boot-efi:
+            type: org.osbuild.loopback
+            options:
+              filename: image.raw
+              start: 4096
+              size: 409600
+        mounts:
+          - name: '-'
+            type: org.osbuild.xfs
+            source: '-'
+            target: /
+          - name: boot
+            type: org.osbuild.xfs
+            source: boot
+            target: /boot
+          - name: boot-efi
+            type: org.osbuild.fat
+            source: boot-efi
+            target: /boot/efi
+      - type: org.osbuild.grub2.inst
+        options:
           filename: image.raw
-          location: 2048
           platform: i386-pc
-          prefix:
-            number: 2
+          location: 2048
+          core:
+            type: mkimage
             partlabel: gpt
-            path: /grub2
+            filesystem: xfs
+          prefix:
             type: partition
-        type: org.osbuild.grub2.inst
+            partlabel: gpt
+            number: 2
+            path: /grub2
 sources:
   org.osbuild.curl:
     items:
@@ -531,4 +532,3 @@ sources:
         url: https://example.com/repo/packages/yum-utils
       sha256:fed83cba0a72e3b9f6af32c0dbc2c45a0bde5ebcc0a8e4ca27678844d9b82c84:
         url: https://example.com/repo/packages/dhcp-client
-version: '2'
