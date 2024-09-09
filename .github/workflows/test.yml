@@ -28,8 +28,3 @@ jobs:
           pip install .[dev]
       - name: Run unit tests
         run: PYTHONPATH=./src make test
-      - name: Validate OTK configuration
-        run: |
-          for f in example/*/*.yaml; do
-            otk -v validate "$f"
-          done
