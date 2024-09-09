@@ -34,8 +34,9 @@ def reference_manifests():
 
 
 @pytest.mark.parametrize("tc", reference_manifests())
-def test_images_ref(tmp_path, tc):
-    os.environ["OSBUILD_TESTING_RNG_SEED"] = "0"
+def test_images_ref(tmp_path, monkeypatch, tc):
+    monkeypatch.setenv("OSBUILD_TESTING_RNG_SEED", "0")
+    monkeypatch.setenv("OTK_EXTERNAL_PATH", "./external")
 
     with tc.ref_yaml_path.open() as fp:
         ref_manifest = yaml.safe_load(fp)
