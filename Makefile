@@ -20,7 +20,7 @@ format:
 	@find src test -name '*.py' | xargs autopep8 --in-place
 
 .PHONY: test
-test:
+test: external
 	@pytest
 
 .PHONY: push-check
@@ -60,6 +60,8 @@ rpm: git-diff-check $(RPM_SPECFILE) $(RPM_TARBALL)
 # Note that "external" will most likely in the future build from internal
 # sources instead of pulling of the network
 .PHONY: external
+# # Keep this in sync with e.g. https://github.com/containers/podman/blob/2981262215f563461d449b9841741339f4d9a894/Makefile#L51
+CONTAINERS_STORAGE_THIN_TAGS=containers_image_openpgp exclude_graphdriver_btrfs exclude_graphdriver_devicemapper
 IMAGES_REF ?= github.com/osbuild/images
 external:
 	mkdir -p "$(SRCDIR)/external"
@@ -67,5 +69,5 @@ external:
 			make-fstab-stage \
 			make-partition-mounts-devices \
 			make-partition-stages; do \
-		GOBIN="$(SRCDIR)/external" go install "$(IMAGES_REF)"/cmd/otk-$${otk_cmd}@latest ; \
+		GOBIN="$(SRCDIR)/external" go install -tags "$(CONTAINERS_STORAGE_THIN_TAGS)" "$(IMAGES_REF)"/cmd/otk-$${otk_cmd}@latest ; \
 	done

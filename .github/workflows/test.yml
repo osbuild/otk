@@ -27,7 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install .[dev]
       - name: Run unit tests
-        run: PYTHONPATH=./src pytest
+        run: PYTHONPATH=./src make test
       - name: Validate OTK configuration
         run: |
           for f in example/*/*.yaml; do
