@@ -46,7 +46,21 @@ def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver:
     if len(generated) != 1:
         raise ValueError(f"unexpected number of generated manifests: {generated}")
     with open(generated[0], encoding="utf8") as fp:
-        manifest = json.load(fp)
+        manifest_str = fp.read()
+
+    # XXX: this is hacky, the OSBUILD_TESTING_RNG_SEED is set for both
+    # "gen-manifests" and "otk-gen-partition-tables" but the partition
+    # table code is called slightly differently which means that the UUIDs
+    # get out of sync. We need this (f)ugly mapping here to fix that.
+    #
+    # "gen-manifests" root UUID -> "otk-gen-partition-table" UUID
+    manifest_str = manifest_str.replace("dde1466f-f75b-4f05-bcf6-8386564c6f79", "9851898e-0b30-437d-8fad-51ec16c3697f")
+    # "gen-manifests" boot UUID -> "otk-gen-partition-table" UUID
+    manifest_str = manifest_str.replace("e4520b54-3a3f-4ed3-b8a6-e326beec8e93", "dbd21911-1c4e-4107-8a9f-14fe6e751358")
+
+    # now convert to json
+    manifest = json.loads(manifest_str)
+
     yaml_path = generated[0].with_suffix(".yaml")
     with yaml_path.open("w", encoding="utf8") as fp:
         yaml.dump(manifest, fp, Dumper=Dumper, sort_keys=False)
