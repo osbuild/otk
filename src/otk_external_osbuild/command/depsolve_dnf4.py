@@ -3,15 +3,35 @@ with [osbuild](https://github.com/osbuild/osbuild) manifests.
 
 THIS FILE IS VERY, VERY PROOF OF CONCEPT AND NEEDS TO BE CLEANED UP"""
 
+import hashlib
 import json
+import os
 import subprocess
 import sys
 
 
 def root():
     data = json.loads(sys.stdin.read())
-
     tree = data["tree"]
+    mock = "OTK_UNDER_TEST" in os.environ
+
+    # When we are under test we don't call the depsolver at all and instead
+    # return a mocked list of things
+    if mock:
+        sys.stdout.write(
+            json.dumps(
+                {
+                    "tree": [
+                        {
+                            "checksum": "sha256:" + hashlib.sha256(p.encode()).hexdigest(),
+                            "remote_location": f"https://example.com/repo/packages/{p}",
+                        }
+                        for p in tree["packages"]["include"]
+                    ],
+                }
+            )
+        )
+        return
 
     request = {
         "command": "depsolve",
