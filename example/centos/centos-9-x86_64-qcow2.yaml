@@ -252,20 +252,9 @@ otk.target.osbuild:
                   ${fs_options.devices}
                 mounts:
                   ${fs_options.mounts}
-              - type: org.osbuild.grub2.inst
-                options:
-                  filename: disk.img
+              - otk.external.otk-make-grub2-inst-stage:
                   platform: i386-pc
-                  location: 2048
-                  core:
-                    type: mkimage
-                    partlabel: gpt
-                    filesystem: xfs
-                  prefix:
-                    type: partition
-                    partlabel: gpt
-                    number: 2
-                    path: /grub2
+                  filesystem: ${filesystem}
     - name: qcow2
       build: name:build
       stages:
