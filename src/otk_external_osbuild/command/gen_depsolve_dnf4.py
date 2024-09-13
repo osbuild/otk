@@ -1,12 +1,35 @@
+import hashlib
 import json
+import os
 import subprocess
 import sys
 
 
+def mockdata(packages):
+    """Mockdata as used by tests, we don't actually execute the depsolver
+    but return a map that's similar enough in format that the rest of the
+    compile can continue."""
+
+    return [
+        {
+            "name": p,
+            "checksum": "sha256:" + hashlib.sha256(p.encode()).hexdigest(),
+            "remote_location": f"https://example.com/repo/packages/{p}",
+            "version": "0",
+            "epoch": "",
+            "release": "0",
+            "arch": "noarch",
+        }
+        for p in packages
+    ]
+
+
 def root():
     data = json.loads(sys.stdin.read())
-
     tree = data["tree"]
+    if "OTK_UNDER_TEST" in os.environ:
+        mockdata(tree["packages"]["include"])
+        return
 
     request = {
         "command": "depsolve",
