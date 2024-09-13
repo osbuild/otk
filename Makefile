@@ -70,5 +70,5 @@ external:
 			make-fstab-stage \
 			make-partition-mounts-devices \
 			make-partition-stages; do \
-		GOBIN="$(SRCDIR)/external" go install -tags "$(CONTAINERS_STORAGE_THIN_TAGS)" "$(IMAGES_REF)"/cmd/otk-$${otk_cmd}@latest ; \
+		GOBIN="$(SRCDIR)/external" go install -tags "$(CONTAINERS_STORAGE_THIN_TAGS)" "$(IMAGES_REF)"/cmd/otk-$${otk_cmd}@main ; \
 	done
