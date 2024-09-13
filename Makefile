@@ -65,6 +65,7 @@ CONTAINERS_STORAGE_THIN_TAGS=containers_image_openpgp exclude_graphdriver_btrfs 
 IMAGES_REF ?= github.com/osbuild/images
 external:
 	mkdir -p "$(SRCDIR)/external"
+	set -e ; \
 	for otk_cmd in gen-partition-table \
 			make-fstab-stage \
 			make-partition-mounts-devices \
