@@ -17,16 +17,16 @@ def root():
                 "tree": {
                     "type": "org.osbuild.rpm",
                     "inputs": {
-                        "origin": "org.osbuild.source",
-                        "references": [
-                            {
-                                "id": package["checksum"],
-                                "options": {
-                                    "metadata": {"rpm.check_gpg": True}
-                                },
-                            }
-                            for package in tree["packages"]
-                        ],
+                        "packages": {
+                            "type": "org.osbuild.files",
+                            "origin": "org.osbuild.source",
+                            "references": [
+                                {
+                                    "id": package["checksum"],
+                                }
+                                for package in tree["packages"]
+                            ],
+                        },
                     },
                     "options": {
                         "gpgkeys": data["tree"]["gpgkeys"],
