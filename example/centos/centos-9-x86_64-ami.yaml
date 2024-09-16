@@ -19,26 +19,26 @@ otk.define:
             baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-x86_64-baseos-20240901"
         packages:
           include:
-            - selinux-policy-targeted
             - coreutils
-            - xz
+            - dosfstools
+            - dosfstools
             - glibc
+            - grub2-pc
+            - grub2-pc
             - platform-python
-            - systemd
+            - policycoreutils
+            - policycoreutils
             - python3
-            - grub2-pc
-            - xfsprogs
-            - dosfstools
-            - rpm
-            - policycoreutils
-            - selinux-policy-targeted
-            - grub2-pc
-            - xfsprogs
-            - dosfstools
-            - rpm
-            - policycoreutils
-            - selinux-policy-targeted
             - qemu-img
+            - rpm
+            - rpm
+            - selinux-policy-targeted
+            - selinux-policy-targeted
+            - selinux-policy-targeted
+            - systemd
+            - xfsprogs
+            - xfsprogs
+            - xz
           exclude: []
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
@@ -52,16 +52,6 @@ otk.define:
             baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-x86_64-baseos-20240901"
         packages:
           include:
-            - dracut-config-generic
-            - grub2-pc
-            - dracut-config-generic
-            - efibootmgr
-            - grub2-efi-x64
-            - shim-x64
-            - kernel
-            - xfsprogs
-            - dosfstools
-            - selinux-policy-targeted
             - "@core"
             - authselect-compat
             - chrony
@@ -71,6 +61,13 @@ otk.define:
             - cockpit-ws
             - dnf-utils
             - dosfstools
+            - dosfstools
+            - dracut-config-generic
+            - dracut-config-generic
+            - efibootmgr
+            - grub2-efi-x64
+            - grub2-pc
+            - kernel
             - nfs-utils
             - oddjob
             - oddjob-mkhomedir
@@ -80,9 +77,12 @@ otk.define:
             - redhat-release
             - redhat-release-eula
             - rsync
+            - selinux-policy-targeted
+            - shim-x64
             - tar
-            - tuned
             - tcpdump
+            - tuned
+            - xfsprogs
           exclude:
             - aic94xx-firmware
             - alsa-firmware
@@ -96,8 +96,8 @@ otk.define:
             - firewalld
             - iprutils
             - ivtv-firmware
-            - iwl1000-firmware
             - iwl100-firmware
+            - iwl1000-firmware
             - iwl105-firmware
             - iwl135-firmware
             - iwl2000-firmware
