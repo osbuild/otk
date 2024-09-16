@@ -3,25 +3,36 @@ import json
 import os
 import subprocess
 import sys
+from typing import List, Optional, TextIO
 
 
-def transform(packages):
+def find_pkg_by_name(packages: List[dict], pkg_name: str) -> Optional[dict]:
+    for pkg in packages:
+        if pkg["name"] == pkg_name:
+            return pkg
+    return None
+
+
+def transform(tree: dict, packages: List[dict]) -> dict:
     """Transform the output of `osbuild-depsolve-dnf4` to the output format
     expected of this external."""
 
-    data = {"tree": {"const": {"internal": {}}}}
+    data: dict = {"tree": {"const": {"internal": {}}}}
 
     # Expose the direct output as internal-only data, this can be used by
     # other externals.
     data["tree"]["const"]["internal"]["packages"] = packages
 
-    # We also store all resolved packages and some meta information about
-    # them, this just turns the list into a more user-friendly accessible
-    # map keyed by package name.
-    data["tree"]["const"]["versions"] = {}
+    if kernel_pkg_name := tree.get("kernel_pkgname"):
+        # We also store all resolved kernel
+        data["tree"]["const"]["kernel"] = {}
 
-    for package in packages:
-        data["tree"]["const"]["versions"][package["name"]] = package
+        kernel_pkg = find_pkg_by_name(packages, kernel_pkg_name)
+        if kernel_pkg:
+            data["tree"]["const"]["kernel"] = {
+                "name": kernel_pkg["name"],
+                "version": kernel_pkg["version"],
+            }
 
     return data
 
@@ -37,24 +48,25 @@ def mockdata(packages):
             "checksum": "sha256:" + hashlib.sha256(p.encode()).hexdigest(),
             "remote_location": f"https://example.com/repo/packages/{p}",
             "version": "",
-            "epoch": "",
-            "release": "",
-            "arch": "",
         }
         for p in packages
     ]
 
 
-def root():
-    data = json.loads(sys.stdin.read())
+def root(input_stream: TextIO) -> None:
+    data = json.loads(input_stream.read())
     tree = data["tree"]
+
+    packages = mockdata(tree["packages"]["include"])
+    if kernel_pkg_name := tree.get("kernel", {}).get("name"):
+        packages.append(kernel_pkg_name)
+
     mock = "OTK_UNDER_TEST" in os.environ
 
     # When we are under test we don't call the depsolver at all and instead
     # return a mocked list of things
     if mock:
-        packages = mockdata(tree["packages"]["include"])
-        sys.stdout.write(json.dumps(transform(packages)))
+        sys.stdout.write(json.dumps(transform(tree, packages)))
         return
 
     request = {
@@ -90,11 +102,11 @@ def root():
     results = json.loads(process.stdout)
     packages = results.get("packages", [])
 
-    sys.stdout.write(json.dumps(transform(packages)))
+    sys.stdout.write(json.dumps(transform(tree, packages)))
 
 
 def main():
-    root()
+    root(sys.stdin)
 
 
 if __name__ == "__main__":

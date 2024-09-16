@@ -5,6 +5,7 @@ otk.define:
     modifications:
       filename: "image.raw"
   kernel:
+    name: "kernel"
     cmdline: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
   packages:
     build:
@@ -50,8 +51,13 @@ otk.define:
             baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-x86_64-appstream-20240901"
           - id: "BaseOS"
             baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-x86_64-baseos-20240901"
+        # XXX: this is not ideal, would be nicer to call it "kernel" but then
+        # we have a scoping issue as anything under "kernel" cannot reference
+        # our toplevel "kernel" define
+        kernel_pkgname: ${kernel.name}
         packages:
           include:
+            - ${kernel.name}
             # https://github.com/osbuild/images/blob/v0.86.0/pkg/distro/rhel/rhel9/ami.go#L189
             - "@core"
             - authselect-compat
@@ -75,8 +81,6 @@ otk.define:
             - efibootmgr
             - grub2-efi-x64
             - shim-x64
-            # XXX: hu?
-            - kernel
             # ???
             - dosfstools
             - xfsprogs
@@ -173,7 +177,7 @@ otk.target.osbuild:
           options:
             kernel:
               update_default: true
-              default_kernel: kernel
+              default_kernel: ${kernel.name}
             network:
               networking: true
               no_zero_conf: true
