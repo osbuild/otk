@@ -1,0 +1,34 @@
+# XXX: we should explore if we can express this entirely as a customization to
+# a common partition table so that centos/fedora PT can be shared more
+otk.define:
+  filesystem:
+    otk.external.otk-gen-partition-table:
+      modifications:
+        ${filesystem.modifications}
+      properties:
+        create:
+          esp_partition: true
+          esp_partition_size: "200 MiB"
+        type: dos
+        start_offset: "8 MiB"
+        # we use hardcoded uuids for compatibility with "images"          
+        uuid: "0xc1748067"
+      partitions:
+        - name: boot
+          mountpoint: /boot
+          label: boot
+          size: "1 GiB"
+          type: ext4
+          part_type: "83"
+          fs_mntops: defaults
+        - name: root
+          mountpoint: /
+          label: root
+          type: ext4
+          part_type: "83"
+          size: "2 GiB"
+          fs_mntops: defaults
+  # XXX: find a better way
+  fs_options:
+    otk.external.otk-make-partition-mounts-devices:
+      ${filesystem}

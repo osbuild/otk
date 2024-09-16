@@ -94,7 +94,7 @@ pipelines:
     stages:
       - type: org.osbuild.kernel-cmdline
         options:
-          root_fs_uuid: b1a2302c-2db6-49d4-bd83-ffcfaf27ba37
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           kernel_opts: ro
       - type: org.osbuild.rpm
         inputs:
@@ -194,11 +194,11 @@ pipelines:
       - type: org.osbuild.fstab
         options:
           filesystems:
-            - uuid: b1a2302c-2db6-49d4-bd83-ffcfaf27ba37
+            - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
               vfs_type: ext4
               path: /
               options: defaults
-            - uuid: 95f06a9d-54e3-4b4e-a9a4-18fccbe0b448
+            - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
               vfs_type: ext4
               path: /boot
               options: defaults
@@ -209,8 +209,8 @@ pipelines:
               passno: 2
       - type: org.osbuild.grub2
         options:
-          root_fs_uuid: b1a2302c-2db6-49d4-bd83-ffcfaf27ba37
-          boot_fs_uuid: 95f06a9d-54e3-4b4e-a9a4-18fccbe0b448
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           kernel_opts: ro
           uefi:
             vendor: fedora
@@ -289,7 +289,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.ext4
         options:
-          uuid: 95f06a9d-54e3-4b4e-a9a4-18fccbe0b448
+          uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           label: boot
         devices:
           device:
@@ -301,7 +301,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.ext4
         options:
-          uuid: b1a2302c-2db6-49d4-bd83-ffcfaf27ba37
+          uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           label: root
         devices:
           device:
