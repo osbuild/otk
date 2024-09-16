@@ -9,7 +9,9 @@ def root():
 
     sources = {"org.osbuild.curl": {"items": {}}}
 
-    for package in itertools.chain.from_iterable(tree["packages"]):
+    for package in itertools.chain.from_iterable(
+        s["const"]["internal"]["packages"] for s in tree["packages"]
+    ):
         sources["org.osbuild.curl"]["items"][package["checksum"]] = {
             "url": package["remote_location"],
         }

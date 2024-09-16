@@ -5,6 +5,19 @@ import subprocess
 import sys
 
 
+def transform(packages):
+    """Transform the output of `osbuild-depsolve-dnf4` to the output format
+    expected of this external."""
+
+    data = {"tree": {"const": {"internal": {}}}}
+
+    # Expose the direct output as internal-only data, this can be used by
+    # other externals.
+    data["tree"]["const"]["internal"]["packages"] = packages
+
+    return data
+
+
 def mockdata(packages):
     """Mockdata as used by tests, we don't actually execute the depsolver
     but return a map that's similar enough in format that the rest of the
@@ -28,7 +41,8 @@ def root():
     data = json.loads(sys.stdin.read())
     tree = data["tree"]
     if "OTK_UNDER_TEST" in os.environ:
-        mockdata(tree["packages"]["include"])
+        packages = mockdata(tree["packages"]["include"])
+        sys.stdout.write(json.dumps(transform(packages)))
         return
 
     request = {
@@ -64,13 +78,7 @@ def root():
     results = json.loads(process.stdout)
     packages = results.get("packages", [])
 
-    sys.stdout.write(
-        json.dumps(
-            {
-                "tree": packages,
-            },
-        ),
-    )
+    sys.stdout.write(json.dumps(transform(packages)))
 
 
 def main():
