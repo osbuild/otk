@@ -1,5 +1,15 @@
 otk.version: "1"
 
+otk.define:
+  distro: fedora
+  version: 40
+  kernel_commandline: "ro"
+  filesystem:
+    modifications:
+      # empty
+
+otk.include: "common/gen-partition-table-x86_64.yaml"
+  
 otk.target.osbuild:
   pipelines:
     - name: build
@@ -96,7 +106,7 @@ otk.target.osbuild:
       stages:
         - type: org.osbuild.kernel-cmdline
           options:
-            root_fs_uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
+            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
             kernel_opts: ro
         - type: org.osbuild.rpm
           inputs:
@@ -189,26 +199,12 @@ otk.target.osbuild:
         - type: org.osbuild.timezone
           options:
             zone: UTC
-        - type: org.osbuild.fstab
-          options:
-            filesystems:
-              - uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
-                vfs_type: ext4
-                path: /
-                options: defaults
-              - uuid: 183791e1-f506-4579-973c-1af91a080f19
-                vfs_type: ext4
-                path: /boot
-                options: defaults
-              - uuid: 7B77-95E7
-                vfs_type: vfat
-                path: /boot/efi
-                options: defaults,uid=0,gid=0,umask=077,shortname=winnt
-                passno: 2
+        - otk.external.otk-make-fstab-stage:
+            ${filesystem}
         - type: org.osbuild.grub2
           options:
-            root_fs_uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
-            boot_fs_uuid: 183791e1-f506-4579-973c-1af91a080f19
+            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
+            boot_fs_uuid: ${filesystem.const.partition_map.boot.uuid}
             kernel_opts: ro
             uefi:
               vendor: fedora
@@ -249,111 +245,25 @@ otk.target.osbuild:
     - name: image
       build: name:build
       stages:
-        - type: org.osbuild.truncate
-          options:
-            filename: disk.img
-            size: '4515168256'
-        - type: org.osbuild.sfdisk
-          options:
-            label: gpt
-            uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
-            partitions:
-              - size: 409600
-                start: 18432
-                type: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
-                uuid: 68B2905B-DF3E-4FB3-80FA-49D1E773AA33
-              - size: 2097152
-                start: 428032
-                type: BC13C2FF-59E6-4262-A352-B275FD6F7172
-                uuid: CB07C243-BC44-4717-853E-28852021225B
-              - size: 6293471
-                start: 2525184
-                type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-                uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
-          devices:
-            device:
-              type: org.osbuild.loopback
-              options:
-                filename: disk.img
-                lock: true
-        - type: org.osbuild.mkfs.fat
-          options:
-            volid: 7B7795E7
-          devices:
-            device:
-              type: org.osbuild.loopback
-              options:
-                filename: disk.img
-                start: 18432
-                size: 409600
-                lock: true
-        - type: org.osbuild.mkfs.ext4
-          options:
-            uuid: 183791e1-f506-4579-973c-1af91a080f19
-            label: boot
-          devices:
-            device:
-              type: org.osbuild.loopback
-              options:
-                filename: disk.img
-                start: 428032
-                size: 2097152
-                lock: true
-        - type: org.osbuild.mkfs.ext4
-          options:
-            uuid: bf59b5df-279f-44e3-9320-77de18d2c4f7
-            label: root
-          devices:
-            device:
-              type: org.osbuild.loopback
-              options:
-                filename: disk.img
-                start: 2525184
-                size: 6293471
-                lock: true
-        - type: org.osbuild.copy
-          inputs:
-            root-tree:
-              type: org.osbuild.tree
-              origin: org.osbuild.pipeline
-              references:
-                - name:os
-          options:
-            paths:
-              - from: input://root-tree/
-                to: mount://-/
-          devices:
-            '-':
-              type: org.osbuild.loopback
-              options:
-                filename: disk.img
-                start: 2525184
-                size: 6293471
-            boot:
-              type: org.osbuild.loopback
-              options:
-                filename: disk.img
-                start: 428032
-                size: 2097152
-            boot-efi:
-              type: org.osbuild.loopback
-              options:
-                filename: disk.img
-                start: 18432
-                size: 409600
-          mounts:
-            - name: '-'
-              type: org.osbuild.ext4
-              source: '-'
-              target: /
-            - name: boot
-              type: org.osbuild.ext4
-              source: boot
-              target: /boot
-            - name: boot-efi
-              type: org.osbuild.fat
-              source: boot-efi
-              target: /boot/efi
+        otk.op.join:
+          values:
+            - otk.external.otk-make-partition-stages:
+                ${filesystem}
+            - - type: org.osbuild.copy
+                inputs:
+                  root-tree:
+                    type: org.osbuild.tree
+                    origin: org.osbuild.pipeline
+                    references:
+                      - name:os
+                options:
+                  paths:
+                    - from: input://root-tree/
+                      to: mount://-/
+                devices:
+                  ${fs_options.devices}
+                mounts:
+                  ${fs_options.mounts}
     - name: xz
       build: name:build
       stages:
