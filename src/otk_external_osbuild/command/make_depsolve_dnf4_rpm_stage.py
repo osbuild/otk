@@ -4,7 +4,7 @@ import sys
 
 def root():
     data = json.load(sys.stdin)
-    tree = data["tree"]
+    tree = data["tree"]["packages"]["const"]["internal"]
 
     sys.stdout.write(
         json.dumps(
@@ -24,7 +24,7 @@ def root():
                         },
                     },
                     "options": {
-                        "gpgkeys": tree["gpgkeys"],
+                        "gpgkeys": data["tree"]["gpgkeys"],
                     },
                 }
             }
