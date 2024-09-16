@@ -32,6 +32,8 @@ def transform(tree: dict, packages: List[dict]) -> dict:
             data["tree"]["const"]["kernel"] = {
                 "name": kernel_pkg["name"],
                 "version": kernel_pkg["version"],
+                "release": kernel_pkg["release"],
+                "arch": kernel_pkg["arch"],
             }
 
     return data
@@ -47,7 +49,10 @@ def mockdata(packages):
             "name": p,
             "checksum": "sha256:" + hashlib.sha256(p.encode()).hexdigest(),
             "remote_location": f"https://example.com/repo/packages/{p}",
-            "version": "",
+            # see https://github.com/osbuild/images/pull/937
+            "version": f"{ord(p[0]) % 9}",
+            "release": f"r{ord(p[1]) % 9}",
+            "arch": "noarch",
         }
         for p in packages
     ]

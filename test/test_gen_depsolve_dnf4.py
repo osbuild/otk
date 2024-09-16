@@ -24,7 +24,9 @@ def test_otk_under_test_mock_data(monkeypatch, capsys):
                             "checksum": "sha256:3d7b91c2dd3273400f26d21a492fcdfdc3dde228cd5627247dfef745ce717755",
                             "name": "pkg1",
                             "remote_location": "https://example.com/repo/packages/pkg1",
-                            "version": "",
+                            "version": "4",
+                            "release": "r8",
+                            "arch": "noarch",
                         },
                     ],
                 },
@@ -50,7 +52,9 @@ def test_otk_under_test_mock_data_kernel(monkeypatch, capsys):
             "const": {
                 "kernel": {
                     "name": "my-kernel",
-                    "version": "",
+                    "version": "1",
+                    "release": "r4",
+                    "arch": "noarch",
                 },
                 "internal": {
                     "packages": [
@@ -58,13 +62,17 @@ def test_otk_under_test_mock_data_kernel(monkeypatch, capsys):
                             "checksum": "sha256:c892f5086e0951a7b31364bfd1373c375b10567a26e6e37ff96de2993428bc12",
                             "name": "my-kernel",
                             "remote_location": "https://example.com/repo/packages/my-kernel",
-                            "version": "",
+                            "version": "1",
+                            "release": "r4",
+                            "arch": "noarch",
                         },
                         {
                             "checksum": "sha256:3d7b91c2dd3273400f26d21a492fcdfdc3dde228cd5627247dfef745ce717755",
                             "name": "pkg1",
                             "remote_location": "https://example.com/repo/packages/pkg1",
-                            "version": "",
+                            "version": "4",
+                            "release": "r8",
+                            "arch": "noarch",
                         },
                     ],
                 },
