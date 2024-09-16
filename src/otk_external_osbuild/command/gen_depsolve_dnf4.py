@@ -10,6 +10,46 @@ import subprocess
 import sys
 
 
+def transform(packages):
+    """Transform the output of `osbuild-depsolve-dnf4` to the output format
+    expected of this external."""
+
+    data = {"tree": {"const": {"internal": {}}}}
+
+    # Expose the direct output as internal-only data, this can be used by
+    # other externals.
+    data["tree"]["const"]["internal"]["packages"] = packages
+
+    # We also store all resolved packages and some meta information about
+    # them, this just turns the list into a more user-friendly accessible
+    # map keyed by package name.
+    data["tree"]["const"]["versions"] = {}
+
+    for package in packages:
+        data["tree"]["const"]["versions"][package["name"]] = package
+
+    return data
+
+
+def mockdata(packages):
+    """Mockdata as used by tests, we don't actually execute the depsolver
+    but return a map that's similar enough in format that the rest of the
+    compile can continue."""
+
+    return [
+        {
+            "name": p,
+            "checksum": "sha256:" + hashlib.sha256(p.encode()).hexdigest(),
+            "remote_location": f"https://example.com/repo/packages/{p}",
+            "version": "",
+            "epoch": "",
+            "release": "",
+            "arch": "",
+        }
+        for p in packages
+    ]
+
+
 def root():
     data = json.loads(sys.stdin.read())
     tree = data["tree"]
@@ -18,28 +58,8 @@ def root():
     # When we are under test we don't call the depsolver at all and instead
     # return a mocked list of things
     if mock:
-        sys.stdout.write(
-            json.dumps(
-                {
-                    "tree": {
-                        "const": {
-                            "internal": {
-                                "packages": [
-                                    {
-                                        "checksum": "sha256:"
-                                        + hashlib.sha256(
-                                            p.encode()
-                                        ).hexdigest(),
-                                        "remote_location": f"https://example.com/repo/packages/{p}",
-                                    }
-                                    for p in tree["packages"]["include"]
-                                ],
-                            },
-                        }
-                    },
-                }
-            )
-        )
+        packages = mockdata(tree["packages"]["include"])
+        sys.stdout.write(json.dumps(transform(packages)))
         return
 
     request = {
@@ -78,13 +98,7 @@ def root():
     results = json.loads(process.stdout)
     packages = results.get("packages", [])
 
-    sys.stdout.write(
-        json.dumps(
-            {
-                "tree": {"const": {"internal": {"packages": packages}}},
-            },
-        ),
-    )
+    sys.stdout.write(json.dumps(transform(packages)))
 
 
 def main():
