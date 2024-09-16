@@ -313,7 +313,7 @@ pipelines:
           uefi:
             vendor: centos
             unified: true
-          saved_entry: ffffffffffffffffffffffffffffffff-0-0.noarch
+          saved_entry: ffffffffffffffffffffffffffffffff-8-r2.noarch
           write_cmdline: false
           config:
             default: saved
