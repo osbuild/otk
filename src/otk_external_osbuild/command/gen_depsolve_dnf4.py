@@ -48,11 +48,10 @@ def mockdata(packages):
 def root():
     data = json.loads(sys.stdin.read())
     tree = data["tree"]
-    mock = "OTK_UNDER_TEST" in os.environ
 
     # When we are under test we don't call the depsolver at all and instead
     # return a mocked list of things
-    if mock:
+    if "OTK_UNDER_TEST" in os.environ:
         packages = mockdata(tree["packages"]["include"])
         sys.stdout.write(json.dumps(transform(packages)))
         return
