@@ -21,13 +21,22 @@ def root():
         sys.stdout.write(
             json.dumps(
                 {
-                    "tree": [
-                        {
-                            "checksum": "sha256:" + hashlib.sha256(p.encode()).hexdigest(),
-                            "remote_location": f"https://example.com/repo/packages/{p}",
+                    "tree": {
+                        "const": {
+                            "internal": {
+                                "packages": [
+                                    {
+                                        "checksum": "sha256:"
+                                        + hashlib.sha256(
+                                            p.encode()
+                                        ).hexdigest(),
+                                        "remote_location": f"https://example.com/repo/packages/{p}",
+                                    }
+                                    for p in tree["packages"]["include"]
+                                ],
+                            },
                         }
-                        for p in tree["packages"]["include"]
-                    ],
+                    },
                 }
             )
         )
@@ -72,7 +81,7 @@ def root():
     sys.stdout.write(
         json.dumps(
             {
-                "tree": packages,
+                "tree": {"const": {"internal": {"packages": packages}}},
             },
         ),
     )
