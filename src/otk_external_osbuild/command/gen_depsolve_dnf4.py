@@ -36,10 +36,10 @@ def mockdata(packages):
             "name": p,
             "checksum": "sha256:" + hashlib.sha256(p.encode()).hexdigest(),
             "remote_location": f"https://example.com/repo/packages/{p}",
-            "version": "",
-            "epoch": "",
-            "release": "",
-            "arch": "",
+            "version": "0",
+            "epoch": "0",
+            "release": "0",
+            "arch": "noarch",
         }
         for p in packages
     ]
