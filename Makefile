@@ -21,6 +21,9 @@ format:
 
 .PHONY: test
 test: external
+	cp $(shell (which "osbuild-gen-depsolve-dnf4")) ./external/
+	cp $(shell (which "osbuild-make-depsolve-dnf4-rpm-stage")) ./external/
+	cp $(shell (which "osbuild-make-depsolve-dnf4-curl-source")) ./external/
 	@pytest
 
 .PHONY: push-check
