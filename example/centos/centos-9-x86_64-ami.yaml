@@ -29,7 +29,7 @@ otk.define:
             - policycoreutils
             - policycoreutils
             - python3
-            - qemu-img
+            - python3-pyyaml
             - rpm
             - rpm
             - selinux-policy-targeted
@@ -52,37 +52,36 @@ otk.define:
             baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-x86_64-baseos-20240901"
         packages:
           include:
+            # https://github.com/osbuild/images/blob/v0.86.0/pkg/distro/rhel/rhel9/ami.go#L189
             - "@core"
             - authselect-compat
             - chrony
             - cloud-init
             - cloud-utils-growpart
-            - cockpit-system
-            - cockpit-ws
-            - dnf-utils
-            - dosfstools
-            - dosfstools
+            - dhcp-client
+            - yum-utils
             - dracut-config-generic
-            - dracut-config-generic
-            - efibootmgr
-            - grub2-efi-x64
-            - grub2-pc
-            - kernel
-            - nfs-utils
-            - oddjob
-            - oddjob-mkhomedir
-            - psmisc
-            - python3-jsonschema
-            - qemu-guest-agent
+            - gdisk
+            - grub2
+            - langpacks-en
+            - NetworkManager-cloud-setup
             - redhat-release
             - redhat-release-eula
             - rsync
-            - selinux-policy-targeted
-            - shim-x64
-            - tar
-            - tcpdump
             - tuned
+            - tar
+            # https://github.com/osbuild/images/blob/v0.86.0/pkg/platform/x86_64.go#L37
+            - dracut-config-generic
+            - efibootmgr
+            - grub2-efi-x64
+            - shim-x64
+            # XXX: hu?
+            - kernel
+            # ???
+            - dosfstools
             - xfsprogs
+            - grub2-pc
+            - selinux-policy-targeted
           exclude:
             - aic94xx-firmware
             - alsa-firmware
@@ -113,7 +112,6 @@ otk.define:
             - iwl6050-firmware
             - iwl7260-firmware
             - langpacks-*
-            - langpacks-en
             - libertas-sd8787-firmware
             - nss
             - plymouth
