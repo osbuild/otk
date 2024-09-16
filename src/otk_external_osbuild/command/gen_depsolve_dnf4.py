@@ -85,10 +85,7 @@ def root():
     )
 
     if process.returncode != 0:
-        # TODO: fix this
-        raise RuntimeError(
-            process.stderr
-        )  # pylint: disable=broad-exception-raised
+        raise RuntimeError(f"{process.stdout=}{process.stderr=}")
 
     results = json.loads(process.stdout)
     packages = results.get("packages", [])
