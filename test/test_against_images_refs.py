@@ -81,6 +81,7 @@ def test_normalize_rpm_refs():
 def test_images_ref(tmp_path, monkeypatch, tc):
     monkeypatch.setenv("OSBUILD_TESTING_RNG_SEED", "0")
     monkeypatch.setenv("OTK_EXTERNAL_PATH", "./external")
+    monkeypatch.setenv("OTK_UNDER_TEST", "1")
 
     with tc.ref_yaml_path.open() as fp:
         ref_manifest = yaml.safe_load(fp)
