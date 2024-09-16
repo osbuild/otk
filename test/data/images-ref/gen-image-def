@@ -59,12 +59,16 @@ def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver:
     manifest_str = manifest_str.replace("1d5b4d74-fd75-4ba1-a6e1-f1737dd4cdd1", "9851898e-0b30-437d-8fad-51ec16c3697f")
     # fedora 40/minimal-raw
     manifest_str = manifest_str.replace("bf59b5df-279f-44e3-9320-77de18d2c4f7", "9851898e-0b30-437d-8fad-51ec16c3697f")
+    # fedora40/minimal-raw/aarch64
+    manifest_str = manifest_str.replace("b1a2302c-2db6-49d4-bd83-ffcfaf27ba37", "9851898e-0b30-437d-8fad-51ec16c3697f")
     # "gen-manifests" boot UUID -> "otk-gen-partition-table" UUID (qcow2)
     manifest_str = manifest_str.replace("e4520b54-3a3f-4ed3-b8a6-e326beec8e93", "dbd21911-1c4e-4107-8a9f-14fe6e751358")
     # ami
     manifest_str = manifest_str.replace("44019259-d936-49a3-a807-063467c4551a", "dbd21911-1c4e-4107-8a9f-14fe6e751358")
     # fedora 40/minimal-raw
     manifest_str = manifest_str.replace("183791e1-f506-4579-973c-1af91a080f19", "dbd21911-1c4e-4107-8a9f-14fe6e751358")
+    # fedora40/minimal-raw/aarch64
+    manifest_str = manifest_str.replace("95f06a9d-54e3-4b4e-a9a4-18fccbe0b448", "dbd21911-1c4e-4107-8a9f-14fe6e751358")
     
 
     # now convert to json
