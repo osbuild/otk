@@ -1,16 +1,17 @@
 import itertools
 import json
 import sys
+from typing import TextIO
 
 
-def root():
-    data = json.load(sys.stdin)
+def root(input_stream: TextIO) -> None:
+    data = json.load(input_stream)
     tree = data["tree"]
 
-    sources = {"org.osbuild.curl": {"items": {}}}
+    sources: dict = {"org.osbuild.curl": {"items": {}}}
 
     for package in itertools.chain.from_iterable(
-        s["const"]["internal"]["packages"] for s in tree["packages"]
+        s["const"]["internal"]["packages"] for s in tree["packagesets"]
     ):
         sources["org.osbuild.curl"]["items"][package["checksum"]] = {
             "url": package["remote_location"],
@@ -26,7 +27,7 @@ def root():
 
 
 def main():
-    root()
+    root(sys.stdin)
 
 
 if __name__ == "__main__":
