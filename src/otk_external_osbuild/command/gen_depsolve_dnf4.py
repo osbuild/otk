@@ -3,6 +3,7 @@ import json
 import os
 import subprocess
 import sys
+from typing import TextIO
 
 
 def transform(packages):
@@ -37,8 +38,8 @@ def mockdata(packages):
     ]
 
 
-def root():
-    data = json.loads(sys.stdin.read())
+def root(input_stream: TextIO) -> None:
+    data = json.loads(input_stream.read())
     tree = data["tree"]
     if "OTK_UNDER_TEST" in os.environ:
         packages = mockdata(tree["packages"]["include"])
@@ -82,7 +83,7 @@ def root():
 
 
 def main():
-    root()
+    root(sys.stdin)
 
 
 if __name__ == "__main__":
