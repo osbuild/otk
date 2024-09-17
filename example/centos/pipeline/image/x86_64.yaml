@@ -20,6 +20,7 @@ stages:
             ${fs_options.devices}
           mounts:
             ${fs_options.mounts}
+        # XXX conditional
         - otk.external.otk-make-grub2-inst-stage:
             platform: i386-pc
             filesystem: ${filesystem}

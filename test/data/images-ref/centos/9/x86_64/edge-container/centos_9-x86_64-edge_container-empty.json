@@ -1,0 +1,975 @@
+{
+  "version": "2",
+  "pipelines": [
+    {
+      "name": "build",
+      "runner": "org.osbuild.centos9",
+      "stages": [
+        {
+          "type": "org.osbuild.rpm",
+          "inputs": {
+            "packages": {
+              "type": "org.osbuild.files",
+              "origin": "org.osbuild.source",
+              "references": [
+                {
+                  "id": "sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528"
+                },
+                {
+                  "id": "sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0"
+                },
+                {
+                  "id": "sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a"
+                },
+                {
+                  "id": "sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d"
+                },
+                {
+                  "id": "sha256:8a1bf05d306aa663e856f3c450c8b2ddc6800116b818c7d3b65503cd89f7682a"
+                },
+                {
+                  "id": "sha256:e0031c189e34e10d9c202fa8d75f72d3296a239164fe6b07e7dc206c7b723d98"
+                },
+                {
+                  "id": "sha256:c1cc69e61c0f1c7ade8df0f2994e582e7c1f2c57d1ec192a0baf9f96b7739d9d"
+                },
+                {
+                  "id": "sha256:a07b0a6df6f248078ebaf93e5bea115093f8a79e0a830e383b6c0b9f7f1605f5"
+                },
+                {
+                  "id": "sha256:9e7ab438597fee20e16e8e441bed0ce966bd59e0fb993fa7c94be31fb1384d88"
+                },
+                {
+                  "id": "sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d"
+                },
+                {
+                  "id": "sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700"
+                },
+                {
+                  "id": "sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528"
+                },
+                {
+                  "id": "sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d"
+                },
+                {
+                  "id": "sha256:9e7ab438597fee20e16e8e441bed0ce966bd59e0fb993fa7c94be31fb1384d88"
+                },
+                {
+                  "id": "sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d"
+                },
+                {
+                  "id": "sha256:90aebae315675cbf04612de4f7d5874850f48e0b8dd82becbeaa47ca93f5ebfb"
+                }
+              ]
+            }
+          },
+          "options": {
+            "gpgkeys": [
+              "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQINBFzMWxkBEADHrskpBgN9OphmhRkc7P/YrsAGSvvl7kfu+e9KAaU6f5MeAVyn\nrIoM43syyGkgFyWgjZM8/rur7EMPY2yt+2q/1ZfLVCRn9856JqTIq0XRpDUe4nKQ\n8BlA7wDVZoSDxUZkSuTIyExbDf0cpw89Tcf62Mxmi8jh74vRlPy1PgjWL5494b3X\n5fxDidH4bqPZyxTBqPrUFuo+EfUVEqiGF94Ppq6ZUvrBGOVo1V1+Ifm9CGEK597c\naevcGc1RFlgxIgN84UpuDjPR9/zSndwJ7XsXYvZ6HXcKGagRKsfYDWGPkA5cOL/e\nf+yObOnC43yPUvpggQ4KaNJ6+SMTZOKikM8yciyBwLqwrjo8FlJgkv8Vfag/2UR7\nJINbyqHHoLUhQ2m6HXSwK4YjtwidF9EUkaBZWrrskYR3IRZLXlWqeOi/+ezYOW0m\nvufrkcvsh+TKlVVnuwmEPjJ8mwUSpsLdfPJo1DHsd8FS03SCKPaXFdD7ePfEjiYk\nnHpQaKE01aWVSLUiygn7F7rYemGqV9Vt7tBw5pz0vqSC72a5E3zFzIIuHx6aANry\nGat3aqU3qtBXOrA/dPkX9cWE+UR5wo/A2UdKJZLlGhM2WRJ3ltmGT48V9CeS6N9Y\nm4CKdzvg7EWjlTlFrd/8WJ2KoqOE9leDPeXRPncubJfJ6LLIHyG09h9kKQARAQAB\ntDpDZW50T1MgKENlbnRPUyBPZmZpY2lhbCBTaWduaW5nIEtleSkgPHNlY3VyaXR5\nQGNlbnRvcy5vcmc+iQI3BBMBAgAhBQJczFsZAhsDBgsJCAcDAgYVCAIJCgsDFgIB\nAh4BAheAAAoJEAW1VbOEg8ZdjOsP/2ygSxH9jqffOU9SKyJDlraL2gIutqZ3B8pl\nGy/Qnb9QD1EJVb4ZxOEhcY2W9VJfIpnf3yBuAto7zvKe/G1nxH4Bt6WTJQCkUjcs\nN3qPWsx1VslsAEz7bXGiHym6Ay4xF28bQ9XYIokIQXd0T2rD3/lNGxNtORZ2bKjD\nvOzYzvh2idUIY1DgGWJ11gtHFIA9CvHcW+SMPEhkcKZJAO51ayFBqTSSpiorVwTq\na0cB+cgmCQOI4/MY+kIvzoexfG7xhkUqe0wxmph9RQQxlTbNQDCdaxSgwbF2T+gw\nbyaDvkS4xtR6Soj7BKjKAmcnf5fn4C5Or0KLUqMzBtDMbfQQihn62iZJN6ZZ/4dg\nq4HTqyVpyuzMXsFpJ9L/FqH2DJ4exGGpBv00ba/Zauy7GsqOc5PnNBsYaHCply0X\n407DRx51t9YwYI/ttValuehq9+gRJpOTTKp6AjZn/a5Yt3h6jDgpNfM/EyLFIY9z\nV6CXqQQ/8JRvaik/JsGCf+eeLZOw4koIjZGEAg04iuyNTjhx0e/QHEVcYAqNLhXG\nrCTTbCn3NSUO9qxEXC+K/1m1kaXoCGA0UWlVGZ1JSifbbMx0yxq/brpEZPUYm+32\no8XfbocBWljFUJ+6aljTvZ3LQLKTSPW7TFO+GXycAOmCGhlXh2tlc6iTc41PACqy\nyy+mHmSv\n=kkH7\n-----END PGP PUBLIC KEY BLOCK-----"
+            ]
+          }
+        },
+        {
+          "type": "org.osbuild.selinux",
+          "options": {
+            "file_contexts": "etc/selinux/targeted/contexts/files/file_contexts",
+            "labels": {
+              "/usr/bin/cp": "system_u:object_r:install_exec_t:s0",
+              "/usr/bin/tar": "system_u:object_r:install_exec_t:s0"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "os",
+      "build": "name:build",
+      "stages": [
+        {
+          "type": "org.osbuild.rpm",
+          "inputs": {
+            "packages": {
+              "type": "org.osbuild.files",
+              "origin": "org.osbuild.source",
+              "references": [
+                {
+                  "id": "sha256:674177213da94e10f7c2eb25574d59f64ab942abe4746b1eedf24bfd4dc17a76"
+                },
+                {
+                  "id": "sha256:c9694c21375651122e49ce8afc80f69910c81f7843714dca0f1af12d3cdcd6b0"
+                },
+                {
+                  "id": "sha256:4791c5734c81dcc16b25ab5a006d8dd8250b9555a539e557cac9bea5a60fecce"
+                },
+                {
+                  "id": "sha256:10d813242917dfde64a292f0744a6c332d29f907a8ebb31188af6ea8de1d1efa"
+                },
+                {
+                  "id": "sha256:87fdf23aeb0c0b27488ecbabd19e8fa175df1b298369845787beb99ddc849714"
+                },
+                {
+                  "id": "sha256:bf079a7045b8c53dd15c009532e5f1c789260a8a2debb1eddd67ecf47712dde8"
+                },
+                {
+                  "id": "sha256:47b7e192a116767577c34ddb8487411519a1461df1d80b482f4622dc6c1f8674"
+                },
+                {
+                  "id": "sha256:a9c2cd1e4311be8781e7421119b8cdeb9c0f36f7d8c63144a3fb2fd6c0ad1018"
+                },
+                {
+                  "id": "sha256:c38a19b3443f7bc00411db2850001c2fa25d751544c364e1802148be05021cc0"
+                },
+                {
+                  "id": "sha256:874acaf989b725037ce173f517404baeb8d2643275bf972edbae7c947e7c1071"
+                },
+                {
+                  "id": "sha256:7f72cc3ac75a624f94ec606d8ddb4dbf6385595499e5449fd0d369d83fdb6467"
+                },
+                {
+                  "id": "sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00"
+                },
+                {
+                  "id": "sha256:a07b0a6df6f248078ebaf93e5bea115093f8a79e0a830e383b6c0b9f7f1605f5"
+                },
+                {
+                  "id": "sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00"
+                },
+                {
+                  "id": "sha256:e2f24de304a49d3d3c1261466376ab341c3834eb683d806cb534587f4fd48f8d"
+                },
+                {
+                  "id": "sha256:dbf9956aa9c5ccd4c6d92f0550e959f58bb815fb570c305e9d93645eee2082d4"
+                },
+                {
+                  "id": "sha256:9370ee4e95b7172989b9fd3f81860093529113ba42b69be340467d87a94bb253"
+                },
+                {
+                  "id": "sha256:6923dd1bc0460082c5d55a831908c24a282860b7f1cd6c2b79cf1bc8857c639c"
+                },
+                {
+                  "id": "sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528"
+                },
+                {
+                  "id": "sha256:1a0970a720caab2869fc7eb436e6b7656fc7efbb24cfa72ae5b49e2f6acbd7ca"
+                },
+                {
+                  "id": "sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d"
+                },
+                {
+                  "id": "sha256:f6fad119f40a1aae00b54c0de6a0fa24a1e35d4bf1284bffcfd7134bdbb837e1"
+                },
+                {
+                  "id": "sha256:7e41bc67e45e9633f10b8c4ab76c6cffba2bd76b9d3859f1fe51337e9978c760"
+                },
+                {
+                  "id": "sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00"
+                },
+                {
+                  "id": "sha256:fbc15b96c51eaf5c099caa6a6658257c6f9a0a4c148ed907c564ad993079ac23"
+                },
+                {
+                  "id": "sha256:4f7872f3a4c4decf34923a48986e52563d2a58bc3225b1890b84b52e7defce09"
+                },
+                {
+                  "id": "sha256:37d2b12d5d9abc2a364ef9448767ee03938e383c0284193477dc7618f4b7c6c2"
+                },
+                {
+                  "id": "sha256:8a1bf05d306aa663e856f3c450c8b2ddc6800116b818c7d3b65503cd89f7682a"
+                },
+                {
+                  "id": "sha256:6449d2f7bae9905add75f6d3e9b03de90743a1cef971f41aedeeb4139a1780d1"
+                },
+                {
+                  "id": "sha256:5fdc7e383dc7e1b390e40c3012a2aa03978901c45f3597c1c239c51134d03dbe"
+                },
+                {
+                  "id": "sha256:8fb6d5f37e8055ce720bd0b1d56587f88c0071f285966ba17e72b2b12672aa73"
+                },
+                {
+                  "id": "sha256:6449d2f7bae9905add75f6d3e9b03de90743a1cef971f41aedeeb4139a1780d1"
+                },
+                {
+                  "id": "sha256:24e5e1c2bbef565360c392851175f46821fc21d6725503a600353625b4c9209c"
+                },
+                {
+                  "id": "sha256:e0031c189e34e10d9c202fa8d75f72d3296a239164fe6b07e7dc206c7b723d98"
+                },
+                {
+                  "id": "sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0"
+                },
+                {
+                  "id": "sha256:f486d76df6f0ea41b7d6acb72751d8eb4cc2a3f04e6273154fef5e76cab27e11"
+                },
+                {
+                  "id": "sha256:427e4b79b1f0fc90306cbe064b1297b21dc6835bfa656d3bf46bc156e3f24bb0"
+                },
+                {
+                  "id": "sha256:ba6559ec248d211b5cfcc313380c7a871da23f845937f429f6304cc841c500cf"
+                },
+                {
+                  "id": "sha256:9e7ab438597fee20e16e8e441bed0ce966bd59e0fb993fa7c94be31fb1384d88"
+                },
+                {
+                  "id": "sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d"
+                },
+                {
+                  "id": "sha256:c3431e360e61e2181051123799078edc5708114fb6b646dd830f022e3f99ae1e"
+                },
+                {
+                  "id": "sha256:f4dc4ad92c4e57553b004ecd08561dd6b15d5dc7d99869c499544a890f18eddc"
+                },
+                {
+                  "id": "sha256:cf51db7aa57c11cf84bbe5f58f73eb415d037cd000bcce129696331d9bddfc3c"
+                },
+                {
+                  "id": "sha256:a1604eba051c0e913db388ce4a80278bab0ee1bc5a8181aa6ae5bee904adcb24"
+                },
+                {
+                  "id": "sha256:3745e8dd111be6023e8fc59dfb541e0de5a9432489285b0c85e1ddf394624c9f"
+                },
+                {
+                  "id": "sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15"
+                },
+                {
+                  "id": "sha256:6e5afe9033e4767cc4ccec7ec2d18958a28dcfb7b8982cae4afde231b5bb8fad"
+                },
+                {
+                  "id": "sha256:aa6d4532f128420f4d741f2834cd8d1d146bbbdc9554aef454b7adb8ff66f748"
+                },
+                {
+                  "id": "sha256:2148952c2c47033e44ec61fa83f01d8688db767553a0d2b6260428373d938fb8"
+                },
+                {
+                  "id": "sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a"
+                },
+                {
+                  "id": "sha256:c8d77bf4d8b1a10dd67a283d0c82bd96c9d5609860f84d7fc77692a36ab9b4c2"
+                },
+                {
+                  "id": "sha256:7b50bdd407a8c815d221c01203fc9a241648c79805faa36a0dc70e9d3a46c7e5"
+                },
+                {
+                  "id": "sha256:0f75ba9658721aa3a185e6ac18b63b7fa3b709a5ec264be07d1f35408e003a8a"
+                },
+                {
+                  "id": "sha256:563a278902fa76bae3ec1833f24ff89abe26329b1d32af9aaa924d6fc6fd68aa"
+                },
+                {
+                  "id": "sha256:f19322aff95a0dab072e7d976be364f553e46efd51e1a602adae348b7c38af29"
+                },
+                {
+                  "id": "sha256:63a4141fa4a0e2e30351d07d00cf678eacb40e1620cb245d9072b629ee8480b1"
+                },
+                {
+                  "id": "sha256:ac31b31649786ed1bb6501121fd43973040b763991a648e673f6853d15627ecd"
+                },
+                {
+                  "id": "sha256:261063ce089e84d540c499ef21de9486c2be4ee6c79142a2dca537262239e6a5"
+                },
+                {
+                  "id": "sha256:7063dece7cccf374d9fa1ee30ff23300fa42477e064e69be7bb6d01c0cfff682"
+                },
+                {
+                  "id": "sha256:946ad7b6251e28d609831d292e9201bccb7ac4acfae29a667bf8cf68715bdcc5"
+                },
+                {
+                  "id": "sha256:5eb21f6a8946d3565412c31082b5ad447edf139a3ce9811d6c0090b632b9395e"
+                },
+                {
+                  "id": "sha256:db755438d5157104180d27e8f8e21478dc2700470e611d4fe646be7972cdcad9"
+                },
+                {
+                  "id": "sha256:5b0513b8ca5a7f03601efc10934409d271890e6ae7a3264445e7397233eac6f8"
+                },
+                {
+                  "id": "sha256:e422e1641a99c5a045bc0b596ef5ce6429c8e7744f016444cedacd4eaf5d3e4c"
+                },
+                {
+                  "id": "sha256:7d02017322fc296d1d3b7a7f79f6f7053a51b062179ef618086509af08a12f5a"
+                },
+                {
+                  "id": "sha256:0d6be69b264717f2dd33652e212b173104b4a647b7c11ae72e9885f11cd312fb"
+                },
+                {
+                  "id": "sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700"
+                },
+                {
+                  "id": "sha256:2b90c77eadb96acadc4e8fcdd394714af190e7711bff194e1209a683228a3b68"
+                },
+                {
+                  "id": "sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528"
+                },
+                {
+                  "id": "sha256:3cc2ce65b79da03dbdb0dd90b29f773ed36810fe411347347186840029f631a8"
+                },
+                {
+                  "id": "sha256:4fdd3b6201a22c7814d6e67dbb7a17790224ea0fd32ef0a0ccb0a5485eae4c9d"
+                },
+                {
+                  "id": "sha256:90aebae315675cbf04612de4f7d5874850f48e0b8dd82becbeaa47ca93f5ebfb"
+                },
+                {
+                  "id": "sha256:8ff8d40e4a4c726df40795e3134432ac66f7d055d54639c1026e341b6d2bd6e7"
+                },
+                {
+                  "id": "sha256:d825698f566ed6f02c7b10f476dd40e53f95a52e00496f4b2be4f3a32036d9b8"
+                },
+                {
+                  "id": "sha256:b268850ef14fd72b9dd55287919124dac642d0fdea27da428dba3ea83e610b27"
+                },
+                {
+                  "id": "sha256:adb519257aeb1f37c2d1813d52f5d5d9891594019d48462a01ac8820de714b17"
+                },
+                {
+                  "id": "sha256:a45298c4ca08fadc8220c2166c430c8ce2b0cf5add3459ecb12fb9264c0c5943"
+                },
+                {
+                  "id": "sha256:b81f37a043a6f767e7c94d105f4bd31282f3ecc20680bb9d09bd93461cf4c863"
+                },
+                {
+                  "id": "sha256:2f259bab93aaaaa2542ba43ef33eb990d0999ee1b9924b557b7be53c0b7a1bb9"
+                },
+                {
+                  "id": "sha256:a1b3288078a1eb056e2062f7da9acd95c708f987143d832425cdc9b5f3ab6fa6"
+                },
+                {
+                  "id": "sha256:e02609638dda40e0b255a42710c10c3604a4201a42d6290cfa28541d4c0a8506"
+                },
+                {
+                  "id": "sha256:772a6043284a6f653b3a220d1a7fa5a482dcd910f81308b3e53e20abbe8acfee"
+                },
+                {
+                  "id": "sha256:6a406152d00694615f91b8b047dc939d75c834790e521ff3997e3734111518e6"
+                },
+                {
+                  "id": "sha256:ebe3262ae97c575e316064735df66981d0a698e5c45b4c4b3294789e6c10c229"
+                },
+                {
+                  "id": "sha256:3ab9282b0620aef4eaa81d22af2b529e7e45993113083d99e220c83dd5203fef"
+                },
+                {
+                  "id": "sha256:ee72af381cca923b80a2759ce0daae8dbe0edc315ffe9732eae39c739280117e"
+                },
+                {
+                  "id": "sha256:1a7e54e138d71deef08348a2b08113c7f7581014986839f7afe92fd956b31baa"
+                },
+                {
+                  "id": "sha256:0a297cf5549425fa4f7cf9236959e92d97dc3ff0c42506ede88c253073891f11"
+                },
+                {
+                  "id": "sha256:54190fea07d72a2037bccd91ff753c29cb4a244bc4cf1d22f622ec0ad8974eba"
+                },
+                {
+                  "id": "sha256:cda11faa92dac29081bda281f8d46dc5a8b31c8ebb6883c60cb87065af4f04b2"
+                },
+                {
+                  "id": "sha256:5ca3521ab07c36460f021434bec6b14de927b8b5f54b8ef5c167618b62c2a188"
+                },
+                {
+                  "id": "sha256:75406d2ab1a318d214d3f17ad722986010c2d69fbac331fb855689191889f812"
+                },
+                {
+                  "id": "sha256:c0946106b732f9f6ae889101ab987ed1bbcfe3eda2ad0a971be31575ad676851"
+                },
+                {
+                  "id": "sha256:d90b7202318ad799fdf7fc011a6a3d09cb586853981e5c53f381c771e0dc549a"
+                },
+                {
+                  "id": "sha256:dbf9956aa9c5ccd4c6d92f0550e959f58bb815fb570c305e9d93645eee2082d4"
+                },
+                {
+                  "id": "sha256:e2f24de304a49d3d3c1261466376ab341c3834eb683d806cb534587f4fd48f8d"
+                },
+                {
+                  "id": "sha256:9370ee4e95b7172989b9fd3f81860093529113ba42b69be340467d87a94bb253"
+                },
+                {
+                  "id": "sha256:674177213da94e10f7c2eb25574d59f64ab942abe4746b1eedf24bfd4dc17a76"
+                },
+                {
+                  "id": "sha256:c9694c21375651122e49ce8afc80f69910c81f7843714dca0f1af12d3cdcd6b0"
+                },
+                {
+                  "id": "sha256:4791c5734c81dcc16b25ab5a006d8dd8250b9555a539e557cac9bea5a60fecce"
+                },
+                {
+                  "id": "sha256:10d813242917dfde64a292f0744a6c332d29f907a8ebb31188af6ea8de1d1efa"
+                },
+                {
+                  "id": "sha256:87fdf23aeb0c0b27488ecbabd19e8fa175df1b298369845787beb99ddc849714"
+                },
+                {
+                  "id": "sha256:bf079a7045b8c53dd15c009532e5f1c789260a8a2debb1eddd67ecf47712dde8"
+                },
+                {
+                  "id": "sha256:47b7e192a116767577c34ddb8487411519a1461df1d80b482f4622dc6c1f8674"
+                },
+                {
+                  "id": "sha256:a9c2cd1e4311be8781e7421119b8cdeb9c0f36f7d8c63144a3fb2fd6c0ad1018"
+                },
+                {
+                  "id": "sha256:c38a19b3443f7bc00411db2850001c2fa25d751544c364e1802148be05021cc0"
+                },
+                {
+                  "id": "sha256:874acaf989b725037ce173f517404baeb8d2643275bf972edbae7c947e7c1071"
+                },
+                {
+                  "id": "sha256:7f72cc3ac75a624f94ec606d8ddb4dbf6385595499e5449fd0d369d83fdb6467"
+                },
+                {
+                  "id": "sha256:fc8aa064642e279d6d03beb27074f88fe4e3182c2dfe3a4117f135b9662ae2b7"
+                },
+                {
+                  "id": "sha256:3fe9a8dfca0f4e96aa36bca306729179202f3854488648a3aca7bdf80bc1bb81"
+                },
+                {
+                  "id": "sha256:b4fccab00160d7f7638cbbb71ee3404bf7c512fd6b35ab8637d3271cf33c0e58"
+                },
+                {
+                  "id": "sha256:557bd0eaadc03a42f7034eaed1acbf4299219213aef48dddee1594d0d0017c37"
+                },
+                {
+                  "id": "sha256:e243470295e7a4ed4c248443bf78f4d827988f58767c47592545f77e76839439"
+                }
+              ]
+            }
+          },
+          "options": {
+            "dbpath": "/usr/share/rpm",
+            "gpgkeys": [
+              "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQINBFzMWxkBEADHrskpBgN9OphmhRkc7P/YrsAGSvvl7kfu+e9KAaU6f5MeAVyn\nrIoM43syyGkgFyWgjZM8/rur7EMPY2yt+2q/1ZfLVCRn9856JqTIq0XRpDUe4nKQ\n8BlA7wDVZoSDxUZkSuTIyExbDf0cpw89Tcf62Mxmi8jh74vRlPy1PgjWL5494b3X\n5fxDidH4bqPZyxTBqPrUFuo+EfUVEqiGF94Ppq6ZUvrBGOVo1V1+Ifm9CGEK597c\naevcGc1RFlgxIgN84UpuDjPR9/zSndwJ7XsXYvZ6HXcKGagRKsfYDWGPkA5cOL/e\nf+yObOnC43yPUvpggQ4KaNJ6+SMTZOKikM8yciyBwLqwrjo8FlJgkv8Vfag/2UR7\nJINbyqHHoLUhQ2m6HXSwK4YjtwidF9EUkaBZWrrskYR3IRZLXlWqeOi/+ezYOW0m\nvufrkcvsh+TKlVVnuwmEPjJ8mwUSpsLdfPJo1DHsd8FS03SCKPaXFdD7ePfEjiYk\nnHpQaKE01aWVSLUiygn7F7rYemGqV9Vt7tBw5pz0vqSC72a5E3zFzIIuHx6aANry\nGat3aqU3qtBXOrA/dPkX9cWE+UR5wo/A2UdKJZLlGhM2WRJ3ltmGT48V9CeS6N9Y\nm4CKdzvg7EWjlTlFrd/8WJ2KoqOE9leDPeXRPncubJfJ6LLIHyG09h9kKQARAQAB\ntDpDZW50T1MgKENlbnRPUyBPZmZpY2lhbCBTaWduaW5nIEtleSkgPHNlY3VyaXR5\nQGNlbnRvcy5vcmc+iQI3BBMBAgAhBQJczFsZAhsDBgsJCAcDAgYVCAIJCgsDFgIB\nAh4BAheAAAoJEAW1VbOEg8ZdjOsP/2ygSxH9jqffOU9SKyJDlraL2gIutqZ3B8pl\nGy/Qnb9QD1EJVb4ZxOEhcY2W9VJfIpnf3yBuAto7zvKe/G1nxH4Bt6WTJQCkUjcs\nN3qPWsx1VslsAEz7bXGiHym6Ay4xF28bQ9XYIokIQXd0T2rD3/lNGxNtORZ2bKjD\nvOzYzvh2idUIY1DgGWJ11gtHFIA9CvHcW+SMPEhkcKZJAO51ayFBqTSSpiorVwTq\na0cB+cgmCQOI4/MY+kIvzoexfG7xhkUqe0wxmph9RQQxlTbNQDCdaxSgwbF2T+gw\nbyaDvkS4xtR6Soj7BKjKAmcnf5fn4C5Or0KLUqMzBtDMbfQQihn62iZJN6ZZ/4dg\nq4HTqyVpyuzMXsFpJ9L/FqH2DJ4exGGpBv00ba/Zauy7GsqOc5PnNBsYaHCply0X\n407DRx51t9YwYI/ttValuehq9+gRJpOTTKp6AjZn/a5Yt3h6jDgpNfM/EyLFIY9z\nV6CXqQQ/8JRvaik/JsGCf+eeLZOw4koIjZGEAg04iuyNTjhx0e/QHEVcYAqNLhXG\nrCTTbCn3NSUO9qxEXC+K/1m1kaXoCGA0UWlVGZ1JSifbbMx0yxq/brpEZPUYm+32\no8XfbocBWljFUJ+6aljTvZ3LQLKTSPW7TFO+GXycAOmCGhlXh2tlc6iTc41PACqy\nyy+mHmSv\n=kkH7\n-----END PGP PUBLIC KEY BLOCK-----"
+            ],
+            "disable_dracut": true,
+            "ostree_booted": true
+          }
+        },
+        {
+          "type": "org.osbuild.fix-bls",
+          "options": {}
+        },
+        {
+          "type": "org.osbuild.locale",
+          "options": {
+            "language": "C.UTF-8"
+          }
+        },
+        {
+          "type": "org.osbuild.timezone",
+          "options": {
+            "zone": "America/New_York"
+          }
+        },
+        {
+          "type": "org.osbuild.sysconfig",
+          "options": {
+            "kernel": {
+              "update_default": true,
+              "default_kernel": "kernel"
+            },
+            "network": {
+              "networking": true,
+              "no_zero_conf": true
+            }
+          }
+        },
+        {
+          "type": "org.osbuild.systemd.unit",
+          "options": {
+            "unit": "grub-boot-success.timer",
+            "dropin": "10-disable-if-greenboot.conf",
+            "config": {
+              "Unit": {
+                "ConditionPathExists": "!/usr/libexec/greenboot/greenboot"
+              }
+            },
+            "unit-type": "global"
+          }
+        },
+        {
+          "type": "org.osbuild.systemd-journald",
+          "options": {
+            "filename": "10-persistent.conf",
+            "config": {
+              "Journal": {
+                "Storage": "persistent"
+              }
+            }
+          }
+        },
+        {
+          "type": "org.osbuild.systemd",
+          "options": {
+            "enabled_services": [
+              "NetworkManager.service",
+              "firewalld.service",
+              "sshd.service",
+              "fdo-client-linuxapp.service",
+              "ignition-firstboot-complete.service",
+              "coreos-ignition-write-issues.service"
+            ]
+          }
+        },
+        {
+          "type": "org.osbuild.selinux",
+          "options": {
+            "file_contexts": "etc/selinux/targeted/contexts/files/file_contexts"
+          }
+        },
+        {
+          "type": "org.osbuild.ostree.preptree",
+          "options": {
+            "etc_group_members": [
+              "wheel",
+              "docker"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "ostree-commit",
+      "build": "name:build",
+      "stages": [
+        {
+          "type": "org.osbuild.ostree.init",
+          "options": {
+            "path": "/repo"
+          }
+        },
+        {
+          "type": "org.osbuild.ostree.commit",
+          "inputs": {
+            "tree": {
+              "type": "org.osbuild.tree",
+              "origin": "org.osbuild.pipeline",
+              "references": [
+                "name:os"
+              ]
+            }
+          },
+          "options": {
+            "ref": "centos/9/x86_64/edge",
+            "os_version": "9-stream"
+          }
+        }
+      ]
+    },
+    {
+      "name": "container-tree",
+      "build": "name:build",
+      "stages": [
+        {
+          "type": "org.osbuild.rpm",
+          "inputs": {
+            "packages": {
+              "type": "org.osbuild.files",
+              "origin": "org.osbuild.source",
+              "references": [
+                {
+                  "id": "sha256:5be1ecc7935f1dd85635d4feedaf660594030253cc97c9e9ca3819ffeac36b65"
+                }
+              ]
+            }
+          },
+          "options": {
+            "gpgkeys": [
+              "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nmQINBFzMWxkBEADHrskpBgN9OphmhRkc7P/YrsAGSvvl7kfu+e9KAaU6f5MeAVyn\nrIoM43syyGkgFyWgjZM8/rur7EMPY2yt+2q/1ZfLVCRn9856JqTIq0XRpDUe4nKQ\n8BlA7wDVZoSDxUZkSuTIyExbDf0cpw89Tcf62Mxmi8jh74vRlPy1PgjWL5494b3X\n5fxDidH4bqPZyxTBqPrUFuo+EfUVEqiGF94Ppq6ZUvrBGOVo1V1+Ifm9CGEK597c\naevcGc1RFlgxIgN84UpuDjPR9/zSndwJ7XsXYvZ6HXcKGagRKsfYDWGPkA5cOL/e\nf+yObOnC43yPUvpggQ4KaNJ6+SMTZOKikM8yciyBwLqwrjo8FlJgkv8Vfag/2UR7\nJINbyqHHoLUhQ2m6HXSwK4YjtwidF9EUkaBZWrrskYR3IRZLXlWqeOi/+ezYOW0m\nvufrkcvsh+TKlVVnuwmEPjJ8mwUSpsLdfPJo1DHsd8FS03SCKPaXFdD7ePfEjiYk\nnHpQaKE01aWVSLUiygn7F7rYemGqV9Vt7tBw5pz0vqSC72a5E3zFzIIuHx6aANry\nGat3aqU3qtBXOrA/dPkX9cWE+UR5wo/A2UdKJZLlGhM2WRJ3ltmGT48V9CeS6N9Y\nm4CKdzvg7EWjlTlFrd/8WJ2KoqOE9leDPeXRPncubJfJ6LLIHyG09h9kKQARAQAB\ntDpDZW50T1MgKENlbnRPUyBPZmZpY2lhbCBTaWduaW5nIEtleSkgPHNlY3VyaXR5\nQGNlbnRvcy5vcmc+iQI3BBMBAgAhBQJczFsZAhsDBgsJCAcDAgYVCAIJCgsDFgIB\nAh4BAheAAAoJEAW1VbOEg8ZdjOsP/2ygSxH9jqffOU9SKyJDlraL2gIutqZ3B8pl\nGy/Qnb9QD1EJVb4ZxOEhcY2W9VJfIpnf3yBuAto7zvKe/G1nxH4Bt6WTJQCkUjcs\nN3qPWsx1VslsAEz7bXGiHym6Ay4xF28bQ9XYIokIQXd0T2rD3/lNGxNtORZ2bKjD\nvOzYzvh2idUIY1DgGWJ11gtHFIA9CvHcW+SMPEhkcKZJAO51ayFBqTSSpiorVwTq\na0cB+cgmCQOI4/MY+kIvzoexfG7xhkUqe0wxmph9RQQxlTbNQDCdaxSgwbF2T+gw\nbyaDvkS4xtR6Soj7BKjKAmcnf5fn4C5Or0KLUqMzBtDMbfQQihn62iZJN6ZZ/4dg\nq4HTqyVpyuzMXsFpJ9L/FqH2DJ4exGGpBv00ba/Zauy7GsqOc5PnNBsYaHCply0X\n407DRx51t9YwYI/ttValuehq9+gRJpOTTKp6AjZn/a5Yt3h6jDgpNfM/EyLFIY9z\nV6CXqQQ/8JRvaik/JsGCf+eeLZOw4koIjZGEAg04iuyNTjhx0e/QHEVcYAqNLhXG\nrCTTbCn3NSUO9qxEXC+K/1m1kaXoCGA0UWlVGZ1JSifbbMx0yxq/brpEZPUYm+32\no8XfbocBWljFUJ+6aljTvZ3LQLKTSPW7TFO+GXycAOmCGhlXh2tlc6iTc41PACqy\nyy+mHmSv\n=kkH7\n-----END PGP PUBLIC KEY BLOCK-----"
+            ]
+          }
+        },
+        {
+          "type": "org.osbuild.locale",
+          "options": {
+            "language": "C.UTF-8"
+          }
+        },
+        {
+          "type": "org.osbuild.ostree.init",
+          "options": {
+            "path": "/usr/share/nginx/html/repo"
+          }
+        },
+        {
+          "type": "org.osbuild.ostree.pull",
+          "inputs": {
+            "commits": {
+              "type": "org.osbuild.ostree",
+              "origin": "org.osbuild.pipeline",
+              "references": {
+                "name:ostree-commit": {
+                  "ref": "centos/9/x86_64/edge"
+                }
+              }
+            }
+          },
+          "options": {
+            "repo": "/usr/share/nginx/html/repo"
+          }
+        },
+        {
+          "type": "org.osbuild.chmod",
+          "options": {
+            "items": {
+              "/var/log/nginx": {
+                "mode": "a+rwX",
+                "recursive": true
+              }
+            }
+          }
+        },
+        {
+          "type": "org.osbuild.chmod",
+          "options": {
+            "items": {
+              "/var/lib/nginx": {
+                "mode": "a+rwX",
+                "recursive": true
+              }
+            }
+          }
+        },
+        {
+          "type": "org.osbuild.nginx.conf",
+          "options": {
+            "path": "/etc/nginx.conf",
+            "config": {
+              "listen": "8080",
+              "root": "/usr/share/nginx/html",
+              "pid": "/tmp/nginx.pid",
+              "daemon": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "container",
+      "build": "name:build",
+      "stages": [
+        {
+          "type": "org.osbuild.oci-archive",
+          "inputs": {
+            "base": {
+              "type": "org.osbuild.tree",
+              "origin": "org.osbuild.pipeline",
+              "references": [
+                "name:container-tree"
+              ]
+            }
+          },
+          "options": {
+            "architecture": "x86_64",
+            "filename": "container.tar",
+            "config": {
+              "Cmd": [
+                "nginx",
+                "-c",
+                "/etc/nginx.conf"
+              ],
+              "ExposedPorts": [
+                "8080"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "sources": {
+    "org.osbuild.curl": {
+      "items": {
+        "sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15": {
+          "url": "https://example.com/repo/packages/dosfstools"
+        },
+        "sha256:0a297cf5549425fa4f7cf9236959e92d97dc3ff0c42506ede88c253073891f11": {
+          "url": "https://example.com/repo/packages/clevis-luks"
+        },
+        "sha256:0d6be69b264717f2dd33652e212b173104b4a647b7c11ae72e9885f11cd312fb": {
+          "url": "https://example.com/repo/packages/passwd"
+        },
+        "sha256:0f75ba9658721aa3a185e6ac18b63b7fa3b709a5ec264be07d1f35408e003a8a": {
+          "url": "https://example.com/repo/packages/iptables"
+        },
+        "sha256:10d813242917dfde64a292f0744a6c332d29f907a8ebb31188af6ea8de1d1efa": {
+          "url": "https://example.com/repo/packages/iwl105-firmware"
+        },
+        "sha256:1a0970a720caab2869fc7eb436e6b7656fc7efbb24cfa72ae5b49e2f6acbd7ca": {
+          "url": "https://example.com/repo/packages/redhat-release"
+        },
+        "sha256:1a7e54e138d71deef08348a2b08113c7f7581014986839f7afe92fd956b31baa": {
+          "url": "https://example.com/repo/packages/clevis-dracut"
+        },
+        "sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d": {
+          "url": "https://example.com/repo/packages/glibc"
+        },
+        "sha256:2148952c2c47033e44ec61fa83f01d8688db767553a0d2b6260428373d938fb8": {
+          "url": "https://example.com/repo/packages/attr"
+        },
+        "sha256:24e5e1c2bbef565360c392851175f46821fc21d6725503a600353625b4c9209c": {
+          "url": "https://example.com/repo/packages/sudo"
+        },
+        "sha256:261063ce089e84d540c499ef21de9486c2be4ee6c79142a2dca537262239e6a5": {
+          "url": "https://example.com/repo/packages/traceroute"
+        },
+        "sha256:2b90c77eadb96acadc4e8fcdd394714af190e7711bff194e1209a683228a3b68": {
+          "url": "https://example.com/repo/packages/policycoreutils-python-utils"
+        },
+        "sha256:2f259bab93aaaaa2542ba43ef33eb990d0999ee1b9924b557b7be53c0b7a1bb9": {
+          "url": "https://example.com/repo/packages/podman"
+        },
+        "sha256:3745e8dd111be6023e8fc59dfb541e0de5a9432489285b0c85e1ddf394624c9f": {
+          "url": "https://example.com/repo/packages/e2fsprogs"
+        },
+        "sha256:37d2b12d5d9abc2a364ef9448767ee03938e383c0284193477dc7618f4b7c6c2": {
+          "url": "https://example.com/repo/packages/bash"
+        },
+        "sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0": {
+          "url": "https://example.com/repo/packages/coreutils"
+        },
+        "sha256:3ab9282b0620aef4eaa81d22af2b529e7e45993113083d99e220c83dd5203fef": {
+          "url": "https://example.com/repo/packages/fuse-overlayfs"
+        },
+        "sha256:3cc2ce65b79da03dbdb0dd90b29f773ed36810fe411347347186840029f631a8": {
+          "url": "https://example.com/repo/packages/setools-console"
+        },
+        "sha256:3fe9a8dfca0f4e96aa36bca306729179202f3854488648a3aca7bdf80bc1bb81": {
+          "url": "https://example.com/repo/packages/ignition"
+        },
+        "sha256:427e4b79b1f0fc90306cbe064b1297b21dc6835bfa656d3bf46bc156e3f24bb0": {
+          "url": "https://example.com/repo/packages/curl"
+        },
+        "sha256:4791c5734c81dcc16b25ab5a006d8dd8250b9555a539e557cac9bea5a60fecce": {
+          "url": "https://example.com/repo/packages/iwl100-firmware"
+        },
+        "sha256:47b7e192a116767577c34ddb8487411519a1461df1d80b482f4622dc6c1f8674": {
+          "url": "https://example.com/repo/packages/iwl2030-firmware"
+        },
+        "sha256:4f7872f3a4c4decf34923a48986e52563d2a58bc3225b1890b84b52e7defce09": {
+          "url": "https://example.com/repo/packages/basesystem"
+        },
+        "sha256:4fdd3b6201a22c7814d6e67dbb7a17790224ea0fd32ef0a0ccb0a5485eae4c9d": {
+          "url": "https://example.com/repo/packages/less"
+        },
+        "sha256:54190fea07d72a2037bccd91ff753c29cb4a244bc4cf1d22f622ec0ad8974eba": {
+          "url": "https://example.com/repo/packages/greenboot"
+        },
+        "sha256:557bd0eaadc03a42f7034eaed1acbf4299219213aef48dddee1594d0d0017c37": {
+          "url": "https://example.com/repo/packages/ssh-key-dir"
+        },
+        "sha256:563a278902fa76bae3ec1833f24ff89abe26329b1d32af9aaa924d6fc6fd68aa": {
+          "url": "https://example.com/repo/packages/NetworkManager"
+        },
+        "sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00": {
+          "url": "https://example.com/repo/packages/dracut-config-generic"
+        },
+        "sha256:5b0513b8ca5a7f03601efc10934409d271890e6ae7a3264445e7397233eac6f8": {
+          "url": "https://example.com/repo/packages/procps-ng"
+        },
+        "sha256:5be1ecc7935f1dd85635d4feedaf660594030253cc97c9e9ca3819ffeac36b65": {
+          "url": "https://example.com/repo/packages/nginx"
+        },
+        "sha256:5ca3521ab07c36460f021434bec6b14de927b8b5f54b8ef5c167618b62c2a188": {
+          "url": "https://example.com/repo/packages/fdo-client"
+        },
+        "sha256:5eb21f6a8946d3565412c31082b5ad447edf139a3ce9811d6c0090b632b9395e": {
+          "url": "https://example.com/repo/packages/iputils"
+        },
+        "sha256:5fdc7e383dc7e1b390e40c3012a2aa03978901c45f3597c1c239c51134d03dbe": {
+          "url": "https://example.com/repo/packages/chrony"
+        },
+        "sha256:63a4141fa4a0e2e30351d07d00cf678eacb40e1620cb245d9072b629ee8480b1": {
+          "url": "https://example.com/repo/packages/NetworkManager-wwan"
+        },
+        "sha256:6449d2f7bae9905add75f6d3e9b03de90743a1cef971f41aedeeb4139a1780d1": {
+          "url": "https://example.com/repo/packages/shadow-utils"
+        },
+        "sha256:674177213da94e10f7c2eb25574d59f64ab942abe4746b1eedf24bfd4dc17a76": {
+          "url": "https://example.com/repo/packages/microcode_ctl"
+        },
+        "sha256:6923dd1bc0460082c5d55a831908c24a282860b7f1cd6c2b79cf1bc8857c639c": {
+          "url": "https://example.com/repo/packages/kernel"
+        },
+        "sha256:6a406152d00694615f91b8b047dc939d75c834790e521ff3997e3734111518e6": {
+          "url": "https://example.com/repo/packages/criu"
+        },
+        "sha256:6e5afe9033e4767cc4ccec7ec2d18958a28dcfb7b8982cae4afde231b5bb8fad": {
+          "url": "https://example.com/repo/packages/keyutils"
+        },
+        "sha256:7063dece7cccf374d9fa1ee30ff23300fa42477e064e69be7bb6d01c0cfff682": {
+          "url": "https://example.com/repo/packages/hostname"
+        },
+        "sha256:75406d2ab1a318d214d3f17ad722986010c2d69fbac331fb855689191889f812": {
+          "url": "https://example.com/repo/packages/fdo-owner-cli"
+        },
+        "sha256:772a6043284a6f653b3a220d1a7fa5a482dcd910f81308b3e53e20abbe8acfee": {
+          "url": "https://example.com/repo/packages/skopeo"
+        },
+        "sha256:7b50bdd407a8c815d221c01203fc9a241648c79805faa36a0dc70e9d3a46c7e5": {
+          "url": "https://example.com/repo/packages/firewalld"
+        },
+        "sha256:7d02017322fc296d1d3b7a7f79f6f7053a51b062179ef618086509af08a12f5a": {
+          "url": "https://example.com/repo/packages/openssh-server"
+        },
+        "sha256:7e41bc67e45e9633f10b8c4ab76c6cffba2bd76b9d3859f1fe51337e9978c760": {
+          "url": "https://example.com/repo/packages/nss-altfiles"
+        },
+        "sha256:7f72cc3ac75a624f94ec606d8ddb4dbf6385595499e5449fd0d369d83fdb6467": {
+          "url": "https://example.com/repo/packages/iwl6050-firmware"
+        },
+        "sha256:874acaf989b725037ce173f517404baeb8d2643275bf972edbae7c947e7c1071": {
+          "url": "https://example.com/repo/packages/iwl5150-firmware"
+        },
+        "sha256:87fdf23aeb0c0b27488ecbabd19e8fa175df1b298369845787beb99ddc849714": {
+          "url": "https://example.com/repo/packages/iwl135-firmware"
+        },
+        "sha256:8a1bf05d306aa663e856f3c450c8b2ddc6800116b818c7d3b65503cd89f7682a": {
+          "url": "https://example.com/repo/packages/platform-python"
+        },
+        "sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a": {
+          "url": "https://example.com/repo/packages/xz"
+        },
+        "sha256:8fb6d5f37e8055ce720bd0b1d56587f88c0071f285966ba17e72b2b12672aa73": {
+          "url": "https://example.com/repo/packages/setup"
+        },
+        "sha256:8ff8d40e4a4c726df40795e3134432ac66f7d055d54639c1026e341b6d2bd6e7": {
+          "url": "https://example.com/repo/packages/rsync"
+        },
+        "sha256:90aebae315675cbf04612de4f7d5874850f48e0b8dd82becbeaa47ca93f5ebfb": {
+          "url": "https://example.com/repo/packages/tar"
+        },
+        "sha256:9370ee4e95b7172989b9fd3f81860093529113ba42b69be340467d87a94bb253": {
+          "url": "https://example.com/repo/packages/shim-x64"
+        },
+        "sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700": {
+          "url": "https://example.com/repo/packages/policycoreutils"
+        },
+        "sha256:946ad7b6251e28d609831d292e9201bccb7ac4acfae29a667bf8cf68715bdcc5": {
+          "url": "https://example.com/repo/packages/iproute"
+        },
+        "sha256:9e7ab438597fee20e16e8e441bed0ce966bd59e0fb993fa7c94be31fb1384d88": {
+          "url": "https://example.com/repo/packages/rpm"
+        },
+        "sha256:a07b0a6df6f248078ebaf93e5bea115093f8a79e0a830e383b6c0b9f7f1605f5": {
+          "url": "https://example.com/repo/packages/grub2-pc"
+        },
+        "sha256:a1604eba051c0e913db388ce4a80278bab0ee1bc5a8181aa6ae5bee904adcb24": {
+          "url": "https://example.com/repo/packages/pinentry"
+        },
+        "sha256:a1b3288078a1eb056e2062f7da9acd95c708f987143d832425cdc9b5f3ab6fa6": {
+          "url": "https://example.com/repo/packages/containernetworking-plugins"
+        },
+        "sha256:a45298c4ca08fadc8220c2166c430c8ce2b0cf5add3459ecb12fb9264c0c5943": {
+          "url": "https://example.com/repo/packages/ima-evm-utils"
+        },
+        "sha256:a9c2cd1e4311be8781e7421119b8cdeb9c0f36f7d8c63144a3fb2fd6c0ad1018": {
+          "url": "https://example.com/repo/packages/iwl3160-firmware"
+        },
+        "sha256:aa6d4532f128420f4d741f2834cd8d1d146bbbdc9554aef454b7adb8ff66f748": {
+          "url": "https://example.com/repo/packages/gnupg2"
+        },
+        "sha256:ac31b31649786ed1bb6501121fd43973040b763991a648e673f6853d15627ecd": {
+          "url": "https://example.com/repo/packages/wpa_supplicant"
+        },
+        "sha256:adb519257aeb1f37c2d1813d52f5d5d9891594019d48462a01ac8820de714b17": {
+          "url": "https://example.com/repo/packages/tmux"
+        },
+        "sha256:b268850ef14fd72b9dd55287919124dac642d0fdea27da428dba3ea83e610b27": {
+          "url": "https://example.com/repo/packages/bash-completion"
+        },
+        "sha256:b4fccab00160d7f7638cbbb71ee3404bf7c512fd6b35ab8637d3271cf33c0e58": {
+          "url": "https://example.com/repo/packages/ignition-edge"
+        },
+        "sha256:b81f37a043a6f767e7c94d105f4bd31282f3ecc20680bb9d09bd93461cf4c863": {
+          "url": "https://example.com/repo/packages/audit"
+        },
+        "sha256:ba6559ec248d211b5cfcc313380c7a871da23f845937f429f6304cc841c500cf": {
+          "url": "https://example.com/repo/packages/vim-minimal"
+        },
+        "sha256:bf079a7045b8c53dd15c009532e5f1c789260a8a2debb1eddd67ecf47712dde8": {
+          "url": "https://example.com/repo/packages/iwl2000-firmware"
+        },
+        "sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528": {
+          "url": "https://example.com/repo/packages/selinux-policy-targeted"
+        },
+        "sha256:c0946106b732f9f6ae889101ab987ed1bbcfe3eda2ad0a971be31575ad676851": {
+          "url": "https://example.com/repo/packages/sos"
+        },
+        "sha256:c1cc69e61c0f1c7ade8df0f2994e582e7c1f2c57d1ec192a0baf9f96b7739d9d": {
+          "url": "https://example.com/repo/packages/python3"
+        },
+        "sha256:c3431e360e61e2181051123799078edc5708114fb6b646dd830f022e3f99ae1e": {
+          "url": "https://example.com/repo/packages/polkit"
+        },
+        "sha256:c38a19b3443f7bc00411db2850001c2fa25d751544c364e1802148be05021cc0": {
+          "url": "https://example.com/repo/packages/iwl5000-firmware"
+        },
+        "sha256:c8d77bf4d8b1a10dd67a283d0c82bd96c9d5609860f84d7fc77692a36ab9b4c2": {
+          "url": "https://example.com/repo/packages/gzip"
+        },
+        "sha256:c9694c21375651122e49ce8afc80f69910c81f7843714dca0f1af12d3cdcd6b0": {
+          "url": "https://example.com/repo/packages/iwl1000-firmware"
+        },
+        "sha256:cda11faa92dac29081bda281f8d46dc5a8b31c8ebb6883c60cb87065af4f04b2": {
+          "url": "https://example.com/repo/packages/greenboot-default-health-checks"
+        },
+        "sha256:cf51db7aa57c11cf84bbe5f58f73eb415d037cd000bcce129696331d9bddfc3c": {
+          "url": "https://example.com/repo/packages/cryptsetup"
+        },
+        "sha256:d825698f566ed6f02c7b10f476dd40e53f95a52e00496f4b2be4f3a32036d9b8": {
+          "url": "https://example.com/repo/packages/usbguard"
+        },
+        "sha256:d90b7202318ad799fdf7fc011a6a3d09cb586853981e5c53f381c771e0dc549a": {
+          "url": "https://example.com/repo/packages/grub2"
+        },
+        "sha256:db755438d5157104180d27e8f8e21478dc2700470e611d4fe646be7972cdcad9": {
+          "url": "https://example.com/repo/packages/openssh-clients"
+        },
+        "sha256:dbf9956aa9c5ccd4c6d92f0550e959f58bb815fb570c305e9d93645eee2082d4": {
+          "url": "https://example.com/repo/packages/grub2-efi-x64"
+        },
+        "sha256:e0031c189e34e10d9c202fa8d75f72d3296a239164fe6b07e7dc206c7b723d98": {
+          "url": "https://example.com/repo/packages/systemd"
+        },
+        "sha256:e02609638dda40e0b255a42710c10c3604a4201a42d6290cfa28541d4c0a8506": {
+          "url": "https://example.com/repo/packages/container-selinux"
+        },
+        "sha256:e243470295e7a4ed4c248443bf78f4d827988f58767c47592545f77e76839439": {
+          "url": "https://example.com/repo/packages/dnsmasq"
+        },
+        "sha256:e2f24de304a49d3d3c1261466376ab341c3834eb683d806cb534587f4fd48f8d": {
+          "url": "https://example.com/repo/packages/efibootmgr"
+        },
+        "sha256:e422e1641a99c5a045bc0b596ef5ce6429c8e7744f016444cedacd4eaf5d3e4c": {
+          "url": "https://example.com/repo/packages/rootfiles"
+        },
+        "sha256:ebe3262ae97c575e316064735df66981d0a698e5c45b4c4b3294789e6c10c229": {
+          "url": "https://example.com/repo/packages/slirp4netns"
+        },
+        "sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d": {
+          "url": "https://example.com/repo/packages/rpm-ostree"
+        },
+        "sha256:ee72af381cca923b80a2759ce0daae8dbe0edc315ffe9732eae39c739280117e": {
+          "url": "https://example.com/repo/packages/clevis"
+        },
+        "sha256:f19322aff95a0dab072e7d976be364f553e46efd51e1a602adae348b7c38af29": {
+          "url": "https://example.com/repo/packages/NetworkManager-wifi"
+        },
+        "sha256:f486d76df6f0ea41b7d6acb72751d8eb4cc2a3f04e6273154fef5e76cab27e11": {
+          "url": "https://example.com/repo/packages/util-linux"
+        },
+        "sha256:f4dc4ad92c4e57553b004ecd08561dd6b15d5dc7d99869c499544a890f18eddc": {
+          "url": "https://example.com/repo/packages/lvm2"
+        },
+        "sha256:f6fad119f40a1aae00b54c0de6a0fa24a1e35d4bf1284bffcfd7134bdbb837e1": {
+          "url": "https://example.com/repo/packages/glibc-minimal-langpack"
+        },
+        "sha256:fbc15b96c51eaf5c099caa6a6658257c6f9a0a4c148ed907c564ad993079ac23": {
+          "url": "https://example.com/repo/packages/dracut-network"
+        },
+        "sha256:fc8aa064642e279d6d03beb27074f88fe4e3182c2dfe3a4117f135b9662ae2b7": {
+          "url": "https://example.com/repo/packages/iwl7260-firmware"
+        }
+      }
+    }
+  }
+}

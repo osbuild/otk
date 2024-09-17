@@ -97,11 +97,11 @@ otk.define:
             - dracut-config-rescue
             - qemu-guest-agent
 
-otk.include: "common/gen-partition-table-x86_64.yaml"
+otk.include: "common/partition-table/x86_64.yaml"
 
 otk.target.osbuild:
   pipelines:
-    - otk.include: "pipeline/build.yaml"
+    - otk.include: "pipeline/build/generic.yaml"
     - name: os
       build: name:build
       stages:
@@ -211,7 +211,7 @@ otk.target.osbuild:
               PasswordAuthentication: false
         - otk.external.otk-make-fstab-stage:
             ${filesystem}
-        - otk.include: fragment/grub2.yaml
+        - otk.include: fragment/grub2/x86_64.yaml
         - type: org.osbuild.systemd
           options:
             enabled_services:
@@ -229,7 +229,7 @@ otk.target.osbuild:
         - type: org.osbuild.selinux
           options:
             file_contexts: etc/selinux/targeted/contexts/files/file_contexts
-    - otk.include: pipeline/image.yaml
+    - otk.include: pipeline/image/x86_64.yaml
   sources:
     otk.external.osbuild-make-depsolve-dnf4-curl-source:
       packagesets:
