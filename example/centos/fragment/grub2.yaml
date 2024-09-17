@@ -7,7 +7,7 @@ options:
   uefi:
     vendor: centos
     unified: true
-  saved_entry: ffffffffffffffffffffffffffffffff-0-0.noarch
+  saved_entry: ffffffffffffffffffffffffffffffff-${packages.os.const.versions.kernel.version}-${packages.os.const.versions.kernel.release}.${packages.os.const.versions.kernel.arch}
   write_cmdline: false
   config:
     default: saved
