@@ -1,10 +1,11 @@
 import json
 import sys
+from typing import TextIO
 
 
-def root():
-    data = json.load(sys.stdin)
-    tree = data["tree"]["packages"]["const"]["internal"]
+def root(input_stream: TextIO) -> None:
+    data = json.load(input_stream)
+    tree = data["tree"]["packageset"]["const"]["internal"]
 
     sys.stdout.write(
         json.dumps(
@@ -33,7 +34,7 @@ def root():
 
 
 def main():
-    root()
+    root(sys.stdin)
 
 
 if __name__ == "__main__":
