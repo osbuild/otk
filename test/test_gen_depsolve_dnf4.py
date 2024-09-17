@@ -45,6 +45,17 @@ def test_gen_depsolve_dnf4_under_test_mock_data(monkeypatch, capsys):
                         },
                     ],
                 },
+                "versions": {
+                    "pkg1": {
+                        "arch": "noarch",
+                        "checksum": "sha256:3d7b91c2dd3273400f26d21a492fcdfdc3dde228cd5627247dfef745ce717755",
+                        "epoch": "",
+                        "name": "pkg1",
+                        "release": "0",
+                        "remote_location": "https://example.com/repo/packages/pkg1",
+                        "version": "0",
+                    },
+                },
             },
         },
     }
@@ -52,7 +63,26 @@ def test_gen_depsolve_dnf4_under_test_mock_data(monkeypatch, capsys):
 
 def make_dnfjson_mock_run_result():
     mock_output = json.dumps({
-        "packages": ["pkg1", "dep-pkg1"],
+        "packages": [
+            {
+                "name": "pkg1",
+                "checksum": "sha256:3d7b91c2dd3273400f26d21a492fcdfdc3dde228cd5627247dfef745ce717755",
+                "remote_location": "https://example.com/repo/packages/pkg1",
+                "version": "0",
+                "epoch": "",
+                "release": "0",
+                "arch": "noarch"
+            },
+            {
+                "name": "pkg1-dep",
+                "checksum": "sha256:3d7b91c2dd3273400f26d21a492fcdfdc3dde228cd5627247dfef745ce717755",
+                "remote_location": "https://example.com/repo/packages/pkg1-dep",
+                "version": "0",
+                "epoch": "",
+                "release": "0",
+                "arch": "noarch"
+            },
+        ],
     })
     run_result = Mock()
     run_result.stdout = mock_output

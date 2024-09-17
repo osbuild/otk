@@ -16,6 +16,14 @@ def transform(packages):
     # other externals.
     data["tree"]["const"]["internal"]["packages"] = packages
 
+    # We also store all resolved packages and some meta information about
+    # them, this just turns the list into a more user-friendly accessible
+    # map keyed by package name.
+    data["tree"]["const"]["versions"] = {}
+
+    for package in packages:
+        data["tree"]["const"]["versions"][package["name"]] = package
+
     return data
 
 
