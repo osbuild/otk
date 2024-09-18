@@ -72,6 +72,8 @@ external:
 	for otk_cmd in gen-partition-table \
 			make-fstab-stage \
 			make-grub2-inst-stage \
+			resolve-containers \
+			resolve-ostree-commit \
 			make-partition-mounts-devices \
 			make-partition-stages; do \
 		GOBIN="$(SRCDIR)/external" go install -tags "$(CONTAINERS_STORAGE_THIN_TAGS)" "$(IMAGES_REF)"/cmd/otk-$${otk_cmd}@main ; \
