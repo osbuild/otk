@@ -34,7 +34,7 @@ def mockdata(packages):
             "release": "0",
             "arch": "noarch",
         }
-        for p in packages
+        for p in packages["include"] + [f"exclude:{p}" for p in packages["exclude"]]
     ]
 
 
@@ -42,7 +42,7 @@ def root(input_stream: TextIO) -> None:
     data = json.loads(input_stream.read())
     tree = data["tree"]
     if "OTK_UNDER_TEST" in os.environ:
-        packages = mockdata(tree["packages"]["include"])
+        packages = mockdata(tree["packages"])
         sys.stdout.write(json.dumps(transform(packages)))
         return
 
