@@ -69,6 +69,7 @@ otk.define:
           exclude:
             - aic94xx-firmware
             - alsa-firmware
+            - alsa-lib
             - alsa-tools-firmware
             - biosdevname
             - firewalld
