@@ -119,7 +119,7 @@ otk.target.osbuild:
         - type: org.osbuild.kernel-cmdline
           options:
             root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
-            kernel_opts: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
+            kernel_opts: ${kernel.cmdline}
         - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
             packageset: ${packages.os}
             gpgkeys:
