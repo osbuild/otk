@@ -1,10 +1,41 @@
 otk.version: "1"
 
+otk.define:
+  filesystem:
+    modifications:
+    # empty
+  kernel:
+    cmdline: net.ifnames=0 biosdevname=0 scsi_mod.use_blk_mq=Y console=ttyS0,38400n8d
+  packages:
+    build:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: x86_64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories.yaml"
+        packages:
+          include:
+            - coreutils
+            - dosfstools
+            - glibc
+            - platform-python
+            - policycoreutils
+            - python3
+            - qemu-img
+            - rpm
+            - selinux-policy-targeted
+            - systemd
+            - xfsprogs
+            - xz
+          exclude: []
+
 otk.target.osbuild:
   pipelines:
     - name: build
       runner: org.osbuild.centos9
       stages:
+        # XXX different GPG keys :(
         - type: org.osbuild.rpm
           inputs:
             packages:
@@ -173,7 +204,7 @@ otk.target.osbuild:
         - type: org.osbuild.kernel-cmdline
           options:
             root_fs_uuid: 2b415803-b751-41ec-9968-33c05812bc4b
-            kernel_opts: net.ifnames=0 biosdevname=0 scsi_mod.use_blk_mq=Y console=ttyS0,38400n8d
+            kernel_opts: ${kernel.cmdline}
         - type: org.osbuild.rpm
           inputs:
             packages:
@@ -424,7 +455,7 @@ otk.target.osbuild:
           options:
             root_fs_uuid: 2b415803-b751-41ec-9968-33c05812bc4b
             boot_fs_uuid: d121c021-958c-4b7b-931a-5740636d0f3a
-            kernel_opts: net.ifnames=0 biosdevname=0 scsi_mod.use_blk_mq=Y console=ttyS0,38400n8d
+            kernel_opts: ${kernel.cmdline}
             uefi:
               vendor: centos
               unified: true
