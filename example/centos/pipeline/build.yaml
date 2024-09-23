@@ -1,21 +1,12 @@
 name: build
-# source-epoch will support reproducible builds:
-# https://reproducible-builds.org/docs/source-date-epoch/
-source-epoch: ${source_epoch}
 runner: "org.osbuild.centos9"
 stages:
-  - otk.external.osbuild_depsolve_dnf4:
-    architecture: ${architecture}
-    releasever: ${version}
-    module_platform_id: platform:el${version}
-    docs: ${packages.build.docs}
-    weak: ${packages.build.weak}
-    repositories: ${packages.repositories}
-    gpgkeys: ${packages.keys}
-    packages: ${packages.buildroot.packages}
+  - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
+      packageset: ${packages.build}
+      gpgkeys:
+        otk.include: "../common/gpgkeys.yaml"
   - type: org.osbuild.selinux
     options:
       file_contexts: etc/selinux/targeted/contexts/files/file_contexts
       labels:
         /usr/bin/cp: system_u:object_r:install_exec_t:s0
-        /usr/bin/tar: system_u:object_r:install_exec_t:s0
