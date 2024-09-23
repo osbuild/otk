@@ -1,0 +1,12 @@
+name: archive
+build: "name:build"
+stages:
+  - type: org.osbuild.tar
+    options:
+      filename: root.tar.xz
+    inputs:
+      tree:
+        type: org.osbuild.tree
+        origin: org.osbuild.pipeline
+        references:
+          - "name:os"
