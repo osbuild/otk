@@ -240,31 +240,7 @@ otk.target.osbuild:
         - type: org.osbuild.selinux
           options:
             file_contexts: etc/selinux/targeted/contexts/files/file_contexts
-    - name: image
-      build: name:build
-      stages:
-        otk.op.join:
-          values:
-            - otk.external.otk-make-partition-stages:
-                ${filesystem}
-            - - type: org.osbuild.copy
-                inputs:
-                  root-tree:
-                    type: org.osbuild.tree
-                    origin: org.osbuild.pipeline
-                    references:
-                      - name:os
-                options:
-                  paths:
-                    - from: input://root-tree/
-                      to: mount://-/
-                devices:
-                  ${fs_options.devices}
-                mounts:
-                  ${fs_options.mounts}
-              - otk.external.otk-make-grub2-inst-stage:
-                  platform: i386-pc
-                  filesystem: ${filesystem}
+    - otk.include: "pipeline/image/x86_64.yaml"
   sources:
     otk.external.osbuild-make-depsolve-dnf4-curl-source:
       packagesets:
