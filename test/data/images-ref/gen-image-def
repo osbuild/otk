@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name,too-many-locals
 
 import json
 import os
@@ -15,6 +15,15 @@ import yaml
 class Dumper(yaml.Dumper):  # pylint: disable=too-many-ancestors
     def increase_indent(self, flow: bool = False, indentless: bool = False) -> None:
         return super().increase_indent(flow=flow, indentless=False)
+
+
+def uuid_for_label(fs_label, osbuild_manifest):
+    for p in osbuild_manifest["pipelines"]:
+        for stage in p["stages"]:
+            if stage["type"].startswith("org.osbuild.mkfs."):
+                if stage["options"].get("label") == fs_label:
+                    return stage["options"].get("uuid")
+    return ""
 
 
 def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver: str, arch: str, img_type: str) -> None:
@@ -51,16 +60,11 @@ def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver:
     # XXX: this is hacky, the OSBUILD_TESTING_RNG_SEED is set for both
     # "gen-manifests" and "otk-gen-partition-tables" but the partition
     # table code is called slightly differently which means that the UUIDs
-    # get out of sync. We need this (f)ugly mapping here to fix that.
-    #
-    # "gen-manifests" root UUID -> "otk-gen-partition-table" UUID (qcow2)
-    manifest_str = manifest_str.replace("dde1466f-f75b-4f05-bcf6-8386564c6f79", "9851898e-0b30-437d-8fad-51ec16c3697f")
-    # ami
-    manifest_str = manifest_str.replace("1d5b4d74-fd75-4ba1-a6e1-f1737dd4cdd1", "9851898e-0b30-437d-8fad-51ec16c3697f")
-    # "gen-manifests" boot UUID -> "otk-gen-partition-table" UUID (qcow2)
-    manifest_str = manifest_str.replace("e4520b54-3a3f-4ed3-b8a6-e326beec8e93", "dbd21911-1c4e-4107-8a9f-14fe6e751358")
-    # ami
-    manifest_str = manifest_str.replace("44019259-d936-49a3-a807-063467c4551a", "dbd21911-1c4e-4107-8a9f-14fe6e751358")
+    # get out of sync. We need this (f)ugly helper to fix it:
+    rootfs_uuid = uuid_for_label("root", json.loads(manifest_str))
+    manifest_str = manifest_str.replace(rootfs_uuid, "9851898e-0b30-437d-8fad-51ec16c3697f")
+    if bootfs_uuid := uuid_for_label("boot", json.loads(manifest_str)):
+        manifest_str = manifest_str.replace(bootfs_uuid, "dbd21911-1c4e-4107-8a9f-14fe6e751358")
 
     # now convert to json
     manifest = json.loads(manifest_str)
