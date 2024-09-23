@@ -13,10 +13,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          - id: "AppStream"
-            baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-x86_64-appstream-20240901"
-          - id: "BaseOS"
-            baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-x86_64-baseos-20240901"
+          otk.include: "common/repositories.yaml"
         packages:
           include:
             - coreutils
@@ -39,10 +36,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          - id: "AppStream"
-            baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-x86_64-appstream-20240901"
-          - id: "BaseOS"
-            baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-x86_64-baseos-20240901"
+          otk.include: "common/repositories.yaml"
         packages:
           include:
             - "@core"
