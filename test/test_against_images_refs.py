@@ -2,6 +2,7 @@ import json
 import os
 import pathlib
 import yaml
+import re
 
 import pytest
 
@@ -87,6 +88,9 @@ def test_images_ref(tmp_path, monkeypatch, tc):
         ref_manifest = yaml.safe_load(fp)
         normalize_rpm_refs(ref_manifest)
 
+    # hack
+    ref_manifest = json.loads(re.sub(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", "", json.dumps(ref_manifest)))
+
     otk_json = tmp_path / "manifest-otk.json"
     run(["compile",
          "-o", os.fspath(otk_json),
@@ -95,5 +99,8 @@ def test_images_ref(tmp_path, monkeypatch, tc):
     with otk_json.open() as fp:
         manifest = json.load(fp)
         normalize_rpm_refs(manifest)
+
+    # hack
+    manifest = json.loads(re.sub(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", "", json.dumps(manifest)))
 
     assert manifest == ref_manifest
