@@ -77,7 +77,7 @@ def run():
         # TODO: remove images-git-checkout parameter and use something
         # like "go run github.com/osbuild/images/cmd/build@latest" but
         # this needs something like https://github.com/osbuild/images/pull/902
-        print("need <image-git-checkout> <distoname> <distrover> <arch> <img_type> argument", file=sys.stderr)
+        print("need <image-git-checkout> <distroname> <distrover> <arch> <img_type> argument", file=sys.stderr)
         sys.exit(1)
     generate_reference_image(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 
