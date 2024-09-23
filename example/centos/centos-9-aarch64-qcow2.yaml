@@ -108,7 +108,7 @@ otk.include: "common/partition-table/aarch64.yaml"
 
 otk.target.osbuild:
   pipelines:
-    - otk.include: "pipeline/build.yaml"
+    - otk.include: "pipeline/build/generic.yaml"
     - name: os
       build: name:build
       stages:

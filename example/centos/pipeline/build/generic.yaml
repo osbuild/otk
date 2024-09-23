@@ -1,0 +1,12 @@
+name: build
+runner: "org.osbuild.centos9"
+stages:
+  - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
+      packageset: ${packages.build}
+      gpgkeys:
+        otk.include: "../../common/gpgkeys.yaml"
+  - type: org.osbuild.selinux
+    options:
+      file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+      labels:
+        /usr/bin/cp: system_u:object_r:install_exec_t:s0
