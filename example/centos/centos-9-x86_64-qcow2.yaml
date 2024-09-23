@@ -140,7 +140,7 @@ otk.target.osbuild:
               no_zero_conf: true
         - otk.external.otk-make-fstab-stage:
             ${filesystem}
-        - otk.include: fragment/grub2.yaml
+        - otk.include: "fragment/grub2/x86_64.yaml"
         - type: org.osbuild.systemd
           options:
             default_target: multi-user.target
