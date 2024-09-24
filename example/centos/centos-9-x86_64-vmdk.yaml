@@ -1,0 +1,269 @@
+otk.version: "1"
+
+otk.define:
+  kernel:
+    cmdline: ro net.ifnames=0
+  packages:
+    build:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: x86_64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/x86_64.yaml"
+        packages:
+          include:
+            - coreutils
+            - dosfstools
+            - glibc
+            - grub2-pc
+            - platform-python
+            - policycoreutils
+            - python3
+            - rpm
+            - selinux-policy-targeted
+            - systemd
+            - qemu-img
+            - xfsprogs
+            - xz
+          exclude: []
+    os:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: x86_64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/x86_64.yaml"
+        packages:
+          include:
+            - "@core"
+            - chrony
+            - cloud-init
+            - dosfstools
+            - dracut-config-generic
+            - efibootmgr
+            - firewalld
+            - grub2-efi-x64
+            - grub2-pc
+            - kernel
+            - langpacks-en
+            - open-vm-tools
+            - selinux-policy-targeted
+            - shim-x64
+            - tuned
+            - xfsprogs
+          exclude:
+            - dracut-config-rescue
+            - rng-tools
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: "pipeline/build/generic.yaml"
+    - name: os
+      build: name:build
+      stages:
+        - type: org.osbuild.kernel-cmdline
+          options:
+            root_fs_uuid: 1eb69256-7590-4ae6-ac49-497072e9e23b
+            kernel_opts: ${kernel.cmdline}
+        - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
+            packageset: ${packages.os}
+            gpgkeys:
+              otk.include: "common/gpgkeys.yaml"
+        - type: org.osbuild.fix-bls
+          options:
+            prefix: ''
+        - type: org.osbuild.locale
+          options:
+            language: en_US.UTF-8
+        - type: org.osbuild.timezone
+          options:
+            zone: America/New_York
+        - type: org.osbuild.sysconfig
+          options:
+            kernel:
+              update_default: true
+              default_kernel: kernel
+            network:
+              networking: true
+              no_zero_conf: true
+        - type: org.osbuild.fstab
+          options:
+            filesystems:
+              - uuid: 1eb69256-7590-4ae6-ac49-497072e9e23b
+                vfs_type: xfs
+                path: /
+                options: defaults
+              - uuid: 2b847415-c63a-4dba-aad1-bc828ccf88b6
+                vfs_type: xfs
+                path: /boot
+                options: defaults
+              - uuid: 7B77-95E7
+                vfs_type: vfat
+                path: /boot/efi
+                options: defaults,uid=0,gid=0,umask=077,shortname=winnt
+                passno: 2
+        - type: org.osbuild.grub2
+          options:
+            root_fs_uuid: 1eb69256-7590-4ae6-ac49-497072e9e23b
+            boot_fs_uuid: 2b847415-c63a-4dba-aad1-bc828ccf88b6
+            kernel_opts: ${kernel.cmdline}
+            legacy: i386-pc
+            uefi:
+              vendor: centos
+              unified: true
+            saved_entry: ffffffffffffffffffffffffffffffff-8-2.fk1.x86_64
+            write_cmdline: false
+            config:
+              default: saved
+        - type: org.osbuild.selinux
+          options:
+            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+    - name: image
+      build: name:build
+      stages:
+        - type: org.osbuild.truncate
+          options:
+            filename: disk.img
+            size: '4507828224'
+        - type: org.osbuild.sfdisk
+          options:
+            label: gpt
+            uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
+            partitions:
+              - bootable: true
+                size: 2048
+                start: 2048
+                type: 21686148-6449-6E6F-744E-656564454649
+                uuid: FAC7F1FB-3E8D-4137-A512-961DE09A5549
+              - size: 409600
+                start: 4096
+                type: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
+                uuid: 68B2905B-DF3E-4FB3-80FA-49D1E773AA33
+              - size: 2097152
+                start: 413696
+                type: BC13C2FF-59E6-4262-A352-B275FD6F7172
+                uuid: CB07C243-BC44-4717-853E-28852021225B
+              - size: 6293471
+                start: 2510848
+                type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+                uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
+          devices:
+            device:
+              type: org.osbuild.loopback
+              options:
+                filename: disk.img
+                lock: true
+        - type: org.osbuild.mkfs.fat
+          options:
+            volid: 7B7795E7
+          devices:
+            device:
+              type: org.osbuild.loopback
+              options:
+                filename: disk.img
+                start: 4096
+                size: 409600
+                lock: true
+        - type: org.osbuild.mkfs.xfs
+          options:
+            uuid: 2b847415-c63a-4dba-aad1-bc828ccf88b6
+            label: boot
+          devices:
+            device:
+              type: org.osbuild.loopback
+              options:
+                filename: disk.img
+                start: 413696
+                size: 2097152
+                lock: true
+        - type: org.osbuild.mkfs.xfs
+          options:
+            uuid: 1eb69256-7590-4ae6-ac49-497072e9e23b
+            label: root
+          devices:
+            device:
+              type: org.osbuild.loopback
+              options:
+                filename: disk.img
+                start: 2510848
+                size: 6293471
+                lock: true
+        - type: org.osbuild.copy
+          inputs:
+            root-tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:os
+          options:
+            paths:
+              - from: input://root-tree/
+                to: mount://-/
+          devices:
+            '-':
+              type: org.osbuild.loopback
+              options:
+                filename: disk.img
+                start: 2510848
+                size: 6293471
+            boot:
+              type: org.osbuild.loopback
+              options:
+                filename: disk.img
+                start: 413696
+                size: 2097152
+            boot-efi:
+              type: org.osbuild.loopback
+              options:
+                filename: disk.img
+                start: 4096
+                size: 409600
+          mounts:
+            - name: '-'
+              type: org.osbuild.xfs
+              source: '-'
+              target: /
+            - name: boot
+              type: org.osbuild.xfs
+              source: boot
+              target: /boot
+            - name: boot-efi
+              type: org.osbuild.fat
+              source: boot-efi
+              target: /boot/efi
+        - type: org.osbuild.grub2.inst
+          options:
+            filename: disk.img
+            platform: i386-pc
+            location: 2048
+            core:
+              type: mkimage
+              partlabel: gpt
+              filesystem: xfs
+            prefix:
+              type: partition
+              partlabel: gpt
+              number: 2
+              path: /grub2
+    - name: vmdk
+      build: name:build
+      stages:
+        - type: org.osbuild.qemu
+          inputs:
+            image:
+              type: org.osbuild.files
+              origin: org.osbuild.pipeline
+              references:
+                name:image:
+                  file: disk.img
+          options:
+            filename: disk.vmdk
+            format:
+              type: vmdk
+              subformat: streamOptimized
+  sources:
+    otk.external.osbuild-make-depsolve-dnf4-curl-source:
+      packagesets:
+        - ${packages.build}
+        - ${packages.os}
