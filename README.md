@@ -18,7 +18,19 @@ You can find `otk`'s documentation in the [/doc](./doc) subdirectory. This READM
 If you want to quickly run and try out `otk` without installation the easiest is to run our container image:
 
 ```
-podman run -i ghcr.io/osbuild/otk < omnifest.yaml
+podman run -i -v .:/app:z ghcr.io/osbuild/otk compile /app/test/data/base/01-define.yaml
+```
+
+or rebuild the container locally
+
+```shell
+make container
+```
+
+and run an example
+
+```shell
+make container-test
 ```
 
 If you want to hack on `otk` then read the [installation instructions](./doc/00-installation.md).

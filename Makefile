@@ -7,6 +7,19 @@ check-pre-commit:
 	  exit 1; \
 	}
 
+.PHONY: container
+container: ## rebuild the upstream container "ghcr.io/osbuild/otk" locally
+	podman build --build-arg CONTAINERS_STORAGE_THIN_TAGS="$(CONTAINERS_STORAGE_THIN_TAGS)" \
+	             --build-arg IMAGES_REF="$(IMAGES_REF)" \
+	             --tag otk \
+	             --pull=newer .
+
+CONTAINER_TEST_FILE?=example/centos/centos-9-x86_64-tar.yaml
+
+.PHONY: container-test
+container-test: container ## run an example command in the container to test it
+	podman run --rm -ti -v .:/app otk:latest compile /app/$(CONTAINER_TEST_FILE)
+
 .PHONY: lint
 lint: check-pre-commit
 	pre-commit run --all-files
@@ -37,13 +50,13 @@ git-diff-check:
 
 ## Package building
 SRCDIR ?= $(abspath .)
-COMMIT = $(shell (cd "$(SRCDIR)" && git rev-parse HEAD))
+COMMIT = $(shell (cd "$(SRCDIR)" && git rev-parse HEAD 2>/dev/null || echo "INVALID" ))
 RPM_SPECFILE=rpmbuild/SPECS/otk-$(COMMIT).spec
 RPM_TARBALL=rpmbuild/SOURCES/otk-$(COMMIT).tar.gz
 
 $(RPM_SPECFILE):
 	mkdir -p $(CURDIR)/rpmbuild/SPECS
-	(echo "%global commit $(COMMIT)"; git show HEAD:otk.spec) > $(RPM_SPECFILE)
+	(echo "%global commit $(COMMIT)"; git show HEAD:otk.spec 2>/dev/null || echo "INVALID SETUP" ) > $(RPM_SPECFILE)
 
 $(RPM_TARBALL):
 	mkdir -p $(CURDIR)/rpmbuild/SOURCES
