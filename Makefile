@@ -19,11 +19,33 @@ type: check-pre-commit
 format:
 	@find src test -name '*.py' | xargs autopep8 --in-place
 
+OSBUILD_GEN_DEPSOLVE_DNF4_EXECUTABLE := $(shell (which "osbuild-gen-depsolve-dnf4" 2>/dev/null))
+OSBUILD_MAKE_DEPSOLVE_DNF4_RPM_STAGE_EXECUTABLE := $(shell (which "osbuild-make-depsolve-dnf4-rpm-stage" 2>/dev/null))
+OSBUILD_MAKE_DEPSOLVE_DNF4_CURL_SOURCE_EXECUTABLE := $(shell (which "osbuild-make-depsolve-dnf4-curl-source" 2>/dev/null))
+
+.PHONY: check_binaries
+check_binaries:
+	@MISSING_BINS="" ; \
+	if [ -z "$(OSBUILD_GEN_DEPSOLVE_DNF4_EXECUTABLE)" ]; then \
+	  MISSING_BINS="$${MISSING_BINS} osbuild-gen-depsolve-dnf4"; \
+	fi; \
+	if [ -z "$(OSBUILD_MAKE_DEPSOLVE_DNF4_RPM_STAGE_EXECUTABLE)" ]; then \
+	  MISSING_BINS="$${MISSING_BINS} osbuild-make-depsolve-dnf4-rpm-stage"; \
+	fi; \
+	if [ -z "$(OSBUILD_MAKE_DEPSOLVE_DNF4_CURL_SOURCE_EXECUTABLE)" ]; then \
+	  MISSING_BINS="$${MISSING_BINS} osbuild-make-depsolve-dnf4-curl-source"; \
+	fi; \
+	if [ -n "$${MISSING_BINS}" ]; then \
+	  echo "Following binaries are missing:$${MISSING_BINS}" ; \
+	  echo "Please checkout 'doc/00-installation.md' how to activate the venv and install otk" \
+	  exit 1; \
+	fi
+
 .PHONY: test
-test: external
-	cp $(shell (which "osbuild-gen-depsolve-dnf4")) ./external/
-	cp $(shell (which "osbuild-make-depsolve-dnf4-rpm-stage")) ./external/
-	cp $(shell (which "osbuild-make-depsolve-dnf4-curl-source")) ./external/
+test: external check_binaries
+	cp $(OSBUILD_GEN_DEPSOLVE_DNF4_EXECUTABLE) ./external/
+	cp $(OSBUILD_MAKE_DEPSOLVE_DNF4_RPM_STAGE_EXECUTABLE) ./external/
+	cp $(OSBUILD_MAKE_DEPSOLVE_DNF4_CURL_SOURCE_EXECUTABLE) ./external/
 	@pytest
 
 .PHONY: push-check
