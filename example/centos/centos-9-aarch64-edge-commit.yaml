@@ -1,0 +1,218 @@
+otk.version: "1"
+
+otk.define:
+  filesystem:
+    modifications:
+    # empty
+  packages:
+    build:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: aarch64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/aarch64.yaml"
+        packages:
+          include:
+            - coreutils
+            - glibc
+            - platform-python
+            - policycoreutils
+            - python3
+            - rpm
+            - rpm-ostree
+            - selinux-policy-targeted
+            - systemd
+            - tar
+            - xz
+          exclude: []
+    os:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: aarch64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/aarch64.yaml"
+        packages:
+          include:
+            - NetworkManager
+            - NetworkManager-wifi
+            - NetworkManager-wwan
+            - attr
+            - audit
+            - basesystem
+            - bash
+            - bash-completion
+            - chrony
+            - clevis
+            - clevis-dracut
+            - clevis-luks
+            - container-selinux
+            - containernetworking-plugins
+            - coreutils
+            - criu
+            - cryptsetup
+            - curl
+            - dnsmasq
+            - dosfstools
+            - dracut-config-generic
+            - dracut-network
+            - e2fsprogs
+            - efibootmgr
+            - fdo-client
+            - fdo-owner-cli
+            - firewalld
+            - fuse-overlayfs
+            - glibc
+            - glibc-minimal-langpack
+            - gnupg2
+            - greenboot
+            - greenboot-default-health-checks
+            - grub2-efi-aa64
+            - grub2-tools
+            - gzip
+            - hostname
+            - ignition
+            - ignition-edge
+            - ima-evm-utils
+            - iproute
+            - iptables
+            - iputils
+            - iwl7260-firmware
+            - kernel
+            - keyutils
+            - less
+            - lvm2
+            - nss-altfiles
+            - openssh-clients
+            - openssh-server
+            - passwd
+            - pinentry
+            - platform-python
+            - podman
+            - policycoreutils
+            - policycoreutils-python-utils
+            - polkit
+            - procps-ng
+            - redhat-release
+            - rootfiles
+            - rpm
+            - rpm-ostree
+            - rsync
+            - selinux-policy-targeted
+            - setools-console
+            - setup
+            - shadow-utils
+            - shim-aa64
+            - skopeo
+            - slirp4netns
+            - sos
+            - ssh-key-dir
+            - sudo
+            - systemd
+            - tar
+            - tmux
+            - traceroute
+            - usbguard
+            - util-linux
+            - vim-minimal
+            - wpa_supplicant
+            - xz
+          exclude:
+            - rng-tools
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: "pipeline/build/tar.yaml"
+    - name: os
+      build: name:build
+      stages:
+        - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
+            packageset: ${packages.os}
+            gpgkeys:
+              otk.include: "common/gpgkeys.yaml"
+            options:
+              rpm_stage:
+                dbpath: /usr/share/rpm
+                disable_dracut: true
+                ostree_booted: true
+        - type: org.osbuild.fix-bls
+          options: {}
+        - type: org.osbuild.locale
+          options:
+            language: C.UTF-8
+        - type: org.osbuild.timezone
+          options:
+            zone: America/New_York
+        - type: org.osbuild.sysconfig
+          options:
+            kernel:
+              update_default: true
+              default_kernel: kernel
+            network:
+              networking: true
+              no_zero_conf: true
+        - type: org.osbuild.systemd.unit
+          options:
+            unit: grub-boot-success.timer
+            dropin: 10-disable-if-greenboot.conf
+            config:
+              Unit:
+                ConditionPathExists: '!/usr/libexec/greenboot/greenboot'
+            unit-type: global
+        - type: org.osbuild.systemd-journald
+          options:
+            filename: 10-persistent.conf
+            config:
+              Journal:
+                Storage: persistent
+        - type: org.osbuild.systemd
+          options:
+            enabled_services:
+              - NetworkManager.service
+              - firewalld.service
+              - sshd.service
+              - fdo-client-linuxapp.service
+              - ignition-firstboot-complete.service
+              - coreos-ignition-write-issues.service
+        - type: org.osbuild.selinux
+          options:
+            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+        - type: org.osbuild.ostree.preptree
+          options:
+            etc_group_members:
+              - wheel
+              - docker
+    - name: ostree-commit
+      build: name:build
+      stages:
+        - type: org.osbuild.ostree.init
+          options:
+            path: /repo
+        - type: org.osbuild.ostree.commit
+          inputs:
+            tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:os
+          options:
+            ref: centos/9/aarch64/edge
+            os_version: 9-stream
+    - name: commit-archive
+      build: name:build
+      stages:
+        - type: org.osbuild.tar
+          inputs:
+            tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:ostree-commit
+          options:
+            filename: commit.tar
+  sources:
+    otk.external.osbuild-make-depsolve-dnf4-curl-source:
+      packagesets:
+        - ${packages.build}
+        - ${packages.os}
