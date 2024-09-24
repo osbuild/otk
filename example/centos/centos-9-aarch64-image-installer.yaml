@@ -1,0 +1,572 @@
+otk.version: "1"
+
+otk.define:
+  filesystem:
+    modifications:
+    # empty
+  packages:
+    build:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: aarch64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/aarch64.yaml"
+        packages:
+          include:
+            - coreutils
+            - efibootmgr
+            - glibc
+            - grub2-efi-aa64
+            - grub2-efi-aa64-cdboot
+            - grub2-tools
+            - grub2-tools-extra
+            - grub2-tools-minimal
+            - isomd5sum
+            - lorax-templates-generic
+            - platform-python
+            - policycoreutils
+            - python3
+            - rpm
+            - selinux-policy-targeted
+            - shim-aa64
+            - squashfs-tools
+            - systemd
+            - tar
+            - xorriso
+            - xz
+          exclude: []
+    os:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: aarch64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/aarch64.yaml"
+        packages:
+          include:
+            - "@core"
+            - authselect-compat
+            - chrony
+            - cockpit-system
+            - cockpit-ws
+            - dhcp-client
+            - dnf
+            - dnf-utils
+            - dosfstools
+            - dracut-config-generic
+            - e2fsprogs
+            - efibootmgr
+            - firewalld
+            - glibc
+            - grub2-efi-aa64
+            - grub2-tools
+            - iwl100-firmware
+            - iwl1000-firmware
+            - iwl105-firmware
+            - iwl135-firmware
+            - iwl2000-firmware
+            - iwl2030-firmware
+            - iwl3160-firmware
+            - iwl5000-firmware
+            - iwl5150-firmware
+            - iwl6000g2a-firmware
+            - iwl6000g2b-firmware
+            - iwl6050-firmware
+            - iwl7260-firmware
+            - kernel
+            - lorax-templates-generic
+            - lorax-templates-rhel
+            - lvm2
+            - net-tools
+            - nfs-utils
+            - oddjob
+            - oddjob-mkhomedir
+            - policycoreutils
+            - psmisc
+            - python3-iniparse
+            - python3-jsonschema
+            - qemu-guest-agent
+            - qemu-img
+            - redhat-release
+            - redhat-release-eula
+            - rsync
+            - selinux-policy-targeted
+            - shim-aa64
+            - systemd
+            - tar
+            - tar
+            - tcpdump
+            - tuned
+            - xfsprogs
+            - xz
+          exclude:
+            - dracut-config-rescue
+    anaconda:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: aarch64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/aarch64.yaml"
+        packages:
+          include:
+            - aajohan-comfortaa-fonts
+            - abattis-cantarell-fonts
+            - alsa-firmware
+            - alsa-tools-firmware
+            - anaconda
+            - anaconda-dracut
+            - anaconda-install-env-deps
+            - anaconda-widgets
+            - audit
+            - bind-utils
+            - bitmap-fangsongti-fonts
+            - bzip2
+            - cryptsetup
+            - curl
+            - dbus-x11
+            - dejavu-sans-fonts
+            - dejavu-sans-mono-fonts
+            - device-mapper-persistent-data
+            - dmidecode
+            - dnf
+            - dracut-config-generic
+            - dracut-network
+            - efibootmgr
+            - ethtool
+            - fcoe-utils
+            - ftp
+            - gdb-gdbserver
+            - gdisk
+            - glibc-all-langpacks
+            - gnome-kiosk
+            - google-noto-sans-cjk-ttc-fonts
+            - grub2-efi-aa64
+            - grub2-efi-aa64-cdboot
+            - grub2-tools
+            - grub2-tools-extra
+            - grub2-tools-minimal
+            - grubby
+            - gsettings-desktop-schemas
+            - hdparm
+            - hexedit
+            - hostname
+            - hostname
+            - initscripts
+            - ipmitool
+            - iwl100-firmware
+            - iwl1000-firmware
+            - iwl105-firmware
+            - iwl135-firmware
+            - iwl2000-firmware
+            - iwl2030-firmware
+            - iwl3160-firmware
+            - iwl5000-firmware
+            - iwl5150-firmware
+            - iwl6000g2a-firmware
+            - iwl6000g2b-firmware
+            - iwl6050-firmware
+            - iwl7260-firmware
+            - jomolhari-fonts
+            - kacst-farsi-fonts
+            - kacst-qurn-fonts
+            - kbd
+            - kbd-misc
+            - kdump-anaconda-addon
+            - kernel
+            - khmeros-base-fonts
+            - less
+            - libblockdev-lvm-dbus
+            - libibverbs
+            - libreport-plugin-bugzilla
+            - libreport-plugin-reportuploader
+            - librsvg2
+            - linux-firmware
+            - lklug-fonts
+            - lldpad
+            - lohit-assamese-fonts
+            - lohit-bengali-fonts
+            - lohit-devanagari-fonts
+            - lohit-gujarati-fonts
+            - lohit-gurmukhi-fonts
+            - lohit-kannada-fonts
+            - lohit-odia-fonts
+            - lohit-tamil-fonts
+            - lohit-telugu-fonts
+            - lsof
+            - madan-fonts
+            - mdadm
+            - mt-st
+            - mtr
+            - net-tools
+            - nfs-utils
+            - nm-connection-editor
+            - nmap-ncat
+            - nss-softokn
+            - nss-tools
+            - openssh-clients
+            - openssh-server
+            - oscap-anaconda-addon
+            - ostree
+            - pciutils
+            - perl-interpreter
+            - pigz
+            - plymouth
+            - prefixdevname
+            - python3-pyatspi
+            - rdma-core
+            - redhat-release-eula
+            - rng-tools
+            - rpcbind
+            - rpm-ostree
+            - rsync
+            - rsyslog
+            - selinux-policy-targeted
+            - sg3_utils
+            - shim-aa64
+            - sil-abyssinica-fonts
+            - sil-padauk-fonts
+            - sil-scheherazade-fonts
+            - smartmontools
+            - smc-meera-fonts
+            - spice-vdagent
+            - strace
+            - systemd
+            - tar
+            - thai-scalable-waree-fonts
+            - tigervnc-server-minimal
+            - tigervnc-server-module
+            - udisks2
+            - udisks2-iscsi
+            - usbutils
+            - vim-minimal
+            - volume_key
+            - wget
+            - xfsdump
+            - xfsprogs
+            - xorg-x11-drivers
+            - xorg-x11-fonts-misc
+            - xorg-x11-server-Xorg
+            - xorg-x11-server-utils
+            - xorg-x11-xauth
+            - xz
+          exclude: []
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: "pipeline/build/tar.yaml"
+    - name: anaconda-tree
+      build: name:build
+      stages:
+        - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
+            packageset: ${packages.anaconda}
+            gpgkeys:
+              otk.include: "common/gpgkeys.yaml"
+        - type: org.osbuild.buildstamp
+          options:
+            arch: aarch64
+            product: CentOS Stream
+            version: 9-stream
+            final: true
+            variant: ''
+            bugurl: ''
+        - type: org.osbuild.locale
+          options:
+            language: en_US.UTF-8
+        - type: org.osbuild.users
+          options:
+            users:
+              install:
+                uid: 0
+                gid: 0
+                home: /root
+                shell: /usr/libexec/anaconda/run-anaconda
+                password: ''
+              root:
+                password: ''
+        - type: org.osbuild.anaconda
+          options:
+            activatable-modules:
+              - org.fedoraproject.Anaconda.Modules.Network
+              - org.fedoraproject.Anaconda.Modules.Payloads
+              - org.fedoraproject.Anaconda.Modules.Storage
+              - org.fedoraproject.Anaconda.Modules.Users
+        - type: org.osbuild.lorax-script
+          options:
+            path: 99-generic/runtime-postinstall.tmpl
+            basearch: aarch64
+            product:
+              name: ''
+              version: ''
+        - type: org.osbuild.dracut
+          options:
+            kernel:
+              - 8-2.fk1.aarch64
+            modules:
+              - bash
+              - systemd
+              - fips
+              - systemd-initrd
+              - modsign
+              - nss-softokn
+              - i18n
+              - convertfs
+              - network-manager
+              - network
+              - ifcfg
+              - url-lib
+              - drm
+              - plymouth
+              - crypt
+              - dm
+              - dmsquash-live
+              - kernel-modules
+              - kernel-modules-extra
+              - kernel-network-modules
+              - livenet
+              - lvm
+              - mdraid
+              - qemu
+              - qemu-net
+              - resume
+              - rootfs-block
+              - terminfo
+              - udev-rules
+              - dracut-systemd
+              - pollcdrom
+              - usrmount
+              - base
+              - fs-lib
+              - img-lib
+              - shutdown
+              - uefi-lib
+              - nvdimm
+              - prefixdevname
+              - prefixdevname-tools
+              - anaconda
+              - rdma
+              - rngd
+              - multipath
+              - fcoe
+              - fcoe-uefi
+              - iscsi
+              - lunmask
+              - nfs
+            add_drivers:
+              - cuse
+              - ipmi_devintf
+              - ipmi_msghandler
+            install:
+              - /.buildstamp
+        - type: org.osbuild.selinux.config
+          options:
+            state: permissive
+    - name: rootfs-image
+      build: name:build
+      stages:
+        - type: org.osbuild.mkdir
+          options:
+            paths:
+              - path: /LiveOS
+        - type: org.osbuild.truncate
+          options:
+            filename: /LiveOS/rootfs.img
+            size: '5368709120'
+        - type: org.osbuild.mkfs.ext4
+          options:
+            uuid: 2fe99653-f7ff-44fd-bea8-fa70107524fb
+            label: Anaconda
+          devices:
+            device:
+              type: org.osbuild.loopback
+              options:
+                filename: LiveOS/rootfs.img
+        - type: org.osbuild.copy
+          inputs:
+            tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:anaconda-tree
+          options:
+            paths:
+              - from: input://tree/
+                to: mount://device/
+          devices:
+            device:
+              type: org.osbuild.loopback
+              options:
+                filename: LiveOS/rootfs.img
+          mounts:
+            - name: device
+              type: org.osbuild.ext4
+              source: device
+              target: /
+    - name: efiboot-tree
+      build: name:build
+      stages:
+        - type: org.osbuild.grub2.iso
+          options:
+            product:
+              name: CentOS Stream
+              version: 9-stream
+            kernel:
+              dir: /images/pxeboot
+              opts:
+                - inst.stage2=hd:LABEL=CentOS-Stream-9-BaseOS-aarch64
+                - inst.ks=hd:LABEL=CentOS-Stream-9-BaseOS-aarch64:/osbuild.ks
+            isolabel: CentOS-Stream-9-BaseOS-aarch64
+            architectures:
+              - AA64
+            vendor: centos
+    - name: os
+      build: name:build
+      stages:
+        - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
+            packageset: ${packages.os}
+            gpgkeys:
+              otk.include: "common/gpgkeys.yaml"
+        - type: org.osbuild.fix-bls
+          options: {}
+        - type: org.osbuild.locale
+          options:
+            language: C.UTF-8
+        - type: org.osbuild.timezone
+          options:
+            zone: America/New_York
+        - type: org.osbuild.sysconfig
+          options:
+            kernel:
+              update_default: true
+              default_kernel: kernel
+            network:
+              networking: true
+              no_zero_conf: true
+        - type: org.osbuild.selinux
+          options:
+            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+    - name: bootiso-tree
+      build: name:build
+      stages:
+        - type: org.osbuild.mkdir
+          options:
+            paths:
+              - path: /images
+              - path: /images/pxeboot
+        - type: org.osbuild.copy
+          inputs:
+            tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:anaconda-tree
+          options:
+            paths:
+              - from: input://tree/boot/vmlinuz-8-2.fk1.aarch64
+                to: tree:///images/pxeboot/vmlinuz
+              - from: input://tree/boot/initramfs-8-2.fk1.aarch64.img
+                to: tree:///images/pxeboot/initrd.img
+        - type: org.osbuild.squashfs
+          inputs:
+            tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:rootfs-image
+          options:
+            filename: images/install.img
+            compression:
+              method: xz
+              options:
+                bcj: arm
+        - type: org.osbuild.truncate
+          options:
+            filename: images/efiboot.img
+            size: '20971520'
+        - type: org.osbuild.mkfs.fat
+          options:
+            volid: c81236c2
+          devices:
+            device:
+              type: org.osbuild.loopback
+              options:
+                filename: images/efiboot.img
+                size: 40960
+                lock: true
+        - type: org.osbuild.copy
+          inputs:
+            root-tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:efiboot-tree
+          options:
+            paths:
+              - from: input://root-tree/
+                to: mount://-/
+          devices:
+            '-':
+              type: org.osbuild.loopback
+              options:
+                filename: images/efiboot.img
+                size: 40960
+          mounts:
+            - name: '-'
+              type: org.osbuild.fat
+              source: '-'
+              target: /
+        - type: org.osbuild.copy
+          inputs:
+            root-tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:efiboot-tree
+          options:
+            paths:
+              - from: input://root-tree/EFI
+                to: tree:///
+        - type: org.osbuild.tar
+          inputs:
+            tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:os
+          options:
+            filename: /liveimg.tar.gz
+        - type: org.osbuild.kickstart
+          options:
+            path: /osbuild.ks
+            liveimg:
+              url: file:///run/install/repo/liveimg.tar.gz
+        - type: org.osbuild.discinfo
+          options:
+            basearch: aarch64
+            release: CentOS Stream 9-stream
+    - name: bootiso
+      build: name:build
+      stages:
+        - type: org.osbuild.xorrisofs
+          inputs:
+            tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:bootiso-tree
+          options:
+            filename: installer.iso
+            volid: CentOS-Stream-9-BaseOS-aarch64
+            sysid: LINUX
+            efi: images/efiboot.img
+            isolevel: 3
+        - type: org.osbuild.implantisomd5
+          options:
+            filename: installer.iso
+  sources:
+    otk.external.osbuild-make-depsolve-dnf4-curl-source:
+      packagesets:
+        - ${packages.build}
+        - ${packages.os}
+        - ${packages.anaconda}
