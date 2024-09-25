@@ -7,12 +7,21 @@ check-pre-commit:
 	  exit 1; \
 	}
 
-.PHONY: container
-container: ## rebuild the upstream container "ghcr.io/osbuild/otk" locally
+
+SRC_CONTAINER_FILES=$(shell find src 2>/dev/null|| echo "src") \
+                    Makefile \
+                    pyproject.toml
+
+container_built.info: Containerfile $(SRC_CONTAINER_FILES) # internal rule to avoid rebuilding if not necessary
 	podman build --build-arg CONTAINERS_STORAGE_THIN_TAGS="$(CONTAINERS_STORAGE_THIN_TAGS)" \
 	             --build-arg IMAGES_REF="$(IMAGES_REF)" \
 	             --tag otk \
 	             --pull=newer .
+	echo "Container last built on" > $@
+	date >> $@
+
+.PHONY: container
+container: container_built.info ## rebuild the upstream container "ghcr.io/osbuild/otk" locally
 
 CONTAINER_TEST_FILE?=example/centos/centos-9-x86_64-tar.yaml
 
