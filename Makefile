@@ -71,7 +71,7 @@ format: ## format all python source files
 
 .PHONY: test
 test: external | $(VENV_DIR) ## run all tests
-	source $(VENV_DIR)/bin/activate
+	. $(VENV_DIR)/bin/activate
 	@pytest
 
 .PHONY: push-check
@@ -105,7 +105,7 @@ srpm: git-diff-check $(RPM_SPECFILE) $(RPM_TARBALL) ## create the source RPM
 
 .PHONY: rpm
 rpm: git-diff-check $(RPM_SPECFILE) $(RPM_TARBALL) rpm-prerequisites | $(VENV_DIR) ## create the RPM
-	source $(VENV_DIR)/bin/activate
+	. $(VENV_DIR)/bin/activate
 	rpmbuild -bb \
 		--define "_topdir $(CURDIR)/$(RPM_BUILD_DIR)" \
 		$(RPM_SPECFILE)
@@ -131,7 +131,7 @@ clean: ## clean all build artifacts
 
 $(VENV_DIR): pyproject.toml | $(EXTERNAL_DIR)
 	python3 -m venv $@
-	source $@/bin/activate
+	. $@/bin/activate
 	pip install -e ".[dev]"
 	ln -sf $(VENV_DIR)/bin/osbuild-* $(EXTERNAL_DIR)/
 	touch $@
