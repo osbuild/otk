@@ -12,6 +12,7 @@ otk = "otk.command:root"
 osbuild-gen-depsolve-dnf4 = "otk_external_osbuild.command.gen_depsolve_dnf4:main"
 osbuild-make-depsolve-dnf4-rpm-stage = "otk_external_osbuild.command.make_depsolve_dnf4_rpm_stage:main"
 osbuild-make-depsolve-dnf4-curl-source = "otk_external_osbuild.command.make_depsolve_dnf4_curl_source:main"
+osbuild-get-dnf4-package-info = "otk_external_osbuild.command.get_dnf4_package_info:main"
 
 [project.optional-dependencies]
 dev = [
