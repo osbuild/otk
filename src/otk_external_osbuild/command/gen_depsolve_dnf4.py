@@ -19,20 +19,26 @@ def transform(packages):
     return data
 
 
-def mockdata(packages):
+def mockdata(packages, architecture):
     """Mockdata as used by tests, we don't actually execute the depsolver
     but return a map that's similar enough in format that the rest of the
     compile can continue."""
 
+    # see https://github.com/osbuild/images/pull/937
+    def ver(pkg_name):
+        return str(ord(pkg_name[0]) % 9)
+
+    def release(pkg_name):
+        return str(ord(pkg_name[1]) % 9)
     return [
         {
             "name": p,
             "checksum": "sha256:" + hashlib.sha256(p.encode()).hexdigest(),
             "remote_location": f"https://example.com/repo/packages/{p}",
-            "version": "0",
-            "epoch": "",
-            "release": "0",
-            "arch": "noarch",
+            "version": ver(p),
+            "epoch": "0",
+            "release": release(p) + ".fk1",
+            "arch": architecture,
         }
         for p in packages["include"] + [f"exclude:{p}" for p in packages["exclude"]]
     ]
@@ -42,7 +48,7 @@ def root(input_stream: TextIO) -> None:
     data = json.loads(input_stream.read())
     tree = data["tree"]
     if "OTK_UNDER_TEST" in os.environ:
-        packages = mockdata(tree["packages"])
+        packages = mockdata(tree["packages"], tree["architecture"])
         sys.stdout.write(json.dumps(transform(packages)))
         return
 
