@@ -43,9 +43,12 @@ cp -a example/* %{buildroot}%{_datadir}/otk/example/
 %doc doc
 %{_datadir}/otk
 %{_bindir}/otk
-%{_bindir}/otk_external_osbuild
+%{_bindir}/osbuild-gen-depsolve-dnf4
+%{_bindir}/osbuild-make-depsolve-dnf4-curl-source
+%{_bindir}/osbuild-make-depsolve-dnf4-rpm-stage
+%{_bindir}/osbuild-get-dnf4-package-info
 %{python3_sitelib}/otk
-%{python3_sitelib}/otk_osbuild
+%{python3_sitelib}/otk_external_osbuild
 %{python3_sitelib}/otk-%{version}.dist-info
 
 
