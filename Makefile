@@ -21,9 +21,10 @@ format:
 
 .PHONY: test
 test: external
-	cp $(shell (which "osbuild-gen-depsolve-dnf4")) ./external/
-	cp $(shell (which "osbuild-make-depsolve-dnf4-rpm-stage")) ./external/
-	cp $(shell (which "osbuild-make-depsolve-dnf4-curl-source")) ./external/
+	echo '#!/usr/bin/python3 -motk_external_osbuild.command.gen_depsolve_dnf4' > ./external/osbuild-gen-depsolve-dnf4
+	echo '#!/usr/bin/python3 -motk_external_osbuild.command.make_depsolve_dnf4_rpm_stage' > ./external/osbuild-make-depsolve-dnf4-rpm-stage
+	echo '#!/usr/bin/python3 -motk_external_osbuild.command.make_depsolve_dnf4_curl_source'> ./external/osbuild-make-depsolve-dnf4-curl-source
+	chmod +x external/*
 	@pytest
 
 .PHONY: push-check
