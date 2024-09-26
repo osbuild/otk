@@ -109,7 +109,7 @@ otk.define:
         packageset: ${packages.os}
         packagename: "kernel"
 
-otk.include: "common/partition-table/x86_64.yaml"
+otk.include: "common/partition-table/x86_64/default.yaml"
 
 otk.target.osbuild:
   pipelines:
