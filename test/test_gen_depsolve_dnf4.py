@@ -5,6 +5,7 @@ from unittest.mock import call, Mock, patch
 
 from otk_external_osbuild.command.gen_depsolve_dnf4 import root
 
+# pylint: disable=line-too-long
 
 fake_input = {
     "tree": {
@@ -34,6 +35,11 @@ def test_gen_depsolve_dnf4_under_test_mock_data(monkeypatch, capsys):
             "const": {
                 "internal": {
                     "packages": [
+                        {
+                            "checksum": "sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15",
+                            "name": "https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-baseos",
+                            "remote_location": "https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-baseos",
+                        },
                         {
                             "checksum": "sha256:3d7b91c2dd3273400f26d21a492fcdfdc3dde228cd5627247dfef745ce717755",
                             "name": "pkg1",

@@ -4,6 +4,7 @@ import os
 import subprocess
 import sys
 from typing import TextIO
+from urllib.parse import urlsplit, urlunsplit
 
 
 def transform(packages):
@@ -19,7 +20,7 @@ def transform(packages):
     return data
 
 
-def mockdata(packages, architecture):
+def mockdata(packages, repos, architecture):
     """Mockdata as used by tests, we don't actually execute the depsolver
     but return a map that's similar enough in format that the rest of the
     compile can continue."""
@@ -30,7 +31,20 @@ def mockdata(packages, architecture):
 
     def release(pkg_name):
         return str(ord(pkg_name[1]) % 9)
-    return [
+
+    pseudo_repo_pkgs = []
+    for repo in repos:
+        l = list(urlsplit(repo["baseurl"]))
+        l[1] = "example.com"
+        l[2] = "pseudo-repo-pkg:" + l[2].rsplit("-", maxsplit=1)[0]
+        base_url = urlunsplit(l)
+        pseudo_repo_pkgs.append({
+            "name": f"{base_url}",
+            "remote_location": f"{base_url}",
+            "checksum": "sha256:" + hashlib.sha256(f"{base_url}".encode()).hexdigest(),
+        })
+
+    return pseudo_repo_pkgs + [
         {
             "name": p,
             "checksum": "sha256:" + hashlib.sha256(p.encode()).hexdigest(),
@@ -48,7 +62,7 @@ def root(input_stream: TextIO) -> None:
     data = json.loads(input_stream.read())
     tree = data["tree"]
     if "OTK_UNDER_TEST" in os.environ:
-        packages = mockdata(tree["packages"], tree["architecture"])
+        packages = mockdata(tree["packages"], tree["repositories"], tree["architecture"])
         sys.stdout.write(json.dumps(transform(packages)))
         return
 
