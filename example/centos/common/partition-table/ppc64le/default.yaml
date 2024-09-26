@@ -1,0 +1,33 @@
+otk.define:
+  filesystem:
+    otk.external.otk-gen-partition-table:
+      modifications:
+        ${filesystem.modifications}
+      properties:
+        type: dos
+        bios: true
+        default_size: "10 GiB"
+        uuid: "0x14fc63d2"
+        create:
+          bios_boot_partition: true
+          bios_boot_partition_size: "4 MiB"
+          bios_boot_partition_type_ppc_prep: true
+          bios_boot_partition_skip_uuid: true
+          esp_partition: false
+      partitions:
+        - name: boot
+          mountpoint: /boot
+          label: boot
+          size: "1 GiB"
+          type: "xfs"
+          fs_mntops: defaults
+        - name: root
+          mountpoint: /
+          type: "xfs"
+          size: "2 GiB"
+          fs_mntops: defaults
+  # XXX: it would be nicer if the "fs_options" could be part of their
+  # stages directly without this indirection.
+  fs_options:
+    otk.external.otk-make-partition-mounts-devices:
+      ${filesystem}
