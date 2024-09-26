@@ -96,7 +96,7 @@ pipelines:
     stages:
       - type: org.osbuild.kernel-cmdline
         options:
-          root_fs_uuid: faedb185-077c-44cd-97f1-c7105c700e2e
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           kernel_opts: console=ttyS0,115200n8 console=tty0 net.ifnames=0 nvme_core.io_timeout=4294967295
             iommu.strict=0
       - type: org.osbuild.rpm
@@ -312,11 +312,11 @@ pipelines:
       - type: org.osbuild.fstab
         options:
           filesystems:
-            - uuid: faedb185-077c-44cd-97f1-c7105c700e2e
+            - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
               vfs_type: xfs
               path: /
               options: defaults
-            - uuid: 956ad99b-3c45-462e-adc0-6a6935bba9c9
+            - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
               vfs_type: xfs
               path: /boot
               options: defaults
@@ -327,8 +327,8 @@ pipelines:
               passno: 2
       - type: org.osbuild.grub2
         options:
-          root_fs_uuid: faedb185-077c-44cd-97f1-c7105c700e2e
-          boot_fs_uuid: 956ad99b-3c45-462e-adc0-6a6935bba9c9
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           kernel_opts: console=ttyS0,115200n8 console=tty0 net.ifnames=0 nvme_core.io_timeout=4294967295
             iommu.strict=0
           uefi:
@@ -398,7 +398,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.xfs
         options:
-          uuid: 956ad99b-3c45-462e-adc0-6a6935bba9c9
+          uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           label: boot
         devices:
           device:
@@ -410,7 +410,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.xfs
         options:
-          uuid: faedb185-077c-44cd-97f1-c7105c700e2e
+          uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           label: root
         devices:
           device:
