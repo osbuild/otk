@@ -68,7 +68,7 @@ otk.target.osbuild:
       stages:
         - type: org.osbuild.kernel-cmdline
           options:
-            root_fs_uuid: 1eb69256-7590-4ae6-ac49-497072e9e23b
+            root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
             kernel_opts: ${kernel.cmdline}
         - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
             packageset: ${packages.os}
@@ -94,11 +94,11 @@ otk.target.osbuild:
         - type: org.osbuild.fstab
           options:
             filesystems:
-              - uuid: 1eb69256-7590-4ae6-ac49-497072e9e23b
+              - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
                 vfs_type: xfs
                 path: /
                 options: defaults
-              - uuid: 2b847415-c63a-4dba-aad1-bc828ccf88b6
+              - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
                 vfs_type: xfs
                 path: /boot
                 options: defaults
@@ -109,8 +109,8 @@ otk.target.osbuild:
                 passno: 2
         - type: org.osbuild.grub2
           options:
-            root_fs_uuid: 1eb69256-7590-4ae6-ac49-497072e9e23b
-            boot_fs_uuid: 2b847415-c63a-4dba-aad1-bc828ccf88b6
+            root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+            boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
             kernel_opts: ${kernel.cmdline}
             legacy: i386-pc
             uefi:

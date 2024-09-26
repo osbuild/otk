@@ -3,6 +3,9 @@ otk.version: "1"
 otk.define:
   kernel:
     cmdline: ro loglevel=3 console=tty1 console=ttyS0 earlyprintk=ttyS0 rootdelay=300
+  filesystem:
+    modifications:
+    # empty
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
@@ -121,7 +124,7 @@ otk.target.osbuild:
       stages:
         - type: org.osbuild.kernel-cmdline
           options:
-            root_fs_uuid: e0a0d98d-a253-4303-a035-540491d68a93
+            root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
             kernel_opts: ${kernel.cmdline}
         - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
             packageset: ${packages.os}
@@ -253,11 +256,11 @@ otk.target.osbuild:
         - type: org.osbuild.fstab
           options:
             filesystems:
-              - uuid: e0a0d98d-a253-4303-a035-540491d68a93
+              - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
                 vfs_type: xfs
                 path: /
                 options: defaults
-              - uuid: 9c4faccb-ad08-40e0-a23d-4c1a24437f1b
+              - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
                 vfs_type: xfs
                 path: /boot
                 options: defaults
@@ -268,8 +271,8 @@ otk.target.osbuild:
                 passno: 2
         - type: org.osbuild.grub2
           options:
-            root_fs_uuid: e0a0d98d-a253-4303-a035-540491d68a93
-            boot_fs_uuid: 9c4faccb-ad08-40e0-a23d-4c1a24437f1b
+            root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+            boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
             kernel_opts: ${kernel.cmdline}
             uefi:
               vendor: centos
