@@ -1,6 +1,12 @@
 otk.version: "1"
 
 otk.define:
+  # XXX these sizes are currently hardcoded in `images` in the future they
+  # XXX might come from an external or elsewhere?
+  # XXX https://github.com/osbuild/images/blob/v0.89.0/pkg/image/anaconda_tar_installer.go#L24
+  size_iso_rootfs: '5368709120'
+  size_iso_efiboot: '20971520'
+  size_iso_efiboot_in_sectors: 40960
   filesystem:
     modifications:
     # empty
@@ -372,7 +378,7 @@ otk.target.osbuild:
         - type: org.osbuild.truncate
           options:
             filename: /LiveOS/rootfs.img
-            size: '5368709120'
+            size: ${size_iso_rootfs}
         - type: org.osbuild.mkfs.ext4
           options:
             # we use hardcoded uuids for compatibility with "images"
@@ -484,7 +490,7 @@ otk.target.osbuild:
         - type: org.osbuild.truncate
           options:
             filename: images/efiboot.img
-            size: '20971520'
+            size: ${size_iso_efiboot}
         - type: org.osbuild.mkfs.fat
           options:
             volid: c81236c2
@@ -493,7 +499,7 @@ otk.target.osbuild:
               type: org.osbuild.loopback
               options:
                 filename: images/efiboot.img
-                size: 40960
+                size: ${size_iso_efiboot_in_sectors}
                 lock: true
         - type: org.osbuild.copy
           inputs:
@@ -511,7 +517,7 @@ otk.target.osbuild:
               type: org.osbuild.loopback
               options:
                 filename: images/efiboot.img
-                size: 40960
+                size: ${size_iso_efiboot_in_sectors}
           mounts:
             - name: '-'
               type: org.osbuild.fat
