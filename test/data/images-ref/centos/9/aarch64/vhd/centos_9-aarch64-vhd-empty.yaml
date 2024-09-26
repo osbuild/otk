@@ -29,6 +29,8 @@ pipelines:
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:48af68b2888775d102da39bebbe05cf07bca2f2ab9f1103dd19359d64083c70b
               - id: sha256:360688270679b1c512513cfab6d931c8c715318582a9974caa3c0f88a0ee053c
+              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
+              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -97,7 +99,7 @@ pipelines:
     stages:
       - type: org.osbuild.kernel-cmdline
         options:
-          root_fs_uuid: e0a0d98d-a253-4303-a035-540491d68a93
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           kernel_opts: ro loglevel=3 console=tty1 console=ttyS0 earlyprintk=ttyS0
             rootdelay=300
       - type: org.osbuild.rpm
@@ -183,6 +185,8 @@ pipelines:
               - id: sha256:590ef3ccd31b243b045e9c5f9268d1013b0960060366c76028a23b070b5fb7be
               - id: sha256:9fe43931a7b645b90921b9b72d836e9d06ececc0b3cca1376fa0a297b5f522a5
               - id: sha256:49ec7b34785f32ffd1f252d5cc9a0a015ca074f75c601d2272149a72d50d42df
+              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
+              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -367,11 +371,11 @@ pipelines:
       - type: org.osbuild.fstab
         options:
           filesystems:
-            - uuid: e0a0d98d-a253-4303-a035-540491d68a93
+            - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
               vfs_type: xfs
               path: /
               options: defaults
-            - uuid: 9c4faccb-ad08-40e0-a23d-4c1a24437f1b
+            - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
               vfs_type: xfs
               path: /boot
               options: defaults
@@ -382,8 +386,8 @@ pipelines:
               passno: 2
       - type: org.osbuild.grub2
         options:
-          root_fs_uuid: e0a0d98d-a253-4303-a035-540491d68a93
-          boot_fs_uuid: 9c4faccb-ad08-40e0-a23d-4c1a24437f1b
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           kernel_opts: ro loglevel=3 console=tty1 console=ttyS0 earlyprintk=ttyS0
             rootdelay=300
           uefi:
@@ -457,7 +461,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.xfs
         options:
-          uuid: 9c4faccb-ad08-40e0-a23d-4c1a24437f1b
+          uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           label: boot
         devices:
           device:
@@ -469,7 +473,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.xfs
         options:
-          uuid: e0a0d98d-a253-4303-a035-540491d68a93
+          uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           label: root
         devices:
           device:
@@ -616,10 +620,14 @@ sources:
         url: https://example.com/repo/packages/exclude:cockpit-podman
       sha256:6923dd1bc0460082c5d55a831908c24a282860b7f1cd6c2b79cf1bc8857c639c:
         url: https://example.com/repo/packages/kernel
+      sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:6f1984a96a0a6f38cf4fd688a63af7fc395e68a335cc6def15ce41cffdde0221:
         url: https://example.com/repo/packages/@Server
       sha256:725c887b1ebcd6be8eb9a0ef6b2c476ff6d2dd8f9cf622f8d60953a1f22c94c8:
         url: https://example.com/repo/packages/exclude:python3-hwdata
+      sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:75666699b77db631f576041e8102a55b46758c01b807eacae0f170930ab59b3d:
         url: https://example.com/repo/packages/uuid
       sha256:782c4bb3c7a9beb41e451bceb3f4db6de6a331eb31ca76e6a64296251ba2fdb1:

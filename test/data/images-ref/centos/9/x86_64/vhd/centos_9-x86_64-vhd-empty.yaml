@@ -31,6 +31,9 @@ pipelines:
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:48af68b2888775d102da39bebbe05cf07bca2f2ab9f1103dd19359d64083c70b
               - id: sha256:360688270679b1c512513cfab6d931c8c715318582a9974caa3c0f88a0ee053c
+              - id: sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d
+              - id: sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15
+              - id: sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -99,7 +102,7 @@ pipelines:
     stages:
       - type: org.osbuild.kernel-cmdline
         options:
-          root_fs_uuid: 07607b47-ade0-4f89-a9c8-e2f7de4139d0
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           kernel_opts: ro loglevel=3 console=tty1 console=ttyS0 earlyprintk=ttyS0
             rootdelay=300
       - type: org.osbuild.rpm
@@ -186,6 +189,9 @@ pipelines:
               - id: sha256:590ef3ccd31b243b045e9c5f9268d1013b0960060366c76028a23b070b5fb7be
               - id: sha256:9fe43931a7b645b90921b9b72d836e9d06ececc0b3cca1376fa0a297b5f522a5
               - id: sha256:49ec7b34785f32ffd1f252d5cc9a0a015ca074f75c601d2272149a72d50d42df
+              - id: sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d
+              - id: sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15
+              - id: sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -370,11 +376,11 @@ pipelines:
       - type: org.osbuild.fstab
         options:
           filesystems:
-            - uuid: 07607b47-ade0-4f89-a9c8-e2f7de4139d0
+            - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
               vfs_type: xfs
               path: /
               options: defaults
-            - uuid: debdefbe-1279-49f5-808f-dd823bf50af9
+            - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
               vfs_type: xfs
               path: /boot
               options: defaults
@@ -385,8 +391,8 @@ pipelines:
               passno: 2
       - type: org.osbuild.grub2
         options:
-          root_fs_uuid: 07607b47-ade0-4f89-a9c8-e2f7de4139d0
-          boot_fs_uuid: debdefbe-1279-49f5-808f-dd823bf50af9
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           kernel_opts: ro loglevel=3 console=tty1 console=ttyS0 earlyprintk=ttyS0
             rootdelay=300
           legacy: i386-pc
@@ -466,7 +472,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.xfs
         options:
-          uuid: debdefbe-1279-49f5-808f-dd823bf50af9
+          uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           label: boot
         devices:
           device:
@@ -478,7 +484,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.xfs
         options:
-          uuid: 07607b47-ade0-4f89-a9c8-e2f7de4139d0
+          uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           label: root
         devices:
           device:
@@ -567,6 +573,8 @@ sources:
         url: https://example.com/repo/packages/exclude:NetworkManager-config-server
       sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15:
         url: https://example.com/repo/packages/dosfstools
+      sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-appstream
       sha256:04cb12e072878beef30b2e3560c39bf1cb0e5a8896a545e7f4bfb0ec777196b3:
         url: https://example.com/repo/packages/exclude:iwl3160-firmware
       sha256:09e61bc3a2412f610b1784706d9ed9e8b4d9eb29e8d0e415e888b4172beae8d3:
@@ -603,6 +611,8 @@ sources:
         url: https://example.com/repo/packages/gdisk
       sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0:
         url: https://example.com/repo/packages/coreutils
+      sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-baseos
       sha256:3fc8516922a52d754083308fc413432652da40490b0a336294a5d765757be942:
         url: https://example.com/repo/packages/cloud-init
       sha256:476f3ccb0b9ae8b029e7105db14adf652095700dc1c8b87b8caaed29993aab27:
@@ -651,6 +661,8 @@ sources:
         url: https://example.com/repo/packages/hyperv-daemons
       sha256:7a4bff421e4a68b5dadc7bef985c10316dad74015b17b89867f5178321e38876:
         url: https://example.com/repo/packages/exclude:dnf-plugin-spacewalk
+      sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-rt
       sha256:81f29ed6c790aa976572770ecf7b6f0351da3c46c9558640c7a83896b6bf8e05:
         url: https://example.com/repo/packages/exclude:alsa-sof-firmware
       sha256:840109e45bc2504c9f202410bd941dc430bcef1065e1c1a98e5d08506c0c91af:
