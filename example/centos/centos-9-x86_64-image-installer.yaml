@@ -389,6 +389,7 @@ otk.target.osbuild:
             size: '5368709120'
         - type: org.osbuild.mkfs.ext4
           options:
+            # we use hardcoded uuids for compatibility with "images"
             uuid: 2fe99653-f7ff-44fd-bea8-fa70107524fb
             label: Anaconda
           devices:
