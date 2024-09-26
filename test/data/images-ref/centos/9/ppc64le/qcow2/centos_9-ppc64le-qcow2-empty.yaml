@@ -99,7 +99,7 @@ pipelines:
     stages:
       - type: org.osbuild.kernel-cmdline
         options:
-          root_fs_uuid: 5a891ac8-949e-4a33-b37a-a69e3c0f6bf1
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           kernel_opts: console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0
       - type: org.osbuild.rpm
         inputs:
@@ -250,7 +250,7 @@ pipelines:
       - type: org.osbuild.fstab
         options:
           filesystems:
-            - uuid: 5a891ac8-949e-4a33-b37a-a69e3c0f6bf1
+            - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
               vfs_type: xfs
               path: /
               options: defaults
@@ -260,7 +260,7 @@ pipelines:
               options: defaults
       - type: org.osbuild.grub2
         options:
-          root_fs_uuid: 5a891ac8-949e-4a33-b37a-a69e3c0f6bf1
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
           boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
           kernel_opts: console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0
           legacy: powerpc-ieee1275
@@ -314,7 +314,7 @@ pipelines:
               lock: true
       - type: org.osbuild.mkfs.xfs
         options:
-          uuid: 5a891ac8-949e-4a33-b37a-a69e3c0f6bf1
+          uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
         devices:
           device:
             type: org.osbuild.loopback
