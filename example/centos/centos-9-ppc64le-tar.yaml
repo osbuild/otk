@@ -10,7 +10,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/s390x.yaml"
+          otk.include: "common/repositories/ppc64le.yaml"
         packages:
           include:
             - coreutils
@@ -30,7 +30,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/s390x.yaml"
+          otk.include: "common/repositories/ppc64le.yaml"
         packages:
           include:
             - selinux-policy-targeted
