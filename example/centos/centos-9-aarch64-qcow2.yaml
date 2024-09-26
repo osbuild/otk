@@ -11,7 +11,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/aarch64.yaml"
         packages:
           include:
             - coreutils
@@ -33,7 +33,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/aarch64.yaml"
         packages:
           include:
             - "@core"
