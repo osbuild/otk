@@ -15,12 +15,6 @@ RUN pip install --no-dependencies .
 # ----
 FROM registry.access.redhat.com/ubi9/go-toolset:latest AS build_go
 
-ARG CONTAINERS_STORAGE_THIN_TAGS="containers_image_openpgp exclude_graphdriver_btrfs exclude_graphdriver_devicemapper"
-ENV CONTAINERS_STORAGE_THIN_TAGS=${CONTAINERS_STORAGE_THIN_TAGS}
-
-ARG IMAGES_REF="github.com/osbuild/images"
-ENV IMAGES_REF=${IMAGES_REF}
-
 COPY Makefile .
 
 RUN make external
