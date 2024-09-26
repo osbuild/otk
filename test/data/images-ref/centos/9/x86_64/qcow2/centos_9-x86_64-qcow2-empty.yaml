@@ -29,6 +29,9 @@ pipelines:
               - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:360688270679b1c512513cfab6d931c8c715318582a9974caa3c0f88a0ee053c
+              - id: sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d
+              - id: sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15
+              - id: sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -171,6 +174,9 @@ pipelines:
               - id: sha256:2de43b323b1e26fd256368050a89e6f1ab3ca1c7d469b67e134db4d5ffc7929d
               - id: sha256:ec6b0c3970b59b0ca5532cb3dc4dd7239136602223a2d39e7e20fba18298bc62
               - id: sha256:241171773fc64efd040332c534e7f67f3f97e75ab0bb61b09bbe33fc81850a9b
+              - id: sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d
+              - id: sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15
+              - id: sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -429,6 +435,8 @@ sources:
     items:
       sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15:
         url: https://example.com/repo/packages/dosfstools
+      sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-appstream
       sha256:04cb12e072878beef30b2e3560c39bf1cb0e5a8896a545e7f4bfb0ec777196b3:
         url: https://example.com/repo/packages/exclude:iwl3160-firmware
       sha256:0bdf1ef00f53398361ebaf915f0325ccdc0534447134ba8506a03c71f2c5c9e2:
@@ -463,6 +471,8 @@ sources:
         url: https://example.com/repo/packages/qemu-img
       sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0:
         url: https://example.com/repo/packages/coreutils
+      sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-baseos
       sha256:3fc8516922a52d754083308fc413432652da40490b0a336294a5d765757be942:
         url: https://example.com/repo/packages/cloud-init
       sha256:43436865ed2d17b812735341ae5102c5ea86ce1eb70a0a43045a552a755da79d:
@@ -495,6 +505,8 @@ sources:
         url: https://example.com/repo/packages/redhat-release-eula
       sha256:7b4efa9ae15ac908a0e4f0f79b90b322a98f10ab4e0b414e15d7424a270597d5:
         url: https://example.com/repo/packages/qemu-guest-agent
+      sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-rt
       sha256:874ecbebddb9872c2fc949de3be7888f72ad3ae0e7847ee5ce0503c691503ad0:
         url: https://example.com/repo/packages/exclude:iwl2000-firmware
       sha256:8836d54e733450c96ab05b71d619e5bd52693fac5466644fbf39d02b58a09747:

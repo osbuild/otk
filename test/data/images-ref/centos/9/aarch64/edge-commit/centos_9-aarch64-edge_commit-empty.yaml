@@ -22,6 +22,8 @@ pipelines:
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d
               - id: sha256:90aebae315675cbf04612de4f7d5874850f48e0b8dd82becbeaa47ca93f5ebfb
+              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
+              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -185,6 +187,8 @@ pipelines:
               - id: sha256:557bd0eaadc03a42f7034eaed1acbf4299219213aef48dddee1594d0d0017c37
               - id: sha256:e243470295e7a4ed4c248443bf78f4d827988f58767c47592545f77e76839439
               - id: sha256:ec6b0c3970b59b0ca5532cb3dc4dd7239136602223a2d39e7e20fba18298bc62
+              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
+              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
         options:
           dbpath: /usr/share/rpm
           gpgkeys:
@@ -392,12 +396,16 @@ sources:
         url: https://example.com/repo/packages/kernel
       sha256:6a406152d00694615f91b8b047dc939d75c834790e521ff3997e3734111518e6:
         url: https://example.com/repo/packages/criu
+      sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:6e5afe9033e4767cc4ccec7ec2d18958a28dcfb7b8982cae4afde231b5bb8fad:
         url: https://example.com/repo/packages/keyutils
       sha256:7063dece7cccf374d9fa1ee30ff23300fa42477e064e69be7bb6d01c0cfff682:
         url: https://example.com/repo/packages/hostname
       sha256:75406d2ab1a318d214d3f17ad722986010c2d69fbac331fb855689191889f812:
         url: https://example.com/repo/packages/fdo-owner-cli
+      sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:772a6043284a6f653b3a220d1a7fa5a482dcd910f81308b3e53e20abbe8acfee:
         url: https://example.com/repo/packages/skopeo
       sha256:7b50bdd407a8c815d221c01203fc9a241648c79805faa36a0dc70e9d3a46c7e5:

@@ -20,6 +20,8 @@ pipelines:
               - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:90aebae315675cbf04612de4f7d5874850f48e0b8dd82becbeaa47ca93f5ebfb
+              - id: sha256:1324cffcaa49021bb7da2de54cbe95be0565e2e213ec4bb657a5ab06f9ea5d4f
+              - id: sha256:7b507ea13181aff07a2d7827448ac14aab25f1c82939d72893eb7d06483e335e
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -97,6 +99,8 @@ pipelines:
               - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:ec6b0c3970b59b0ca5532cb3dc4dd7239136602223a2d39e7e20fba18298bc62
+              - id: sha256:1324cffcaa49021bb7da2de54cbe95be0565e2e213ec4bb657a5ab06f9ea5d4f
+              - id: sha256:7b507ea13181aff07a2d7827448ac14aab25f1c82939d72893eb7d06483e335e
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -189,10 +193,14 @@ pipelines:
 sources:
   org.osbuild.curl:
     items:
+      sha256:1324cffcaa49021bb7da2de54cbe95be0565e2e213ec4bb657a5ab06f9ea5d4f:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-ppc64le-appstream
       sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d:
         url: https://example.com/repo/packages/glibc
       sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0:
         url: https://example.com/repo/packages/coreutils
+      sha256:7b507ea13181aff07a2d7827448ac14aab25f1c82939d72893eb7d06483e335e:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-ppc64le-baseos
       sha256:8a1bf05d306aa663e856f3c450c8b2ddc6800116b818c7d3b65503cd89f7682a:
         url: https://example.com/repo/packages/platform-python
       sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a:
