@@ -1,0 +1,157 @@
+otk.version: "1"
+
+otk.define:
+  filesystem:
+    modifications:
+    # empty
+  packages:
+    build:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: x86_64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/x86_64.yaml"
+        packages:
+          include:
+            - coreutils
+            - dosfstools
+            - glibc
+            - platform-python
+            - policycoreutils
+            - python3
+            - rpm
+            - selinux-policy-targeted
+            - systemd
+            - xfsprogs
+            - xz
+          exclude: []
+    os:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: x86_64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/x86_64.yaml"
+        packages:
+          include:
+            - "@core"
+            - NetworkManager-wifi
+            - dosfstools
+            - dracut-config-generic
+            - efibootmgr
+            - grub2-efi-x64
+            - initial-setup
+            - iwl3160-firmware
+            - iwl7260-firmware
+            - kernel
+            - libxkbcommon
+            - selinux-policy-targeted
+            - shim-x64
+            - xfsprogs
+          exclude: []
+  kernel:
+    cmdline: ro
+    package:
+      otk.external.osbuild-get-dnf4-package-info:
+        packageset: ${packages.os}
+        packagename: "kernel"
+
+otk.include: "common/partition-table/x86_64/minimal-raw.yaml"
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: "pipeline/build/generic.yaml"
+    - name: os
+      build: name:build
+      stages:
+        - type: org.osbuild.kernel-cmdline
+          options:
+            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
+            kernel_opts: ${kernel.cmdline}
+        - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
+            packageset: ${packages.os}
+            gpgkeys:
+              otk.include: "common/gpgkeys.yaml"
+        - type: org.osbuild.fix-bls
+          options:
+            prefix: ''
+        - type: org.osbuild.locale
+          options:
+            language: C.UTF-8
+        - type: org.osbuild.timezone
+          options:
+            zone: America/New_York
+        - type: org.osbuild.sysconfig
+          options:
+            kernel:
+              update_default: true
+              default_kernel: kernel
+            network:
+              networking: true
+              no_zero_conf: true
+        - type: org.osbuild.systemd.unit
+          options:
+            unit: grub-boot-success.timer
+            dropin: 10-disable-if-greenboot.conf
+            config:
+              Unit:
+                ConditionPathExists: '!/usr/libexec/greenboot/greenboot'
+            unit-type: global
+        - otk.external.otk-make-fstab-stage:
+            ${filesystem}
+        - otk.include: fragment/grub2/x86_64-no-bios.yaml
+        - type: org.osbuild.copy
+          inputs:
+            file-cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9:
+              type: org.osbuild.files
+              origin: org.osbuild.source
+              references:
+                - id: sha256:cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9
+          options:
+            paths:
+              - from: input://file-cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9/sha256:cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9
+                to: tree:///root/anaconda-ks.cfg
+                remove_destination: true
+        - type: org.osbuild.chown
+          options:
+            items:
+              /root/anaconda-ks.cfg:
+                user: root
+                group: root
+        - type: org.osbuild.systemd
+          options:
+            enabled_services:
+              - NetworkManager.service
+              - firewalld.service
+              - sshd.service
+              - initial-setup.service
+        - type: org.osbuild.selinux
+          options:
+            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+    - otk.include: pipeline/image/x86_64-no-bios.yaml
+    - name: xz
+      build: name:build
+      stages:
+        - type: org.osbuild.xz
+          inputs:
+            file:
+              type: org.osbuild.files
+              origin: org.osbuild.pipeline
+              references:
+                name:image:
+                  file: disk.img
+          options:
+            filename: disk.raw.xz
+  sources:
+    otk.op.join:
+      values:
+        - otk.external.osbuild-make-depsolve-dnf4-curl-source:
+            packagesets:
+              - ${packages.build}
+              - ${packages.os}
+        - org.osbuild.inline:
+            items:
+              sha256:cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9:
+                encoding: base64
+                data: IyBSdW4gaW5pdGlhbC1zZXR1cCBvbiBmaXJzdCBib290CiMgQ3JlYXRlZCBieSBvc2J1aWxkCmZpcnN0Ym9vdCAtLXJlY29uZmlnCmxhbmcgZW5fVVMuVVRGLTgK
