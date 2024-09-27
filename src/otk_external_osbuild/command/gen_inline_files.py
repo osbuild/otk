@@ -28,6 +28,9 @@ def root(input_stream: TextIO) -> None:
 
     inline_paths = tree.get("paths", {})
     for name, item in inline_paths.items():
+        if name in inlines:
+            raise KeyError(f"duplicate name found for inline files: {name}")
+
         path = item["path"]
         read_type = item["type"]
         if read_type == "text":
