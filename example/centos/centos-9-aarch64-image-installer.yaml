@@ -258,6 +258,12 @@ otk.define:
             - xorg-x11-xauth
             - xz
           exclude: []
+  kernel:
+    anaconda:
+      package:
+        otk.external.osbuild-get-dnf4-package-info:
+          packageset: ${packages.anaconda}
+          packagename: "kernel"
 
 otk.target.osbuild:
   pipelines:
@@ -308,8 +314,7 @@ otk.target.osbuild:
         - type: org.osbuild.dracut
           options:
             kernel:
-              # XXX: which kernel here, from the anaconda or os package set?
-              - 8-2.fk1.aarch64
+              - ${kernel.anaconda.package.version}-${kernel.anaconda.package.release}.${kernel.anaconda.package.arch}
             modules:
               - bash
               - systemd
@@ -471,10 +476,9 @@ otk.target.osbuild:
                 - name:anaconda-tree
           options:
             paths:
-              # XXX: kernel from anaconda package set(?)
-              - from: input://tree/boot/vmlinuz-8-2.fk1.aarch64
+              - from: input://tree/boot/vmlinuz-${kernel.anaconda.package.version}-${kernel.anaconda.package.release}.${kernel.anaconda.package.arch}
                 to: tree:///images/pxeboot/vmlinuz
-              - from: input://tree/boot/initramfs-8-2.fk1.aarch64.img
+              - from: input://tree/boot/initramfs-${kernel.anaconda.package.version}-${kernel.anaconda.package.release}.${kernel.anaconda.package.arch}.img
                 to: tree:///images/pxeboot/initrd.img
         - type: org.osbuild.squashfs
           inputs:
