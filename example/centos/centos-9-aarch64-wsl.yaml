@@ -1,0 +1,134 @@
+otk.version: "1"
+
+otk.define:
+  packages:
+    build:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: aarch64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/aarch64.yaml"
+        packages:
+          include:
+            - coreutils
+            - glibc
+            - platform-python
+            - python3
+            - python3-iniparse
+            - rpm
+            - selinux-policy-targeted
+            - systemd
+            - tar
+            - xz
+          exclude: []
+    os:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: aarch64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/aarch64.yaml"
+        packages:
+          include:
+            - alternatives
+            - audit-libs
+            - basesystem
+            - bash
+            - ca-certificates
+            - coreutils-single
+            - crypto-policies-scripts
+            - curl-minimal
+            - dejavu-sans-fonts
+            - dnf
+            - filesystem
+            - findutils
+            - gdb-gdbserver
+            - glibc-minimal-langpack
+            - gmp
+            - gnupg2
+            - gobject-introspection
+            - hostname
+            - langpacks-en
+            - libcurl-minimal
+            - openssl
+            - pam
+            - passwd
+            - procps-ng
+            - python3
+            - python3-inotify
+            - redhat-release
+            - rootfiles
+            - rpm
+            - sed
+            - setup
+            - shadow-utils
+            - subscription-manager
+            - systemd
+            - tar
+            - tpm2-tss
+            - tzdata
+            - util-linux
+            - vim-minimal
+            - yum
+          exclude:
+            - gawk-all-langpacks
+            - glibc-gconv-extra
+            - glibc-langpack-en
+            - openssl-pkcs11
+            - python-unversioned-command
+            - redhat-release-eula
+            - rpm-plugin-systemd-inhibit
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: pipeline/build/tar.yaml
+    - name: os
+      build: name:build
+      stages:
+        - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
+            packageset: ${packages.os}
+            gpgkeys:
+              otk.include: "common/gpgkeys.yaml"
+        - type: org.osbuild.fix-bls
+          options: {}
+        - type: org.osbuild.locale
+          options:
+            language: en_US.UTF-8
+        - type: org.osbuild.timezone
+          options:
+            zone: America/New_York
+        # We add "kernel" here (even though we don't install a kernel package) to be compatible with "images" which adds
+        # it unconditionally regardless if here is a kernel or not. sysconfig seems to be fine with it. We should
+        # revisit this for rhel10/centos10
+        - type: org.osbuild.sysconfig
+          options:
+            kernel:
+              update_default: true
+              default_kernel: kernel
+            network:
+              networking: true
+              no_zero_conf: true
+        - type: org.osbuild.wsl.conf
+          options:
+            boot:
+              systemd: true
+    # We don't include the common tar pipeline because the WSL in images wants a
+    # different filename; we'll dedup that later.
+    - name: archive
+      build: "name:build"
+      stages:
+        - type: org.osbuild.tar
+          options:
+            filename: disk.tar.gz
+          inputs:
+            tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - "name:os"
+  sources:
+    otk.external.osbuild-make-depsolve-dnf4-curl-source:
+      packagesets:
+        - ${packages.build}
+        - ${packages.os}
