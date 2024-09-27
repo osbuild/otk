@@ -253,22 +253,8 @@ otk.target.osbuild:
                     arg: NM_UNMANAGED
                   op: '='
                   val: '1'
-        - type: org.osbuild.fstab
-          options:
-            filesystems:
-              - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
-                vfs_type: xfs
-                path: /
-                options: defaults
-              - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
-                vfs_type: xfs
-                path: /boot
-                options: defaults
-              - uuid: 7B77-95E7
-                vfs_type: vfat
-                path: /boot/efi
-                options: defaults,uid=0,gid=0,umask=077,shortname=winnt
-                passno: 2
+        - otk.external.otk-make-fstab-stage:
+            ${filesystem}
         - type: org.osbuild.grub2
           options:
             root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
