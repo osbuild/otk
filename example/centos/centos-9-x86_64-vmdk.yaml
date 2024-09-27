@@ -58,7 +58,7 @@ otk.define:
             - dracut-config-rescue
             - rng-tools
 
-otk.include: "common/partition-table/x86_64/vmdk.yaml"
+otk.include: "common/partition-table/x86_64/vhd_vmdk.yaml"
 
 otk.target.osbuild:
   pipelines:
