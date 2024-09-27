@@ -4,8 +4,6 @@ otk.define:
   filesystem:
     modifications:
     # empty
-  kernel:
-    cmdline: console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
@@ -104,6 +102,12 @@ otk.define:
             - plymouth
             - rng-tools
             - udisks2
+  kernel:
+    cmdline: console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0
+    package:
+      otk.external.osbuild-get-dnf4-package-info:
+        packageset: ${packages.os}
+        packagename: "kernel"
 
 otk.include: "common/partition-table/x86_64.yaml"
 
