@@ -308,6 +308,7 @@ otk.target.osbuild:
         - type: org.osbuild.dracut
           options:
             kernel:
+              # XXX: which kernel here, from the anaconda or os package set?
               - 8-2.fk1.aarch64
             modules:
               - bash
@@ -470,6 +471,7 @@ otk.target.osbuild:
                 - name:anaconda-tree
           options:
             paths:
+              # XXX: kernel from anaconda package set(?)
               - from: input://tree/boot/vmlinuz-8-2.fk1.aarch64
                 to: tree:///images/pxeboot/vmlinuz
               - from: input://tree/boot/initramfs-8-2.fk1.aarch64.img

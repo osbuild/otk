@@ -4,8 +4,6 @@ otk.define:
   filesystem:
     modifications:
       filename: "image.raw"
-  kernel:
-    cmdline: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
@@ -97,6 +95,12 @@ otk.define:
             - plymouth
             - dracut-config-rescue
             - qemu-guest-agent
+  kernel:
+    cmdline: console=tty0 console=ttyS0,115200n8 net.ifnames=0 nvme_core.io_timeout=4294967295
+    package:
+      otk.external.osbuild-get-dnf4-package-info:
+        packageset: ${packages.os}
+        packagename: "kernel"
 
 otk.include: "common/partition-table/x86_64.yaml"
 
