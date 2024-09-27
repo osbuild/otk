@@ -114,7 +114,7 @@ otk.define:
             - rhnsd
             - usb_modeswitch
 
-otk.include: "common/partition-table/x86_64/vhd.yaml"
+otk.include: "common/partition-table/x86_64/vhd_vmdk.yaml"
 
 otk.target.osbuild:
   pipelines:
