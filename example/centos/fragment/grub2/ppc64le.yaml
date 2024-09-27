@@ -1,0 +1,10 @@
+type: org.osbuild.grub2
+options:
+  root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
+  boot_fs_uuid: ${filesystem.const.partition_map.boot.uuid}
+  kernel_opts: ${kernel.cmdline}
+  saved_entry: ffffffffffffffffffffffffffffffff-${kernel.package.version}-${kernel.package.release}.${kernel.package.arch}
+  legacy: "powerpc-ieee1275"
+  write_cmdline: false
+  config:
+    default: saved

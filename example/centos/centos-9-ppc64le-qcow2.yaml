@@ -7,17 +7,17 @@ otk.define:
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ppc64le
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/ppc64le.yaml"
         packages:
           include:
             - coreutils
-            - dosfstools
             - glibc
-            - grub2-pc
+            - grub2-ppc64le
+            - grub2-ppc64le-modules
             - platform-python
             - policycoreutils
             - python3
@@ -30,11 +30,11 @@ otk.define:
           exclude: []
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ppc64le
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/ppc64le.yaml"
         packages:
           include:
             - "@core"
@@ -47,9 +47,9 @@ otk.define:
             - dnf-utils
             - dosfstools
             - dracut-config-generic
-            - efibootmgr
-            - grub2-efi-x64
-            - grub2-pc
+            - grub2-ppc64le
+            - grub2-ppc64le-modules
+            - powerpc-utils
             - kernel
             - nfs-utils
             - oddjob
@@ -61,7 +61,6 @@ otk.define:
             - redhat-release-eula
             - rsync
             - selinux-policy-targeted
-            - shim-x64
             - tar
             - tcpdump
             - tuned
@@ -109,7 +108,7 @@ otk.define:
         packageset: ${packages.os}
         packagename: "kernel"
 
-otk.include: "common/partition-table/x86_64/default.yaml"
+otk.include: "common/partition-table/ppc64le/default.yaml"
 
 otk.target.osbuild:
   pipelines:
@@ -144,14 +143,14 @@ otk.target.osbuild:
               no_zero_conf: true
         - otk.external.otk-make-fstab-stage:
             ${filesystem}
-        - otk.include: "fragment/grub2/x86_64.yaml"
+        - otk.include: fragment/grub2/ppc64le.yaml
         - type: org.osbuild.systemd
           options:
             default_target: multi-user.target
         - type: org.osbuild.selinux
           options:
             file_contexts: etc/selinux/targeted/contexts/files/file_contexts
-    - otk.include: "pipeline/image/x86_64.yaml"
+    - otk.include: pipeline/image/ppc64le.yaml
     - name: qcow2
       build: name:build
       stages:
