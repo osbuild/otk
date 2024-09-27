@@ -14,6 +14,7 @@ osbuild-make-depsolve-dnf4-rpm-stage = "otk_external_osbuild.command.make_depsol
 osbuild-make-depsolve-dnf4-curl-source = "otk_external_osbuild.command.make_depsolve_dnf4_curl_source:main"
 osbuild-get-dnf4-package-info = "otk_external_osbuild.command.get_dnf4_package_info:main"
 osbuild-gen-inline-files = "otk_external_osbuild.command.gen_inline_files:main"
+osbuild-make-inline-source = "otk_external_osbuild.command.make_inline_source:main"
 
 [project.optional-dependencies]
 dev = [
