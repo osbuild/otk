@@ -23,6 +23,14 @@ def test_make_inline_source(capsys):
                         "encoding": "base64",
                         "data": "TGV0J3MgdGVzdCB0aGUgaW5saW5lIGZpbGUgZ2VuZXJhdG9yLg==",
                     },
+                    "sha256:aac460f1c46997623431e7212c5e34e1f1cb2088989f5738da0d4d034844a219": {
+                        "encoding": "base64",
+                        "data": "VGV4dCBmcm9tIGEgZmlsZSBvbiBkaXNr",
+                    },
+                    "sha256:176e605efa4b7ae0ad5315f0959d3d37a8dead002bf65009029994a4d2f50c90": {
+                        "encoding": "base64",
+                        "data": "Qnl0ZXMgZnJvbSBhIGZpbGUgb24gZGlzaw==",
+                    }
                 }
             }
         }
