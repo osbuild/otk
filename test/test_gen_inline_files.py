@@ -2,6 +2,7 @@ import json
 import os
 from io import StringIO
 
+import pytest
 from otk_external_osbuild.command.gen_inline_files import root
 
 test_input = {
@@ -64,3 +65,28 @@ def test_gen_inline_files(capsys, tmp_path):
     root(StringIO(json.dumps(test_input)))
     output = json.loads(capsys.readouterr().out)
     assert output == expected_output
+
+
+def test_gen_inline_files_name_collision():
+    input_with_collisions = {
+        "tree": {
+            "inline": {
+                "dupe": {
+                    "contents": "Hello Bob\nHow's it going?\n"
+                },
+                "test": {
+                    "contents": "Let's test the inline file generator."
+                }
+            },
+            "paths": {
+                "dupe": {
+                    "path": "/does/not/matter",
+                    "type": "text",
+                }
+            }
+        }
+    }
+
+    with pytest.raises(KeyError) as exc:
+        root(StringIO(json.dumps(input_with_collisions)))
+    assert exc.value.args[0] == "duplicate name found for inline files: dupe"
