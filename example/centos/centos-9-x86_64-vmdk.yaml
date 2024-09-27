@@ -91,35 +91,9 @@ otk.target.osbuild:
             network:
               networking: true
               no_zero_conf: true
-        - type: org.osbuild.fstab
-          options:
-            filesystems:
-              - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
-                vfs_type: xfs
-                path: /
-                options: defaults
-              - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
-                vfs_type: xfs
-                path: /boot
-                options: defaults
-              - uuid: 7B77-95E7
-                vfs_type: vfat
-                path: /boot/efi
-                options: defaults,uid=0,gid=0,umask=077,shortname=winnt
-                passno: 2
-        - type: org.osbuild.grub2
-          options:
-            root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
-            boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
-            kernel_opts: ${kernel.cmdline}
-            legacy: i386-pc
-            uefi:
-              vendor: centos
-              unified: true
-            saved_entry: ffffffffffffffffffffffffffffffff-8-2.fk1.x86_64
-            write_cmdline: false
-            config:
-              default: saved
+        - otk.external.otk-make-fstab-stage:
+            ${filesystem}
+        - otk.include: fragment/grub2/x86_64.yaml
         - type: org.osbuild.selinux
           options:
             file_contexts: etc/selinux/targeted/contexts/files/file_contexts
