@@ -3,8 +3,6 @@ otk.version: "1"
 otk.define:
   filesystem:
     modifications:
-  kernel:
-    cmdline: ro loglevel=3 console=tty1 console=ttyS0 earlyprintk=ttyS0 rootdelay=300
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
@@ -113,6 +111,12 @@ otk.define:
             - rhnlib
             - rhnsd
             - usb_modeswitch
+  kernel:
+    cmdline: ro loglevel=3 console=tty1 console=ttyS0 earlyprintk=ttyS0 rootdelay=300
+    package:
+      otk.external.osbuild-get-dnf4-package-info:
+        packageset: ${packages.os}
+        packagename: "kernel"
 
 otk.include: "common/partition-table/x86_64/vhd_vmdk.yaml"
 
@@ -124,7 +128,7 @@ otk.target.osbuild:
       stages:
         - type: org.osbuild.kernel-cmdline
           options:
-            root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
             kernel_opts: ${kernel.cmdline}
         - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
             packageset: ${packages.os}
@@ -257,14 +261,14 @@ otk.target.osbuild:
             ${filesystem}
         - type: org.osbuild.grub2
           options:
-            root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
-            boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
+            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
+            boot_fs_uuid: ${filesystem.const.partition_map.boot.uuid}
             kernel_opts: ${kernel.cmdline}
             legacy: i386-pc
             uefi:
               vendor: centos
               unified: true
-            saved_entry: ffffffffffffffffffffffffffffffff-8-2.fk1.x86_64
+            saved_entry: ffffffffffffffffffffffffffffffff-${kernel.package.version}-${kernel.package.release}.${kernel.package.arch}
             write_cmdline: false
             config:
               default: saved
