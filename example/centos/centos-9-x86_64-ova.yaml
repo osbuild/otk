@@ -1,0 +1,162 @@
+otk.version: "1"
+
+otk.define:
+  filesystem:
+    modifications:
+    # empty
+  packages:
+    build:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: x86_64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/x86_64.yaml"
+        packages:
+          include:
+            - coreutils
+            - dosfstools
+            - glibc
+            - grub2-pc
+            - platform-python
+            - policycoreutils
+            - python3
+            - qemu-img
+            - rpm
+            - selinux-policy-targeted
+            - systemd
+            - tar
+            - xfsprogs
+            - xz
+          exclude: []
+    os:
+      otk.external.osbuild-gen-depsolve-dnf4:
+        architecture: x86_64
+        module_platform_id: c9s
+        releasever: "9"
+        repositories:
+          otk.include: "common/repositories/x86_64.yaml"
+        packages:
+          include:
+            - "@core"
+            - chrony
+            - cloud-init
+            - dosfstools
+            - dracut-config-generic
+            - dracut-config-generic
+            - efibootmgr
+            - firewalld
+            - grub2-efi-x64
+            - grub2-pc
+            - kernel
+            - langpacks-en
+            - open-vm-tools
+            - selinux-policy-targeted
+            - shim-x64
+            - tuned
+            - xfsprogs
+          exclude:
+            - dracut-config-rescue
+            - rng-tools
+  kernel:
+    cmdline: ro net.ifnames=0
+    package:
+      otk.external.osbuild-get-dnf4-package-info:
+        packageset: ${packages.os}
+        packagename: "kernel"
+
+otk.include: "common/partition-table/x86_64/ova.yaml"
+
+otk.target.osbuild:
+  pipelines:
+    - otk.include: "pipeline/build/tar.yaml"
+    - name: os
+      build: name:build
+      stages:
+        - type: org.osbuild.kernel-cmdline
+          options:
+            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
+            kernel_opts: ${kernel.cmdline}
+        - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
+            packageset: ${packages.os}
+            gpgkeys:
+              otk.include: "common/gpgkeys.yaml"
+        - type: org.osbuild.fix-bls
+          options:
+            prefix: ''
+        - type: org.osbuild.locale
+          options:
+            language: en_US.UTF-8
+        - type: org.osbuild.timezone
+          options:
+            zone: America/New_York
+        - type: org.osbuild.sysconfig
+          options:
+            kernel:
+              update_default: true
+              default_kernel: kernel
+            network:
+              networking: true
+              no_zero_conf: true
+        - otk.external.otk-make-fstab-stage:
+            ${filesystem}
+        - otk.include: "fragment/grub2/x86_64.yaml"
+        - type: org.osbuild.selinux
+          options:
+            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+    - otk.include: pipeline/image/x86_64.yaml
+    - name: vmdk
+      build: name:build
+      stages:
+        - type: org.osbuild.qemu
+          inputs:
+            image:
+              type: org.osbuild.files
+              origin: org.osbuild.pipeline
+              references:
+                name:image:
+                  file: disk.img
+          options:
+            filename: image.vmdk
+            format:
+              type: vmdk
+              subformat: streamOptimized
+    - name: ovf
+      build: name:build
+      stages:
+        - type: org.osbuild.copy
+          inputs:
+            vmdk-tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:vmdk
+          options:
+            paths:
+              - from: input://vmdk-tree/image.vmdk
+                to: tree:///
+        - type: org.osbuild.ovf
+          options:
+            vmdk: image.vmdk
+    - name: archive
+      build: name:build
+      stages:
+        - type: org.osbuild.tar
+          inputs:
+            tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:ovf
+          options:
+            filename: image.ova
+            format: ustar
+            paths:
+              - image.ovf
+              - image.mf
+              - image.vmdk
+  sources:
+    otk.external.osbuild-make-depsolve-dnf4-curl-source:
+      packagesets:
+        - ${packages.build}
+        - ${packages.os}
