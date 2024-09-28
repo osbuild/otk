@@ -51,6 +51,15 @@ otk.define:
             - shim-aa64
             - xfsprogs
           exclude: []
+  files:
+    otk.external.osbuild-gen-inline-files:
+      inline:
+        kickstart:
+          contents: |
+            # Run initial-setup on first boot
+            # Created by osbuild
+            firstboot --reconfig
+            lang en_US.UTF-8
   kernel:
     cmdline: ro
     package:
@@ -104,14 +113,16 @@ otk.target.osbuild:
         - otk.include: fragment/grub2/aarch64.yaml
         - type: org.osbuild.copy
           inputs:
+            # XXX note we're only keeping the hash here since it corresponds to the reference
+            # XXX manifest and the same in the input
             file-cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9:
               type: org.osbuild.files
               origin: org.osbuild.source
               references:
-                - id: sha256:cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9
+                - id: ${files.const.files.kickstart.id}
           options:
             paths:
-              - from: input://file-cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9/sha256:cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9
+              - from: input://file-cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9/${files.const.files.kickstart.id}
                 to: tree:///root/anaconda-ks.cfg
                 remove_destination: true
         - type: org.osbuild.chown
@@ -151,8 +162,6 @@ otk.target.osbuild:
             packagesets:
               - ${packages.build}
               - ${packages.os}
-        - org.osbuild.inline:
-            items:
-              sha256:cbe2cb6e47e05af3b653e2567e9ee04ba7d9dcf8fdc2cfd15b232a0844c128f9:
-                encoding: base64
-                data: IyBSdW4gaW5pdGlhbC1zZXR1cCBvbiBmaXJzdCBib290CiMgQ3JlYXRlZCBieSBvc2J1aWxkCmZpcnN0Ym9vdCAtLXJlY29uZmlnCmxhbmcgZW5fVVMuVVRGLTgK
+        - otk.external.osbuild-make-inline-source:
+            const:
+              files: ${files.const.files}
