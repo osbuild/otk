@@ -26,10 +26,14 @@ def uuid_for_label(fs_label, osbuild_manifest):
     return ""
 
 
+def make_config(_: str) -> bytes:
+    return b'{"name": "empty"}'
+
+
 def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver: str, arch: str, img_type: str) -> None:
     # pylint: disable=consider-using-with
     empty_config = tempfile.NamedTemporaryFile()
-    empty_config.write(b'{"name": "empty"}')
+    empty_config.write(make_config(img_type))
     empty_config.flush()
 
     # ideally we would just generate all manifests on the fly but today
