@@ -71,8 +71,5 @@ otk.target.osbuild:
         - otk.external.osbuild-make-depsolve-dnf4-curl-source:
             packagesets:
               - ${packages.build}
-        - org.osbuild.ostree:
-            items:
-              6418a0aa4c44e24284267bdb12dec2f9929b0885cf92a6b5ad0ea92c2f94c717:
-                remote:
-                  url: http://example.com/repo
+        - otk.external.otk-make-ostree-source:
+            ${commit}
