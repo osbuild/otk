@@ -1,5 +1,0 @@
-otk.op.if-set:
-  what: modfication.user
-  then:
-    - type: org.osbuild.users
-      options: ${modfication.user}

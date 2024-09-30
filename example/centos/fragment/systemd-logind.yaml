@@ -1,6 +1,0 @@
-- type: org.osbuild.systemd-logind
-  options:
-    filename: "00-getty-fixes.conf"
-    config:
-      Login:
-        NAutoVTs: 0
