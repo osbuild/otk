@@ -22,11 +22,30 @@ import yaml
 from . import tree
 from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET
 from .context import Context, validate_var_name
-from .error import ParseError, TransformDirectiveTypeError, TransformDirectiveUnknownError
+from .error import ParseError, ParseDuplicatedYamlKeyError, TransformDirectiveTypeError, TransformDirectiveUnknownError
 from .external import call
 from .traversal import State
 
 log = logging.getLogger(__name__)
+
+
+# from https://gist.github.com/pypt/94d747fe5180851196eb?permalink_comment_id=4653474#gistcomment-4653474
+# pylint: disable=too-many-ancestors
+class SafeUniqueKeyLoader(yaml.SafeLoader):
+    def construct_mapping(self, node, deep=False):
+        mapping = set()
+        for key_node, _ in node.value:
+            if ':merge' in key_node.tag:
+                continue
+            key = self.construct_object(key_node, deep=deep)
+            if key in mapping:
+                if "otk." in key:
+                    raise ParseDuplicatedYamlKeyError(
+                        f"duplicated {key!r} key found, try using "
+                        f"{key}.<uniq-tag>, e.g. {key}.foo")
+                raise ParseDuplicatedYamlKeyError(f"duplicated {key!r} key found")
+            mapping.add(key)
+        return super().construct_mapping(node, deep)
 
 
 def resolve(ctx: Context, state: State, data: Any) -> Any:
@@ -202,9 +221,11 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
     log.info("resolving %s", path)
     try:
         with path.open(encoding="utf8") as fp:
-            data = yaml.safe_load(fp)
+            data = yaml.load(fp, Loader=SafeUniqueKeyLoader)
     except FileNotFoundError as fnfe:
         raise FileNotFoundError(f"file {path} referenced from {state.path} was not found") from fnfe
+    except ParseDuplicatedYamlKeyError as err:
+        raise ParseDuplicatedYamlKeyError(f"file {path} has duplicated yaml keys: {err}") from err
 
     if data is not None:
         return resolve(ctx, state.copy(path=path), data)

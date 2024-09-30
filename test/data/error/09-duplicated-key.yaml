@@ -1,0 +1,5 @@
+otk.version: 1
+
+otk.target.osbuild:
+  otk.include: "foo.yaml"
+  otk.include: "bar.yaml"
