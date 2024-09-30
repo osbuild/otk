@@ -21,6 +21,8 @@ class Omnifest:
 
     def __init__(self, path: pathlib.Path, target: str = "", *, warn_duplicated_defs: bool = False) -> None:
         self._ctx = CommonContext(target_requested=target, warn_duplicated_defs=warn_duplicated_defs)
+        # XXX: this can be removed once we find a way to deal with unset variables
+        self._ctx.define("user.modifications", {})
         self._target = target
         # XXX: redo using a type-safe target registry
         if target:
