@@ -33,10 +33,7 @@ stages:
       rootfs:
         label: root
       kernel_opts:
-        - luks.uuid=5a8535ea-d662-4a9a-af6b-76b51fe4b522
-        - modprobe.blacklist=vc4 rw coreos.no_persist_ip
-        - ignition.platform.id=metal
-        - $ignition_firstboot
+        ${kernel_opts_list}
   - type: org.osbuild.ostree.remotes
     options:
       repo: /ostree/repo
@@ -131,10 +128,10 @@ stages:
             serial: 0
   - type: org.osbuild.grub2
     options:
+      # TODO: requires partition table external support for LUKS+LVM
       root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
       boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
-      kernel_opts: luks.uuid=5a8535ea-d662-4a9a-af6b-76b51fe4b522 modprobe.blacklist=vc4
-        rw coreos.no_persist_ip ignition.platform.id=metal $ignition_firstboot
+      kernel_opts: ${kernel_opts}
       legacy: i386-pc
       uefi:
         vendor: centos
