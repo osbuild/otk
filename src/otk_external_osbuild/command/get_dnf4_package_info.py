@@ -22,6 +22,7 @@ def root(input_stream: TextIO) -> None:
         json.dumps(
             {
                 "tree": {
+                    "name": pkg["name"],
                     "version": pkg["version"],
                     "release": pkg["release"],
                     "arch": pkg["arch"],

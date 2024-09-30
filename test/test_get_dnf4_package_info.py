@@ -36,6 +36,7 @@ def test_make_depsolve_dnf4_curl_source(capsys):
     output = json.loads(capsys.readouterr().out)
     assert output == {
         "tree": {
+            "name": "foo",
             "version": "1",
             "release": "fc30",
             "arch": "c64",
