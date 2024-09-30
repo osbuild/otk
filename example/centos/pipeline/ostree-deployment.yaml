@@ -1,0 +1,162 @@
+name: ostree-deployment
+build: name:build
+stages:
+  - type: org.osbuild.ostree.init-fs
+  - type: org.osbuild.ostree.os-init
+    options:
+      osname: rhel-edge
+  - type: org.osbuild.mkdir
+    options:
+      paths:
+        - path: /boot/efi
+          mode: 448
+  - type: org.osbuild.ostree.pull
+    inputs:
+      commits:
+        type: org.osbuild.ostree
+        origin: org.osbuild.source
+        references:
+          6418a0aa4c44e24284267bdb12dec2f9929b0885cf92a6b5ad0ea92c2f94c717:
+            ref: centos/9/x86_64/edge
+    options:
+      repo: /ostree/repo
+      remote: rhel-edge
+  - type: org.osbuild.ostree.deploy
+    options:
+      osname: rhel-edge
+      ref: centos/9/x86_64/edge
+      remote: rhel-edge
+      mounts:
+        - /boot
+        - /boot/efi
+      rootfs:
+        label: root
+      kernel_opts:
+        - luks.uuid=5a8535ea-d662-4a9a-af6b-76b51fe4b522
+        - modprobe.blacklist=vc4 rw coreos.no_persist_ip
+        - ignition.platform.id=metal
+        - $ignition_firstboot
+  - type: org.osbuild.ostree.remotes
+    options:
+      repo: /ostree/repo
+      remotes:
+        - name: rhel-edge
+          url: http://example.com/repo
+  - type: org.osbuild.ostree.fillvar
+    options:
+      deployment:
+        osname: rhel-edge
+        ref: centos/9/x86_64/edge
+  - type: org.osbuild.ostree.config
+    options:
+      repo: /ostree/repo
+      config:
+        sysroot:
+          readonly: true
+          bootloader: none
+    mounts:
+      - name: ostree-centos/9/x86_64/edge
+        type: org.osbuild.ostree.deployment
+        options:
+          deployment:
+            osname: rhel-edge
+            ref: centos/9/x86_64/edge
+            serial: 0
+  - type: org.osbuild.fstab
+    options:
+      filesystems:
+        - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          vfs_type: xfs
+          path: /
+          options: defaults
+        - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
+          vfs_type: xfs
+          path: /boot
+          options: defaults
+          freq: 1
+          passno: 1
+        - uuid: 7B77-95E7
+          vfs_type: vfat
+          path: /boot/efi
+          options: defaults,uid=0,gid=0,umask=077,shortname=winnt
+          passno: 2
+    mounts:
+      - name: ostree-centos/9/x86_64/edge
+        type: org.osbuild.ostree.deployment
+        options:
+          deployment:
+            osname: rhel-edge
+            ref: centos/9/x86_64/edge
+            serial: 0
+  - type: org.osbuild.ignition
+    options:
+      network:
+        - systemd.firstboot=off
+        - systemd.condition-first-boot=true
+  - type: org.osbuild.users
+    options:
+      users:
+        root:
+          password: '!locked'
+    mounts:
+      - name: ostree-centos/9/x86_64/edge
+        type: org.osbuild.ostree.deployment
+        options:
+          deployment:
+            osname: rhel-edge
+            ref: centos/9/x86_64/edge
+            serial: 0
+  - type: org.osbuild.keymap
+    options:
+      keymap: us
+    mounts:
+      - name: ostree-centos/9/x86_64/edge
+        type: org.osbuild.ostree.deployment
+        options:
+          deployment:
+            osname: rhel-edge
+            ref: centos/9/x86_64/edge
+            serial: 0
+  - type: org.osbuild.locale
+    options:
+      language: C.UTF-8
+    mounts:
+      - name: ostree-centos/9/x86_64/edge
+        type: org.osbuild.ostree.deployment
+        options:
+          deployment:
+            osname: rhel-edge
+            ref: centos/9/x86_64/edge
+            serial: 0
+  - type: org.osbuild.grub2
+    options:
+      root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+      boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
+      kernel_opts: luks.uuid=5a8535ea-d662-4a9a-af6b-76b51fe4b522 modprobe.blacklist=vc4
+        rw coreos.no_persist_ip ignition.platform.id=metal $ignition_firstboot
+      legacy: i386-pc
+      uefi:
+        vendor: centos
+        install: true
+        unified: true
+      greenboot: true
+      write_cmdline: false
+      config:
+        default: saved
+        terminal_output:
+          - console
+        timeout: 1
+      ignition: true
+    mounts:
+      - name: ostree-centos/9/x86_64/edge
+        type: org.osbuild.ostree.deployment
+        options:
+          deployment:
+            osname: rhel-edge
+            ref: centos/9/x86_64/edge
+            serial: 0
+  - type: org.osbuild.ostree.selinux
+    options:
+      deployment:
+        osname: rhel-edge
+        ref: centos/9/x86_64/edge
