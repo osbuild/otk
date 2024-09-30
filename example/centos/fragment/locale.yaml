@@ -1,0 +1,3 @@
+type: org.osbuild.locale
+options:
+  language: ${modifications.locale}
