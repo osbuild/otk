@@ -454,8 +454,7 @@ otk.target.osbuild:
             packageset: ${packages.os}
             gpgkeys:
               otk.include: "common/gpgkeys.yaml"
-        - type: org.osbuild.fix-bls
-          options: {}
+        - otk.include: "fragment/fix-bls/default.yaml"
         - type: org.osbuild.locale
           options:
             language: C.UTF-8

@@ -51,8 +51,7 @@ otk.target.osbuild:
             packageset: ${packages.os}
             gpgkeys:
               otk.include: "common/gpgkeys.yaml"
-        - type: org.osbuild.fix-bls
-          options: {}
+        - otk.include: "fragment/fix-bls/default.yaml"
         - otk.include: "fragment/locale.yaml"
         - type: org.osbuild.timezone
           options:

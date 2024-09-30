@@ -1,0 +1,6 @@
+# If `/boot` is on a separate partition the `empty` BLS fragment should be used, otherwise the default version
+# is used.
+#
+# See: https://github.com/osbuild/images/blob/v0.90.0/pkg/manifest/os.go#L439
+type: org.osbuild.fix-bls
+options: {}
