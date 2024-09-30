@@ -16,15 +16,16 @@ stages:
         type: org.osbuild.ostree
         origin: org.osbuild.source
         references:
+          # TODO: requires resolving variables in keys
           6418a0aa4c44e24284267bdb12dec2f9929b0885cf92a6b5ad0ea92c2f94c717:
-            ref: centos/9/x86_64/edge
+            ref: ${commit.const.ref}
     options:
       repo: /ostree/repo
       remote: rhel-edge
   - type: org.osbuild.ostree.deploy
     options:
       osname: rhel-edge
-      ref: centos/9/x86_64/edge
+      ref: ${commit.const.ref}
       remote: rhel-edge
       mounts:
         - /boot
@@ -41,12 +42,12 @@ stages:
       repo: /ostree/repo
       remotes:
         - name: rhel-edge
-          url: http://example.com/repo
+          url: ${commit.const.url}
   - type: org.osbuild.ostree.fillvar
     options:
       deployment:
         osname: rhel-edge
-        ref: centos/9/x86_64/edge
+        ref: ${commit.const.ref}
   - type: org.osbuild.ostree.config
     options:
       repo: /ostree/repo
@@ -55,12 +56,12 @@ stages:
           readonly: true
           bootloader: none
     mounts:
-      - name: ostree-centos/9/x86_64/edge
+      - name: ostree-${commit.const.ref}
         type: org.osbuild.ostree.deployment
         options:
           deployment:
             osname: rhel-edge
-            ref: centos/9/x86_64/edge
+            ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.fstab
     options:
@@ -81,12 +82,12 @@ stages:
           options: defaults,uid=0,gid=0,umask=077,shortname=winnt
           passno: 2
     mounts:
-      - name: ostree-centos/9/x86_64/edge
+      - name: ostree-${commit.const.ref}
         type: org.osbuild.ostree.deployment
         options:
           deployment:
             osname: rhel-edge
-            ref: centos/9/x86_64/edge
+            ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.ignition
     options:
@@ -99,34 +100,34 @@ stages:
         root:
           password: '!locked'
     mounts:
-      - name: ostree-centos/9/x86_64/edge
+      - name: ostree-${commit.const.ref}
         type: org.osbuild.ostree.deployment
         options:
           deployment:
             osname: rhel-edge
-            ref: centos/9/x86_64/edge
+            ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.keymap
     options:
       keymap: us
     mounts:
-      - name: ostree-centos/9/x86_64/edge
+      - name: ostree-${commit.const.ref}
         type: org.osbuild.ostree.deployment
         options:
           deployment:
             osname: rhel-edge
-            ref: centos/9/x86_64/edge
+            ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.locale
     options:
       language: C.UTF-8
     mounts:
-      - name: ostree-centos/9/x86_64/edge
+      - name: ostree-${commit.const.ref}
         type: org.osbuild.ostree.deployment
         options:
           deployment:
             osname: rhel-edge
-            ref: centos/9/x86_64/edge
+            ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.grub2
     options:
@@ -148,15 +149,15 @@ stages:
         timeout: 1
       ignition: true
     mounts:
-      - name: ostree-centos/9/x86_64/edge
+      - name: ostree-${commit.const.ref}
         type: org.osbuild.ostree.deployment
         options:
           deployment:
             osname: rhel-edge
-            ref: centos/9/x86_64/edge
+            ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.ostree.selinux
     options:
       deployment:
         osname: rhel-edge
-        ref: centos/9/x86_64/edge
+        ref: ${commit.const.ref}

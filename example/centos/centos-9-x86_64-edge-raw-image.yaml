@@ -42,6 +42,10 @@ otk.define:
             - clevis
             - lvm2
           exclude: []
+  commit:
+    otk.external.otk-resolve-ostree-commit:
+      url: http://example.com/repo
+      ref: centos/9/x86_64/edge
 
 otk.target.osbuild:
   pipelines:
