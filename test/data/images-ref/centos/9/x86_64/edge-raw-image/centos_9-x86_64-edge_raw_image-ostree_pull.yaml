@@ -1,0 +1,587 @@
+version: '2'
+pipelines:
+  - name: build
+    runner: org.osbuild.centos9
+    stages:
+      - type: org.osbuild.rpm
+        inputs:
+          packages:
+            type: org.osbuild.files
+            origin: org.osbuild.source
+            references:
+              - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
+              - id: sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0
+              - id: sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a
+              - id: sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d
+              - id: sha256:8a1bf05d306aa663e856f3c450c8b2ddc6800116b818c7d3b65503cd89f7682a
+              - id: sha256:e0031c189e34e10d9c202fa8d75f72d3296a239164fe6b07e7dc206c7b723d98
+              - id: sha256:c1cc69e61c0f1c7ade8df0f2994e582e7c1f2c57d1ec192a0baf9f96b7739d9d
+              - id: sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d
+              - id: sha256:a07b0a6df6f248078ebaf93e5bea115093f8a79e0a830e383b6c0b9f7f1605f5
+              - id: sha256:674177213da94e10f7c2eb25574d59f64ab942abe4746b1eedf24bfd4dc17a76
+              - id: sha256:c9694c21375651122e49ce8afc80f69910c81f7843714dca0f1af12d3cdcd6b0
+              - id: sha256:4791c5734c81dcc16b25ab5a006d8dd8250b9555a539e557cac9bea5a60fecce
+              - id: sha256:10d813242917dfde64a292f0744a6c332d29f907a8ebb31188af6ea8de1d1efa
+              - id: sha256:87fdf23aeb0c0b27488ecbabd19e8fa175df1b298369845787beb99ddc849714
+              - id: sha256:bf079a7045b8c53dd15c009532e5f1c789260a8a2debb1eddd67ecf47712dde8
+              - id: sha256:47b7e192a116767577c34ddb8487411519a1461df1d80b482f4622dc6c1f8674
+              - id: sha256:a9c2cd1e4311be8781e7421119b8cdeb9c0f36f7d8c63144a3fb2fd6c0ad1018
+              - id: sha256:c38a19b3443f7bc00411db2850001c2fa25d751544c364e1802148be05021cc0
+              - id: sha256:874acaf989b725037ce173f517404baeb8d2643275bf972edbae7c947e7c1071
+              - id: sha256:7f72cc3ac75a624f94ec606d8ddb4dbf6385595499e5449fd0d369d83fdb6467
+              - id: sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00
+              - id: sha256:a07b0a6df6f248078ebaf93e5bea115093f8a79e0a830e383b6c0b9f7f1605f5
+              - id: sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00
+              - id: sha256:e2f24de304a49d3d3c1261466376ab341c3834eb683d806cb534587f4fd48f8d
+              - id: sha256:dbf9956aa9c5ccd4c6d92f0550e959f58bb815fb570c305e9d93645eee2082d4
+              - id: sha256:9370ee4e95b7172989b9fd3f81860093529113ba42b69be340467d87a94bb253
+              - id: sha256:f4dc4ad92c4e57553b004ecd08561dd6b15d5dc7d99869c499544a890f18eddc
+              - id: sha256:21fb8eaa1cfa55dbc0ed009dc98fbbbc9de4ecaef53d51dc41ab1b0ae867ed49
+              - id: sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15
+              - id: sha256:ee72af381cca923b80a2759ce0daae8dbe0edc315ffe9732eae39c739280117e
+              - id: sha256:0a297cf5549425fa4f7cf9236959e92d97dc3ff0c42506ede88c253073891f11
+              - id: sha256:cf51db7aa57c11cf84bbe5f58f73eb415d037cd000bcce129696331d9bddfc3c
+              - id: sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d
+              - id: sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00
+              - id: sha256:e2f24de304a49d3d3c1261466376ab341c3834eb683d806cb534587f4fd48f8d
+              - id: sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a
+              - id: sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d
+              - id: sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15
+              - id: sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2
+        options:
+          gpgkeys:
+            - '-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+
+              mQINBFzMWxkBEADHrskpBgN9OphmhRkc7P/YrsAGSvvl7kfu+e9KAaU6f5MeAVyn
+
+              rIoM43syyGkgFyWgjZM8/rur7EMPY2yt+2q/1ZfLVCRn9856JqTIq0XRpDUe4nKQ
+
+              8BlA7wDVZoSDxUZkSuTIyExbDf0cpw89Tcf62Mxmi8jh74vRlPy1PgjWL5494b3X
+
+              5fxDidH4bqPZyxTBqPrUFuo+EfUVEqiGF94Ppq6ZUvrBGOVo1V1+Ifm9CGEK597c
+
+              aevcGc1RFlgxIgN84UpuDjPR9/zSndwJ7XsXYvZ6HXcKGagRKsfYDWGPkA5cOL/e
+
+              f+yObOnC43yPUvpggQ4KaNJ6+SMTZOKikM8yciyBwLqwrjo8FlJgkv8Vfag/2UR7
+
+              JINbyqHHoLUhQ2m6HXSwK4YjtwidF9EUkaBZWrrskYR3IRZLXlWqeOi/+ezYOW0m
+
+              vufrkcvsh+TKlVVnuwmEPjJ8mwUSpsLdfPJo1DHsd8FS03SCKPaXFdD7ePfEjiYk
+
+              nHpQaKE01aWVSLUiygn7F7rYemGqV9Vt7tBw5pz0vqSC72a5E3zFzIIuHx6aANry
+
+              Gat3aqU3qtBXOrA/dPkX9cWE+UR5wo/A2UdKJZLlGhM2WRJ3ltmGT48V9CeS6N9Y
+
+              m4CKdzvg7EWjlTlFrd/8WJ2KoqOE9leDPeXRPncubJfJ6LLIHyG09h9kKQARAQAB
+
+              tDpDZW50T1MgKENlbnRPUyBPZmZpY2lhbCBTaWduaW5nIEtleSkgPHNlY3VyaXR5
+
+              QGNlbnRvcy5vcmc+iQI3BBMBAgAhBQJczFsZAhsDBgsJCAcDAgYVCAIJCgsDFgIB
+
+              Ah4BAheAAAoJEAW1VbOEg8ZdjOsP/2ygSxH9jqffOU9SKyJDlraL2gIutqZ3B8pl
+
+              Gy/Qnb9QD1EJVb4ZxOEhcY2W9VJfIpnf3yBuAto7zvKe/G1nxH4Bt6WTJQCkUjcs
+
+              N3qPWsx1VslsAEz7bXGiHym6Ay4xF28bQ9XYIokIQXd0T2rD3/lNGxNtORZ2bKjD
+
+              vOzYzvh2idUIY1DgGWJ11gtHFIA9CvHcW+SMPEhkcKZJAO51ayFBqTSSpiorVwTq
+
+              a0cB+cgmCQOI4/MY+kIvzoexfG7xhkUqe0wxmph9RQQxlTbNQDCdaxSgwbF2T+gw
+
+              byaDvkS4xtR6Soj7BKjKAmcnf5fn4C5Or0KLUqMzBtDMbfQQihn62iZJN6ZZ/4dg
+
+              q4HTqyVpyuzMXsFpJ9L/FqH2DJ4exGGpBv00ba/Zauy7GsqOc5PnNBsYaHCply0X
+
+              407DRx51t9YwYI/ttValuehq9+gRJpOTTKp6AjZn/a5Yt3h6jDgpNfM/EyLFIY9z
+
+              V6CXqQQ/8JRvaik/JsGCf+eeLZOw4koIjZGEAg04iuyNTjhx0e/QHEVcYAqNLhXG
+
+              rCTTbCn3NSUO9qxEXC+K/1m1kaXoCGA0UWlVGZ1JSifbbMx0yxq/brpEZPUYm+32
+
+              o8XfbocBWljFUJ+6aljTvZ3LQLKTSPW7TFO+GXycAOmCGhlXh2tlc6iTc41PACqy
+
+              yy+mHmSv
+
+              =kkH7
+
+              -----END PGP PUBLIC KEY BLOCK-----'
+      - type: org.osbuild.selinux
+        options:
+          file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+          labels:
+            /usr/bin/cp: system_u:object_r:install_exec_t:s0
+  - name: ostree-deployment
+    build: name:build
+    stages:
+      - type: org.osbuild.ostree.init-fs
+      - type: org.osbuild.ostree.os-init
+        options:
+          osname: rhel-edge
+      - type: org.osbuild.mkdir
+        options:
+          paths:
+            - path: /boot/efi
+              mode: 448
+      - type: org.osbuild.ostree.pull
+        inputs:
+          commits:
+            type: org.osbuild.ostree
+            origin: org.osbuild.source
+            references:
+              6418a0aa4c44e24284267bdb12dec2f9929b0885cf92a6b5ad0ea92c2f94c717:
+                ref: centos/9/x86_64/edge
+        options:
+          repo: /ostree/repo
+          remote: rhel-edge
+      - type: org.osbuild.ostree.deploy
+        options:
+          osname: rhel-edge
+          ref: centos/9/x86_64/edge
+          remote: rhel-edge
+          mounts:
+            - /boot
+            - /boot/efi
+          rootfs:
+            label: root
+          kernel_opts:
+            - luks.uuid=5a8535ea-d662-4a9a-af6b-76b51fe4b522
+            - modprobe.blacklist=vc4 rw coreos.no_persist_ip
+            - ignition.platform.id=metal
+            - $ignition_firstboot
+      - type: org.osbuild.ostree.remotes
+        options:
+          repo: /ostree/repo
+          remotes:
+            - name: rhel-edge
+              url: http://example.com/repo
+      - type: org.osbuild.ostree.fillvar
+        options:
+          deployment:
+            osname: rhel-edge
+            ref: centos/9/x86_64/edge
+      - type: org.osbuild.ostree.config
+        options:
+          repo: /ostree/repo
+          config:
+            sysroot:
+              readonly: true
+              bootloader: none
+        mounts:
+          - name: ostree-centos/9/x86_64/edge
+            type: org.osbuild.ostree.deployment
+            options:
+              deployment:
+                osname: rhel-edge
+                ref: centos/9/x86_64/edge
+                serial: 0
+      - type: org.osbuild.fstab
+        options:
+          filesystems:
+            - uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+              vfs_type: xfs
+              path: /
+              options: defaults
+            - uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
+              vfs_type: xfs
+              path: /boot
+              options: defaults
+              freq: 1
+              passno: 1
+            - uuid: 7B77-95E7
+              vfs_type: vfat
+              path: /boot/efi
+              options: defaults,uid=0,gid=0,umask=077,shortname=winnt
+              passno: 2
+        mounts:
+          - name: ostree-centos/9/x86_64/edge
+            type: org.osbuild.ostree.deployment
+            options:
+              deployment:
+                osname: rhel-edge
+                ref: centos/9/x86_64/edge
+                serial: 0
+      - type: org.osbuild.ignition
+        options:
+          network:
+            - systemd.firstboot=off
+            - systemd.condition-first-boot=true
+      - type: org.osbuild.users
+        options:
+          users:
+            root:
+              password: '!locked'
+        mounts:
+          - name: ostree-centos/9/x86_64/edge
+            type: org.osbuild.ostree.deployment
+            options:
+              deployment:
+                osname: rhel-edge
+                ref: centos/9/x86_64/edge
+                serial: 0
+      - type: org.osbuild.keymap
+        options:
+          keymap: us
+        mounts:
+          - name: ostree-centos/9/x86_64/edge
+            type: org.osbuild.ostree.deployment
+            options:
+              deployment:
+                osname: rhel-edge
+                ref: centos/9/x86_64/edge
+                serial: 0
+      - type: org.osbuild.locale
+        options:
+          language: C.UTF-8
+        mounts:
+          - name: ostree-centos/9/x86_64/edge
+            type: org.osbuild.ostree.deployment
+            options:
+              deployment:
+                osname: rhel-edge
+                ref: centos/9/x86_64/edge
+                serial: 0
+      - type: org.osbuild.grub2
+        options:
+          root_fs_uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          boot_fs_uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
+          kernel_opts: luks.uuid=5a8535ea-d662-4a9a-af6b-76b51fe4b522 modprobe.blacklist=vc4
+            rw coreos.no_persist_ip ignition.platform.id=metal $ignition_firstboot
+          legacy: i386-pc
+          uefi:
+            vendor: centos
+            install: true
+            unified: true
+          greenboot: true
+          write_cmdline: false
+          config:
+            default: saved
+            terminal_output:
+              - console
+            timeout: 1
+          ignition: true
+        mounts:
+          - name: ostree-centos/9/x86_64/edge
+            type: org.osbuild.ostree.deployment
+            options:
+              deployment:
+                osname: rhel-edge
+                ref: centos/9/x86_64/edge
+                serial: 0
+      - type: org.osbuild.ostree.selinux
+        options:
+          deployment:
+            osname: rhel-edge
+            ref: centos/9/x86_64/edge
+  - name: image
+    build: name:build
+    stages:
+      - type: org.osbuild.truncate
+        options:
+          filename: disk.img
+          size: '10737418240'
+      - type: org.osbuild.sfdisk
+        options:
+          label: gpt
+          uuid: D209C89E-EA5E-4FBD-B161-B461CCE297E0
+          partitions:
+            - bootable: true
+              size: 2048
+              start: 2048
+              type: 21686148-6449-6E6F-744E-656564454649
+              uuid: FAC7F1FB-3E8D-4137-A512-961DE09A5549
+            - size: 260096
+              start: 4096
+              type: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
+              uuid: 68B2905B-DF3E-4FB3-80FA-49D1E773AA33
+            - size: 786432
+              start: 264192
+              type: BC13C2FF-59E6-4262-A352-B275FD6F7172
+              uuid: CB07C243-BC44-4717-853E-28852021225B
+            - size: 19920863
+              start: 1050624
+              type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+              uuid: 6264D520-3FB9-423F-8AB8-7A0A8E3D3562
+        devices:
+          device:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              lock: true
+      - type: org.osbuild.luks2.format
+        options:
+          passphrase: osbuild
+          uuid: 5a8535ea-d662-4a9a-af6b-76b51fe4b522
+          cipher: cipher_null
+          label: crypt_root
+          sector-size: 0
+          pbkdf:
+            method: argon2id
+            iterations: 4
+            memory: 32
+            parallelism: 1
+        devices:
+          device:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 1050624
+              size: 19920863
+              lock: true
+      - type: org.osbuild.clevis.luks-bind
+        options:
+          passphrase: osbuild
+          pin: 'null'
+          policy: '{}'
+        devices:
+          device:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 1050624
+              size: 19920863
+              lock: true
+      - type: org.osbuild.lvm2.create
+        options:
+          volumes:
+            - name: rootlv
+              size: 9663676416B
+        devices:
+          device:
+            type: org.osbuild.luks2
+            parent: luks-5a85
+            options:
+              passphrase: osbuild
+          luks-5a85:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 1050624
+              size: 19920863
+              lock: true
+      - type: org.osbuild.mkfs.fat
+        options:
+          volid: 7B7795E7
+        devices:
+          device:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 4096
+              size: 260096
+              lock: true
+      - type: org.osbuild.mkfs.xfs
+        options:
+          uuid: dbd21911-1c4e-4107-8a9f-14fe6e751358
+          label: boot
+        devices:
+          device:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 264192
+              size: 786432
+              lock: true
+      - type: org.osbuild.mkfs.xfs
+        options:
+          uuid: 9851898e-0b30-437d-8fad-51ec16c3697f
+          label: root
+        devices:
+          device:
+            type: org.osbuild.lvm2.lv
+            parent: rootvg
+            options:
+              volume: rootlv
+          luks-5a85:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 1050624
+              size: 19920863
+              lock: true
+          rootvg:
+            type: org.osbuild.luks2
+            parent: luks-5a85
+            options:
+              passphrase: osbuild
+      - type: org.osbuild.copy
+        inputs:
+          root-tree:
+            type: org.osbuild.tree
+            origin: org.osbuild.pipeline
+            references:
+              - name:ostree-deployment
+        options:
+          paths:
+            - from: input://root-tree/
+              to: mount://-/
+        devices:
+          '-':
+            type: org.osbuild.lvm2.lv
+            parent: rootvg
+            options:
+              volume: rootlv
+          boot:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 264192
+              size: 786432
+          boot-efi:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 4096
+              size: 260096
+          luks-5a85:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 1050624
+              size: 19920863
+          rootvg:
+            type: org.osbuild.luks2
+            parent: luks-5a85
+            options:
+              passphrase: osbuild
+        mounts:
+          - name: '-'
+            type: org.osbuild.xfs
+            source: '-'
+            target: /
+          - name: boot
+            type: org.osbuild.xfs
+            source: boot
+            target: /boot
+          - name: boot-efi
+            type: org.osbuild.fat
+            source: boot-efi
+            target: /boot/efi
+      - type: org.osbuild.lvm2.metadata
+        options:
+          vg_name: rootvg
+        devices:
+          device:
+            type: org.osbuild.luks2
+            parent: luks-5a85
+            options:
+              passphrase: osbuild
+          luks-5a85:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 1050624
+              size: 19920863
+              lock: true
+      - type: org.osbuild.luks2.remove-key
+        options:
+          passphrase: osbuild
+        devices:
+          device:
+            type: org.osbuild.loopback
+            options:
+              filename: disk.img
+              start: 1050624
+              size: 19920863
+              lock: true
+      - type: org.osbuild.grub2.inst
+        options:
+          filename: disk.img
+          platform: i386-pc
+          location: 2048
+          core:
+            type: mkimage
+            partlabel: gpt
+            filesystem: xfs
+          prefix:
+            type: partition
+            partlabel: gpt
+            number: 2
+            path: /grub2
+  - name: xz
+    build: name:build
+    stages:
+      - type: org.osbuild.xz
+        inputs:
+          file:
+            type: org.osbuild.files
+            origin: org.osbuild.pipeline
+            references:
+              name:image:
+                file: disk.img
+        options:
+          filename: image.raw.xz
+sources:
+  org.osbuild.curl:
+    items:
+      sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15:
+        url: https://example.com/repo/packages/dosfstools
+      sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-appstream
+      sha256:0a297cf5549425fa4f7cf9236959e92d97dc3ff0c42506ede88c253073891f11:
+        url: https://example.com/repo/packages/clevis-luks
+      sha256:10d813242917dfde64a292f0744a6c332d29f907a8ebb31188af6ea8de1d1efa:
+        url: https://example.com/repo/packages/iwl105-firmware
+      sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d:
+        url: https://example.com/repo/packages/glibc
+      sha256:21fb8eaa1cfa55dbc0ed009dc98fbbbc9de4ecaef53d51dc41ab1b0ae867ed49:
+        url: https://example.com/repo/packages/xfsprogs
+      sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0:
+        url: https://example.com/repo/packages/coreutils
+      sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-baseos
+      sha256:4791c5734c81dcc16b25ab5a006d8dd8250b9555a539e557cac9bea5a60fecce:
+        url: https://example.com/repo/packages/iwl100-firmware
+      sha256:47b7e192a116767577c34ddb8487411519a1461df1d80b482f4622dc6c1f8674:
+        url: https://example.com/repo/packages/iwl2030-firmware
+      sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00:
+        url: https://example.com/repo/packages/dracut-config-generic
+      sha256:674177213da94e10f7c2eb25574d59f64ab942abe4746b1eedf24bfd4dc17a76:
+        url: https://example.com/repo/packages/microcode_ctl
+      sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2:
+        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-rt
+      sha256:7f72cc3ac75a624f94ec606d8ddb4dbf6385595499e5449fd0d369d83fdb6467:
+        url: https://example.com/repo/packages/iwl6050-firmware
+      sha256:874acaf989b725037ce173f517404baeb8d2643275bf972edbae7c947e7c1071:
+        url: https://example.com/repo/packages/iwl5150-firmware
+      sha256:87fdf23aeb0c0b27488ecbabd19e8fa175df1b298369845787beb99ddc849714:
+        url: https://example.com/repo/packages/iwl135-firmware
+      sha256:8a1bf05d306aa663e856f3c450c8b2ddc6800116b818c7d3b65503cd89f7682a:
+        url: https://example.com/repo/packages/platform-python
+      sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a:
+        url: https://example.com/repo/packages/xz
+      sha256:9370ee4e95b7172989b9fd3f81860093529113ba42b69be340467d87a94bb253:
+        url: https://example.com/repo/packages/shim-x64
+      sha256:a07b0a6df6f248078ebaf93e5bea115093f8a79e0a830e383b6c0b9f7f1605f5:
+        url: https://example.com/repo/packages/grub2-pc
+      sha256:a9c2cd1e4311be8781e7421119b8cdeb9c0f36f7d8c63144a3fb2fd6c0ad1018:
+        url: https://example.com/repo/packages/iwl3160-firmware
+      sha256:bf079a7045b8c53dd15c009532e5f1c789260a8a2debb1eddd67ecf47712dde8:
+        url: https://example.com/repo/packages/iwl2000-firmware
+      sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528:
+        url: https://example.com/repo/packages/selinux-policy-targeted
+      sha256:c1cc69e61c0f1c7ade8df0f2994e582e7c1f2c57d1ec192a0baf9f96b7739d9d:
+        url: https://example.com/repo/packages/python3
+      sha256:c38a19b3443f7bc00411db2850001c2fa25d751544c364e1802148be05021cc0:
+        url: https://example.com/repo/packages/iwl5000-firmware
+      sha256:c9694c21375651122e49ce8afc80f69910c81f7843714dca0f1af12d3cdcd6b0:
+        url: https://example.com/repo/packages/iwl1000-firmware
+      sha256:cf51db7aa57c11cf84bbe5f58f73eb415d037cd000bcce129696331d9bddfc3c:
+        url: https://example.com/repo/packages/cryptsetup
+      sha256:dbf9956aa9c5ccd4c6d92f0550e959f58bb815fb570c305e9d93645eee2082d4:
+        url: https://example.com/repo/packages/grub2-efi-x64
+      sha256:e0031c189e34e10d9c202fa8d75f72d3296a239164fe6b07e7dc206c7b723d98:
+        url: https://example.com/repo/packages/systemd
+      sha256:e2f24de304a49d3d3c1261466376ab341c3834eb683d806cb534587f4fd48f8d:
+        url: https://example.com/repo/packages/efibootmgr
+      sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d:
+        url: https://example.com/repo/packages/rpm-ostree
+      sha256:ee72af381cca923b80a2759ce0daae8dbe0edc315ffe9732eae39c739280117e:
+        url: https://example.com/repo/packages/clevis
+      sha256:f4dc4ad92c4e57553b004ecd08561dd6b15d5dc7d99869c499544a890f18eddc:
+        url: https://example.com/repo/packages/lvm2
+  org.osbuild.ostree:
+    items:
+      6418a0aa4c44e24284267bdb12dec2f9929b0885cf92a6b5ad0ea92c2f94c717:
+        remote:
+          url: http://example.com/repo
