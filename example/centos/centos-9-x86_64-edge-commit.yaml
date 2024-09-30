@@ -152,8 +152,7 @@ otk.target.osbuild:
                 dbpath: /usr/share/rpm
                 disable_dracut: true
                 ostree_booted: true
-        - type: org.osbuild.fix-bls
-          options: {}
+        - otk.include: "fragment/fix-bls/default.yaml"
         - otk.include: "fragment/locale.yaml"
         - otk.include: "fragment/timezone.yaml"
         - type: org.osbuild.sysconfig
