@@ -55,6 +55,7 @@ otk.define:
     - "modprobe.blacklist=vc4 rw coreos.no_persist_ip"
     - "ignition.platform.id=metal"
     - "$ignition_firstboot"
+  img_filename: disk.img
 
 otk.target.osbuild:
   pipelines:
@@ -71,7 +72,7 @@ otk.target.osbuild:
               origin: org.osbuild.pipeline
               references:
                 name:image:
-                  file: disk.img
+                  file: ${img_filename}
           options:
             filename: image.raw.xz
   sources:
