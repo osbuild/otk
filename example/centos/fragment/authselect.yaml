@@ -1,3 +1,0 @@
-- type: org.osbuild.authselect
-  options:
-    profile: sssd
