@@ -136,9 +136,7 @@ otk.target.osbuild:
             packageset: ${packages.os}
             gpgkeys:
               otk.include: "common/gpgkeys.yaml"
-        - type: org.osbuild.fix-bls
-          options:
-            prefix: ''
+        - otk.include: "fragment/fix-bls/empty-prefix.yaml"
         - otk.include: "fragment/locale.yaml"
         - type: org.osbuild.keymap
           options:
