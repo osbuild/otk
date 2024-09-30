@@ -17,9 +17,9 @@ def must_be(kind: Type) -> Callable:
     def decorator(function):
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
-            if not isinstance(args[1], kind):
+            if not isinstance(args[2], kind):
                 raise TransformDirectiveTypeError(
-                    f"otk.define expects a {kind!r} as its argument but received a `{type(args[1])}`: `{args[1]!r}`")
+                    f"otk.define expects a {kind!r} as its argument but received a `{type(args[2])}`: `{args[2]!r}`")
             return function(*args, **kwargs)
 
         return wrapper
@@ -34,7 +34,7 @@ def must_pass(*vs):
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
             for v in vs:
-                v(args[1])
+                v(args[2])
             return function(*args, **kwargs)
 
         return wrapper
