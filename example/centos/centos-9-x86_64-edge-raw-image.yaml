@@ -46,6 +46,8 @@ otk.define:
     otk.external.otk-resolve-ostree-commit:
       url: http://example.com/repo
       ref: centos/9/x86_64/edge
+  osname: rhel-edge
+  remote: ${osname}
 
 otk.target.osbuild:
   pipelines:

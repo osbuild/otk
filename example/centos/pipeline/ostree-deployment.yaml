@@ -4,7 +4,7 @@ stages:
   - type: org.osbuild.ostree.init-fs
   - type: org.osbuild.ostree.os-init
     options:
-      osname: rhel-edge
+      osname: ${osname}
   - type: org.osbuild.mkdir
     options:
       paths:
@@ -21,12 +21,12 @@ stages:
             ref: ${commit.const.ref}
     options:
       repo: /ostree/repo
-      remote: rhel-edge
+      remote: ${remote}
   - type: org.osbuild.ostree.deploy
     options:
-      osname: rhel-edge
+      osname: ${osname}
       ref: ${commit.const.ref}
-      remote: rhel-edge
+      remote: ${remote}
       mounts:
         - /boot
         - /boot/efi
@@ -41,12 +41,12 @@ stages:
     options:
       repo: /ostree/repo
       remotes:
-        - name: rhel-edge
+        - name: ${remote}
           url: ${commit.const.url}
   - type: org.osbuild.ostree.fillvar
     options:
       deployment:
-        osname: rhel-edge
+        osname: ${osname}
         ref: ${commit.const.ref}
   - type: org.osbuild.ostree.config
     options:
@@ -60,7 +60,7 @@ stages:
         type: org.osbuild.ostree.deployment
         options:
           deployment:
-            osname: rhel-edge
+            osname: ${osname}
             ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.fstab
@@ -86,7 +86,7 @@ stages:
         type: org.osbuild.ostree.deployment
         options:
           deployment:
-            osname: rhel-edge
+            osname: ${osname}
             ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.ignition
@@ -104,7 +104,7 @@ stages:
         type: org.osbuild.ostree.deployment
         options:
           deployment:
-            osname: rhel-edge
+            osname: ${osname}
             ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.keymap
@@ -115,7 +115,7 @@ stages:
         type: org.osbuild.ostree.deployment
         options:
           deployment:
-            osname: rhel-edge
+            osname: ${osname}
             ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.locale
@@ -126,7 +126,7 @@ stages:
         type: org.osbuild.ostree.deployment
         options:
           deployment:
-            osname: rhel-edge
+            osname: ${osname}
             ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.grub2
@@ -153,11 +153,11 @@ stages:
         type: org.osbuild.ostree.deployment
         options:
           deployment:
-            osname: rhel-edge
+            osname: ${osname}
             ref: ${commit.const.ref}
             serial: 0
   - type: org.osbuild.ostree.selinux
     options:
       deployment:
-        osname: rhel-edge
+        osname: ${osname}
         ref: ${commit.const.ref}
