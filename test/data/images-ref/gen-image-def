@@ -26,8 +26,17 @@ def uuid_for_label(fs_label, osbuild_manifest):
     return ""
 
 
-def make_config(_: str) -> bytes:
-    return b'{"name": "empty"}'
+def make_config(img_type: str) -> bytes:
+    default = b'{"name": "empty"}'
+
+    match img_type.split("-"):
+        case ["iot", "commit"] | ["edge", "commit"]:
+            return default
+        case ["iot", *_] | ["edge", *_]:
+            # ostree images and installers require a repo URL
+            return b'{"name": "ostree-pull", "options": {"ostree": {"url": "http://example.com/repo"}}}'
+        case _:
+            return default
 
 
 def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver: str, arch: str, img_type: str) -> None:
