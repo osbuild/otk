@@ -455,9 +455,7 @@ otk.target.osbuild:
             network:
               networking: true
               no_zero_conf: true
-        - type: org.osbuild.selinux
-          options:
-            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+        - otk.include: "fragment/selinux/targeted.yaml"
     - name: bootiso-tree
       build: name:build
       stages:

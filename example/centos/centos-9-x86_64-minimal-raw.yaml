@@ -131,9 +131,7 @@ otk.target.osbuild:
               - firewalld.service
               - sshd.service
               - initial-setup.service
-        - type: org.osbuild.selinux
-          options:
-            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+        - otk.include: "fragment/selinux/targeted.yaml"
     - otk.include: pipeline/image/x86_64-no-bios.yaml
     - name: xz
       build: name:build

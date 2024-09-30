@@ -283,9 +283,7 @@ otk.target.osbuild:
               - sshd
               - waagent
             default_target: multi-user.target
-        - type: org.osbuild.selinux
-          options:
-            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+        - otk.include: "fragment/selinux/targeted.yaml"
     - otk.include: "pipeline/image/aarch64.yaml"
     - name: vpc
       build: name:build
