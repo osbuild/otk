@@ -98,9 +98,7 @@ otk.target.osbuild:
         - otk.external.otk-make-fstab-stage:
             ${filesystem}
         - otk.include: fragment/grub2/x86_64.yaml
-        - type: org.osbuild.selinux
-          options:
-            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+        - otk.include: "fragment/selinux/targeted.yaml"
     - otk.include: "pipeline/image/x86_64.yaml"
     - name: vmdk
       build: name:build

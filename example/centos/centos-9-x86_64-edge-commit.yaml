@@ -188,9 +188,7 @@ otk.target.osbuild:
               - fdo-client-linuxapp.service
               - ignition-firstboot-complete.service
               - coreos-ignition-write-issues.service
-        - type: org.osbuild.selinux
-          options:
-            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+        - otk.include: "fragment/selinux/targeted.yaml"
         - type: org.osbuild.ostree.preptree
           options:
             etc_group_members:

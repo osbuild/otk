@@ -242,9 +242,7 @@ otk.target.osbuild:
               - reboot.target
               - tuned
             default_target: multi-user.target
-        - type: org.osbuild.selinux
-          options:
-            file_contexts: etc/selinux/targeted/contexts/files/file_contexts
+        - otk.include: "fragment/selinux/targeted.yaml"
     - otk.include: "pipeline/image/x86_64.yaml"
   sources:
     otk.external.osbuild-make-depsolve-dnf4-curl-source:
