@@ -17,6 +17,10 @@ class ParseKeyError(ParseTypeError):
     """A required key was missing for a position in the omnifest."""
 
 
+class ParseDuplicatedYamlKeyError(ParseError):
+    """A yaml key is duplicated."""
+
+
 class ParseVersionError(ParseKeyError):
     """The `otk.version` key is missing from an omnifest."""
 
