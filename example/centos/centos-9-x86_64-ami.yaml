@@ -3,6 +3,7 @@ otk.version: "1"
 otk.define:
   modifications:
     locale: en_US.UTF-8
+    timezone: UTC
   filesystem:
     modifications:
       filename: "image.raw"
@@ -139,9 +140,7 @@ otk.target.osbuild:
             x11-keymap:
               layouts:
                 - us
-        - type: org.osbuild.timezone
-          options:
-            zone: UTC
+        - otk.include: "fragment/timezone.yaml"
         - type: org.osbuild.chrony
           options:
             servers:

@@ -1,6 +1,8 @@
 otk.version: "1"
 
 otk.define:
+  modifications:
+    timezone: America/New_York
   # XXX these sizes are currently hardcoded in `images` in the future they
   # XXX might come from an external or elsewhere?
   # XXX https://github.com/osbuild/images/blob/v0.89.0/pkg/image/anaconda_tar_installer.go#L24
@@ -458,9 +460,7 @@ otk.target.osbuild:
         - type: org.osbuild.locale
           options:
             language: C.UTF-8
-        - type: org.osbuild.timezone
-          options:
-            zone: America/New_York
+        - otk.include: "fragment/timezone.yaml"
         - type: org.osbuild.sysconfig
           options:
             kernel:

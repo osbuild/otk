@@ -3,6 +3,7 @@ otk.version: "1"
 otk.define:
   modifications:
     locale: en_US.UTF-8
+    timezone: America/New_York
   filesystem:
     modifications:
   packages:
@@ -82,9 +83,7 @@ otk.target.osbuild:
               otk.include: "common/gpgkeys.yaml"
         - otk.include: "fragment/fix-bls/empty-prefix.yaml"
         - otk.include: "fragment/locale.yaml"
-        - type: org.osbuild.timezone
-          options:
-            zone: America/New_York
+        - otk.include: "fragment/timezone.yaml"
         - type: org.osbuild.sysconfig
           options:
             kernel:
