@@ -3,6 +3,7 @@ otk.version: "1"
 otk.define:
   modifications:
     locale: C.UTF-8
+    timezone: America/New_York
   filesystem:
     modifications:
     # empty
@@ -141,9 +142,7 @@ otk.target.osbuild:
         - type: org.osbuild.fix-bls
           options: {}
         - otk.include: "fragment/locale.yaml"
-        - type: org.osbuild.timezone
-          options:
-            zone: America/New_York
+        - otk.include: "fragment/timezone.yaml"
         - type: org.osbuild.sysconfig
           options:
             kernel:
