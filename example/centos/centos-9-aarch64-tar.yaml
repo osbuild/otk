@@ -1,6 +1,8 @@
 otk.version: "1"
 
 otk.define:
+  modifications:
+    locale: C.UTF-8
   kernel:
     cmdline: console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0
   packages:
@@ -51,9 +53,7 @@ otk.target.osbuild:
               otk.include: "common/gpgkeys.yaml"
         - type: org.osbuild.fix-bls
           options: {}
-        - type: org.osbuild.locale
-          options:
-            language: C.UTF-8
+        - otk.include: "fragment/locale.yaml"
         - type: org.osbuild.timezone
           options:
             zone: America/New_York

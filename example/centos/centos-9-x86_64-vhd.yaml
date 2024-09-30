@@ -1,6 +1,8 @@
 otk.version: "1"
 
 otk.define:
+  modifications:
+    locale: en_US.UTF-8
   filesystem:
     modifications:
   packages:
@@ -137,9 +139,7 @@ otk.target.osbuild:
         - type: org.osbuild.fix-bls
           options:
             prefix: ''
-        - type: org.osbuild.locale
-          options:
-            language: en_US.UTF-8
+        - otk.include: "fragment/locale.yaml"
         - type: org.osbuild.keymap
           options:
             keymap: us
