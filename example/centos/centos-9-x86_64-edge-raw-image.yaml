@@ -447,76 +447,13 @@ otk.target.osbuild:
           options:
             filename: image.raw.xz
   sources:
-    org.osbuild.curl:
-      items:
-        sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15:
-          url: https://example.com/repo/packages/dosfstools
-        sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d:
-          url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-appstream
-        sha256:0a297cf5549425fa4f7cf9236959e92d97dc3ff0c42506ede88c253073891f11:
-          url: https://example.com/repo/packages/clevis-luks
-        sha256:10d813242917dfde64a292f0744a6c332d29f907a8ebb31188af6ea8de1d1efa:
-          url: https://example.com/repo/packages/iwl105-firmware
-        sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d:
-          url: https://example.com/repo/packages/glibc
-        sha256:21fb8eaa1cfa55dbc0ed009dc98fbbbc9de4ecaef53d51dc41ab1b0ae867ed49:
-          url: https://example.com/repo/packages/xfsprogs
-        sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0:
-          url: https://example.com/repo/packages/coreutils
-        sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15:
-          url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-baseos
-        sha256:4791c5734c81dcc16b25ab5a006d8dd8250b9555a539e557cac9bea5a60fecce:
-          url: https://example.com/repo/packages/iwl100-firmware
-        sha256:47b7e192a116767577c34ddb8487411519a1461df1d80b482f4622dc6c1f8674:
-          url: https://example.com/repo/packages/iwl2030-firmware
-        sha256:5660f11783e742698cec671d45910e74342fe3e48ddf054f38c0828776b08d00:
-          url: https://example.com/repo/packages/dracut-config-generic
-        sha256:674177213da94e10f7c2eb25574d59f64ab942abe4746b1eedf24bfd4dc17a76:
-          url: https://example.com/repo/packages/microcode_ctl
-        sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2:
-          url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-rt
-        sha256:7f72cc3ac75a624f94ec606d8ddb4dbf6385595499e5449fd0d369d83fdb6467:
-          url: https://example.com/repo/packages/iwl6050-firmware
-        sha256:874acaf989b725037ce173f517404baeb8d2643275bf972edbae7c947e7c1071:
-          url: https://example.com/repo/packages/iwl5150-firmware
-        sha256:87fdf23aeb0c0b27488ecbabd19e8fa175df1b298369845787beb99ddc849714:
-          url: https://example.com/repo/packages/iwl135-firmware
-        sha256:8a1bf05d306aa663e856f3c450c8b2ddc6800116b818c7d3b65503cd89f7682a:
-          url: https://example.com/repo/packages/platform-python
-        sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a:
-          url: https://example.com/repo/packages/xz
-        sha256:9370ee4e95b7172989b9fd3f81860093529113ba42b69be340467d87a94bb253:
-          url: https://example.com/repo/packages/shim-x64
-        sha256:a07b0a6df6f248078ebaf93e5bea115093f8a79e0a830e383b6c0b9f7f1605f5:
-          url: https://example.com/repo/packages/grub2-pc
-        sha256:a9c2cd1e4311be8781e7421119b8cdeb9c0f36f7d8c63144a3fb2fd6c0ad1018:
-          url: https://example.com/repo/packages/iwl3160-firmware
-        sha256:bf079a7045b8c53dd15c009532e5f1c789260a8a2debb1eddd67ecf47712dde8:
-          url: https://example.com/repo/packages/iwl2000-firmware
-        sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528:
-          url: https://example.com/repo/packages/selinux-policy-targeted
-        sha256:c1cc69e61c0f1c7ade8df0f2994e582e7c1f2c57d1ec192a0baf9f96b7739d9d:
-          url: https://example.com/repo/packages/python3
-        sha256:c38a19b3443f7bc00411db2850001c2fa25d751544c364e1802148be05021cc0:
-          url: https://example.com/repo/packages/iwl5000-firmware
-        sha256:c9694c21375651122e49ce8afc80f69910c81f7843714dca0f1af12d3cdcd6b0:
-          url: https://example.com/repo/packages/iwl1000-firmware
-        sha256:cf51db7aa57c11cf84bbe5f58f73eb415d037cd000bcce129696331d9bddfc3c:
-          url: https://example.com/repo/packages/cryptsetup
-        sha256:dbf9956aa9c5ccd4c6d92f0550e959f58bb815fb570c305e9d93645eee2082d4:
-          url: https://example.com/repo/packages/grub2-efi-x64
-        sha256:e0031c189e34e10d9c202fa8d75f72d3296a239164fe6b07e7dc206c7b723d98:
-          url: https://example.com/repo/packages/systemd
-        sha256:e2f24de304a49d3d3c1261466376ab341c3834eb683d806cb534587f4fd48f8d:
-          url: https://example.com/repo/packages/efibootmgr
-        sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d:
-          url: https://example.com/repo/packages/rpm-ostree
-        sha256:ee72af381cca923b80a2759ce0daae8dbe0edc315ffe9732eae39c739280117e:
-          url: https://example.com/repo/packages/clevis
-        sha256:f4dc4ad92c4e57553b004ecd08561dd6b15d5dc7d99869c499544a890f18eddc:
-          url: https://example.com/repo/packages/lvm2
-    org.osbuild.ostree:
-      items:
-        6418a0aa4c44e24284267bdb12dec2f9929b0885cf92a6b5ad0ea92c2f94c717:
-          remote:
-            url: http://example.com/repo
+    otk.op.join:
+      values:
+        - otk.external.osbuild-make-depsolve-dnf4-curl-source:
+            packagesets:
+              - ${packages.build}
+        - org.osbuild.ostree:
+            items:
+              6418a0aa4c44e24284267bdb12dec2f9929b0885cf92a6b5ad0ea92c2f94c717:
+                remote:
+                  url: http://example.com/repo
