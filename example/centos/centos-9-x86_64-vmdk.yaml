@@ -73,10 +73,7 @@ otk.target.osbuild:
     - name: os
       build: name:build
       stages:
-        - type: org.osbuild.kernel-cmdline
-          options:
-            root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
-            kernel_opts: ${kernel.cmdline}
+        - otk.include: "fragment/kernel-cmdline.yaml"
         - otk.external.osbuild-make-depsolve-dnf4-rpm-stage:
             packageset: ${packages.os}
             gpgkeys:

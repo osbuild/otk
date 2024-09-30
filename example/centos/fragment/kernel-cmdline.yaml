@@ -1,0 +1,4 @@
+type: org.osbuild.kernel-cmdline
+options:
+  root_fs_uuid: ${filesystem.const.partition_map.root.uuid}
+  kernel_opts: ${kernel.cmdline}
