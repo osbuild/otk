@@ -76,6 +76,9 @@ otk.define:
 otk.include: ${variable}
 ```
 
+Using the above `packages` map example you can refer to the include and exclude
+lists using `${packages.include}` and `${packages.exclude}`.
+
 If a `${}` appears in a `str` value then its string value as it appears
 in `otk.define` is replaced into the string. Note that substitutions
 in this form require the value to be a string in the `otk.define`.
