@@ -4,14 +4,16 @@ identical to images produced by the previous `images` implementation.
 
 Generate new ones with:
 ```
-./gen-image-def <images-git-checkout> <distro_name> <distro_ver> <arch> <type>
+./gen-image-def <images-git-checkout> <distro_name> <distro_ver> <arch> <type> <empty|full>
 ```
 and put them into git. e.g.
 ```
-$ ./gen-image-def ~/devel/osbuild/images centos 9 x86_64 qcow2
-$ git add centos/9/x86_64/qcow2/centos_9-x86_64-qcow2-empty.yaml
+$ ./gen-image-def ~/devel/osbuild/images centos 9 x86_64 qcow2 empty
+$ git add centos/9/x86_64/qcow2/empty/centos_9-x86_64-qcow2-empty.yaml
 ```
 (ideally we would generate them on the fly).
 
+
+When doing customizations, pass "full" as the last parameter.
 
 [0] https://github.com/osbuild/images
