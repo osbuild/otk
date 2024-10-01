@@ -1,14 +1,15 @@
 otk.version: "1"
 
 otk.define:
+  architecture: x86_64
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - coreutils
@@ -24,11 +25,11 @@ otk.define:
           exclude: []
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - alternatives

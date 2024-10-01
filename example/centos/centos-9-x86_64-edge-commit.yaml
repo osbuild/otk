@@ -1,6 +1,7 @@
 otk.version: "1"
 
 otk.define:
+  architecture: x86_64
   modifications:
     locale: C.UTF-8
     timezone: America/New_York
@@ -10,11 +11,11 @@ otk.define:
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - coreutils
@@ -32,11 +33,11 @@ otk.define:
           exclude: []
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - NetworkManager
@@ -206,7 +207,7 @@ otk.target.osbuild:
               references:
                 - name:os
           options:
-            ref: centos/9/x86_64/edge
+            ref: centos/9/${architecture}/edge
             os_version: 9-stream
     - name: commit-archive
       build: name:build

@@ -1,6 +1,7 @@
 otk.version: "1"
 
 otk.define:
+  architecture: aarch64
   modifications:
     locale: en_US.UTF-8
     timezone: Etc/UTC
@@ -10,11 +11,11 @@ otk.define:
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: aarch64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/aarch64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - coreutils
@@ -33,11 +34,11 @@ otk.define:
           exclude: []
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: aarch64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/aarch64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - "@Server"
@@ -121,7 +122,7 @@ otk.define:
         packageset: ${packages.os}
         packagename: "kernel"
 
-otk.include: "common/partition-table/aarch64/vhd.yaml"
+otk.include: "common/partition-table/${architecture}/vhd.yaml"
 
 otk.target.osbuild:
   pipelines:
@@ -284,7 +285,7 @@ otk.target.osbuild:
               - waagent
             default_target: multi-user.target
         - otk.include: "fragment/selinux/targeted.yaml"
-    - otk.include: "pipeline/image/aarch64.yaml"
+    - otk.include: "pipeline/image/${architecture}.yaml"
     - name: vpc
       build: name:build
       stages:

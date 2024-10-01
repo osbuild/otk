@@ -1,6 +1,7 @@
 otk.version: "1"
 
 otk.define:
+  architecture: x86_64
   modifications:
     locale: en_US.UTF-8
     timezone: UTC
@@ -10,11 +11,11 @@ otk.define:
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - coreutils
@@ -33,15 +34,15 @@ otk.define:
           exclude: []
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             # https://github.com/osbuild/images/blob/v0.86.0/pkg/distro/rhel/rhel9/ami.go#L189
-            # https://github.com/osbuild/images/blob/v0.86.0/pkg/platform/x86_64.go#L37
+            # https://github.com/osbuild/images/blob/v0.86.0/pkg/platform/${architecture}.go#L37
             - "@core"
             - NetworkManager-cloud-setup
             - authselect-compat
@@ -105,7 +106,7 @@ otk.define:
         packageset: ${packages.os}
         packagename: "kernel"
 
-otk.include: "common/partition-table/x86_64/default.yaml"
+otk.include: "common/partition-table/${architecture}/default.yaml"
 
 otk.target.osbuild:
   pipelines:
@@ -221,7 +222,7 @@ otk.target.osbuild:
               PasswordAuthentication: false
         - otk.external.otk-make-fstab-stage:
             ${filesystem}
-        - otk.include: "fragment/grub2/x86_64.yaml"
+        - otk.include: "fragment/grub2/${architecture}.yaml"
         - type: org.osbuild.systemd
           options:
             enabled_services:
@@ -237,7 +238,7 @@ otk.target.osbuild:
               - tuned
             default_target: multi-user.target
         - otk.include: "fragment/selinux/targeted.yaml"
-    - otk.include: "pipeline/image/x86_64.yaml"
+    - otk.include: "pipeline/image/${architecture}.yaml"
   sources:
     otk.external.osbuild-make-depsolve-dnf4-curl-source:
       packagesets:
