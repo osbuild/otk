@@ -75,7 +75,7 @@ Given the following script called `concat` in `/usr/local/libexec/otk/concat`:
 ```bash
 #!/usr/bin/env bash
 
-output="$(jq -jr '.tree.parts[]' <<< "${1}")"
+output="$(cat - | jq -jr '.tree.parts[]')"
 echo "{\"tree\":{\"output\":\"$output\"}}"
 ```
 
@@ -109,7 +109,7 @@ which results in the following output:
 ```json
 {
   "tree": {
-    "string": "listofstrings"
+    "output": "listofstrings"
   }
 }
 ```
@@ -118,7 +118,7 @@ and the final omnifest will be:
 
 ```yaml
 examplestring:
-  listofstrings
+  output: listofstrings
 ```
 
 ## Paths
