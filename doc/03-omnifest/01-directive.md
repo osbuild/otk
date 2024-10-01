@@ -123,8 +123,8 @@ contents of the file.
 
 Note that cyclical includes are forbidden and will cause an error.
 
-The short form expects a `str` for its value, the long form expects a `map` for
-its value.
+It expects a `str` for its value and as with other strings variable substitution
+is performed before using it.
 
 ```yaml
 otk.include: file.yaml
