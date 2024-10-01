@@ -6,7 +6,7 @@ options:
   uefi:
     vendor: centos
     unified: true
-  saved_entry: ffffffffffffffffffffffffffffffff-8-2.fk1.x86_64
+  saved_entry: ffffffffffffffffffffffffffffffff-${kernel.package.version}-${kernel.package.release}.${kernel.package.arch}
   write_cmdline: false
   config:
     default: saved
