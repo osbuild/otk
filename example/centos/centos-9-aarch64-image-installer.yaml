@@ -1,6 +1,7 @@
 otk.version: "1"
 
 otk.define:
+  architecture: aarch64
   modifications:
     timezone: America/New_York
   # XXX these sizes are currently hardcoded in `images` in the future they
@@ -15,11 +16,11 @@ otk.define:
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: aarch64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/aarch64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - coreutils
@@ -46,11 +47,11 @@ otk.define:
           exclude: []
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: aarch64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/aarch64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - "@core"
@@ -112,11 +113,11 @@ otk.define:
             - dracut-config-rescue
     anaconda:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: aarch64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/aarch64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - aajohan-comfortaa-fonts
@@ -279,7 +280,7 @@ otk.target.osbuild:
               otk.include: "common/gpgkeys.yaml"
         - type: org.osbuild.buildstamp
           options:
-            arch: aarch64
+            arch: ${architecture}
             product: CentOS Stream
             version: 9-stream
             final: true
@@ -309,7 +310,7 @@ otk.target.osbuild:
         - type: org.osbuild.lorax-script
           options:
             path: 99-generic/runtime-postinstall.tmpl
-            basearch: aarch64
+            basearch: ${architecture}
             product:
               name: ''
               version: ''
@@ -429,9 +430,9 @@ otk.target.osbuild:
             kernel:
               dir: /images/pxeboot
               opts:
-                - inst.stage2=hd:LABEL=CentOS-Stream-9-BaseOS-aarch64
-                - inst.ks=hd:LABEL=CentOS-Stream-9-BaseOS-aarch64:/osbuild.ks
-            isolabel: CentOS-Stream-9-BaseOS-aarch64
+                - inst.stage2=hd:LABEL=CentOS-Stream-9-BaseOS-${architecture}
+                - inst.ks=hd:LABEL=CentOS-Stream-9-BaseOS-${architecture}:/osbuild.ks
+            isolabel: CentOS-Stream-9-BaseOS-${architecture}
             architectures:
               - AA64
             vendor: centos
@@ -553,7 +554,7 @@ otk.target.osbuild:
               url: file:///run/install/repo/liveimg.tar.gz
         - type: org.osbuild.discinfo
           options:
-            basearch: aarch64
+            basearch: ${architecture}
             release: CentOS Stream 9-stream
     - name: bootiso
       build: name:build
@@ -567,7 +568,7 @@ otk.target.osbuild:
                 - name:bootiso-tree
           options:
             filename: installer.iso
-            volid: CentOS-Stream-9-BaseOS-aarch64
+            volid: CentOS-Stream-9-BaseOS-${architecture}
             sysid: LINUX
             efi: images/efiboot.img
             isolevel: 3

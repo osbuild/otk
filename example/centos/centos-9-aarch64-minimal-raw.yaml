@@ -1,6 +1,7 @@
 otk.version: "1"
 
 otk.define:
+  architecture: aarch64
   modifications:
     locale: C.UTF-8
     timezone: America/New_York
@@ -10,11 +11,11 @@ otk.define:
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: aarch64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/aarch64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - coreutils
@@ -31,11 +32,11 @@ otk.define:
           exclude: []
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: aarch64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/aarch64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - "@core"
@@ -70,7 +71,7 @@ otk.define:
         packageset: ${packages.os}
         packagename: "kernel"
 
-otk.include: "common/partition-table/aarch64/minimal-raw.yaml"
+otk.include: "common/partition-table/${architecture}/minimal-raw.yaml"
 
 otk.target.osbuild:
   pipelines:
@@ -104,7 +105,7 @@ otk.target.osbuild:
             unit-type: global
         - otk.external.otk-make-fstab-stage:
             ${filesystem}
-        - otk.include: fragment/grub2/aarch64.yaml
+        - otk.include: fragment/grub2/${architecture}.yaml
         - type: org.osbuild.copy
           inputs:
             # XXX note we're only keeping the hash here since it corresponds to the reference
@@ -133,7 +134,7 @@ otk.target.osbuild:
               - sshd.service
               - initial-setup.service
         - otk.include: "fragment/selinux/targeted.yaml"
-    - otk.include: pipeline/image/aarch64.yaml
+    - otk.include: pipeline/image/${architecture}.yaml
     - name: xz
       build: name:build
       stages:

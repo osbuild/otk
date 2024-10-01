@@ -1,6 +1,7 @@
 otk.version: "1"
 
 otk.define:
+  architecture: x86_64
   modifications:
     locale: C.UTF-8
     timezone: America/New_York
@@ -10,11 +11,11 @@ otk.define:
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - coreutils
@@ -33,11 +34,11 @@ otk.define:
           exclude: []
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
-        architecture: x86_64
+        architecture: ${architecture}
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/x86_64.yaml"
+          otk.include: "common/repositories/${architecture}.yaml"
         packages:
           include:
             - "@core"
@@ -112,7 +113,7 @@ otk.define:
         packageset: ${packages.os}
         packagename: "kernel"
 
-otk.include: "common/partition-table/x86_64/default.yaml"
+otk.include: "common/partition-table/${architecture}/default.yaml"
 
 otk.target.osbuild:
   pipelines:
@@ -138,12 +139,12 @@ otk.target.osbuild:
               no_zero_conf: true
         - otk.external.otk-make-fstab-stage:
             ${filesystem}
-        - otk.include: "fragment/grub2/x86_64.yaml"
+        - otk.include: "fragment/grub2/${architecture}.yaml"
         - type: org.osbuild.systemd
           options:
             default_target: multi-user.target
         - otk.include: "fragment/selinux/targeted.yaml"
-    - otk.include: "pipeline/image/x86_64.yaml"
+    - otk.include: "pipeline/image/${architecture}.yaml"
     - name: qcow2
       build: name:build
       stages:
