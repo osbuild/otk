@@ -1,0 +1,44 @@
+name: image
+build: name:build
+stages:
+  otk.op.join:
+    values:
+      - otk.external.otk-make-partition-stages:
+          ${filesystem}
+      - - type: org.osbuild.copy
+          inputs:
+            root-tree:
+              type: org.osbuild.tree
+              origin: org.osbuild.pipeline
+              references:
+                - name:os
+          options:
+            paths:
+              - from: input://root-tree/
+                to: mount://-/
+          devices:
+            otk.op.join:
+              values:
+                - ${fs_options.devices}
+                # TBD this seems strange:
+                - disk:
+                    type: 'org.osbuild.loopback'
+                    options:
+                      filename: 'disk.img'
+          mounts:
+            ${fs_options.mounts}
+        - type: org.osbuild.zipl.inst
+          options:
+            kernel: ${kernel.package.version}-${kernel.package.release}.${kernel.package.arch}
+            location: ${fs_options.devices.boot.options.start}
+          devices:
+            otk.op.join:
+              values:
+                - ${fs_options.devices}
+                # TBD this seems strange:
+                - disk:
+                    type: org.osbuild.loopback
+                    options:
+                      filename: disk.img
+          mounts:
+            ${fs_options.mounts}
