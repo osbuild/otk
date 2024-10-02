@@ -16,7 +16,7 @@ from .traversal import State
 log = logging.getLogger(__name__)
 
 
-def call(_: State, directive: str, tree: Any) -> Any:
+def call(state: State, directive: str, tree: Any) -> Any:
     exe = exe_from_directive(directive)
     exe = path_for(exe)
 
@@ -28,9 +28,9 @@ def call(_: State, directive: str, tree: Any) -> Any:
 
     process = subprocess.run([exe], input=data, encoding="utf8", capture_output=True, check=False)
     if process.returncode != 0:
-        msg = f"call: {exe!r} {directive!r} failed: {process.stdout!r}, {process.stderr!r}"
+        msg = f"call {exe} {directive!r} failed: stdout={process.stdout!r}, stderr={process.stderr!r}"
         log.error(msg)
-        raise ExternalFailedError(msg)
+        raise ExternalFailedError(msg, state)
 
     res = json.loads(process.stdout)
     return res["tree"]
