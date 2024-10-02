@@ -20,7 +20,8 @@ def must_be(kind: Type) -> Callable:
             if not isinstance(args[2], kind):
                 # XXX: this needs state to give proper errors
                 raise TransformDirectiveTypeError(
-                    f"otk.define expects a {kind!r} as its argument but received a `{type(args[2])}`: `{args[2]!r}`")
+                    f"otk.define expects a {kind!r} as its argument but "
+                    f"received a `{type(args[2])}`: `{args[2]!r}`", args[1])
             return function(*args, **kwargs)
 
         return wrapper
