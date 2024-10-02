@@ -51,7 +51,7 @@ def path_for(exe):
     env = os.getenv("OTK_EXTERNAL_PATH", None)
 
     if env is not None:
-        paths = [env] + paths
+        paths = env.split(":") + paths
 
     for pathname in paths:
         path = pathlib.Path(pathname) / exe
