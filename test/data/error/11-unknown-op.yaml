@@ -1,0 +1,4 @@
+otk.version: "1"
+
+otk.target.osbuild:
+  otk.op.non-existing:

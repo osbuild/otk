@@ -1,1 +1,1 @@
-First level below a 'target' should be a dictionary (not a list)
+03-target-should-not-be-list.yaml: First level below a 'target' should be a dictionary (not a list)

@@ -1,1 +1,1 @@
-directive otk.external.mirror should not have siblings: ['otk.external.mirror', 'otk.external.other']
+06-no-two-externals.yaml: directive otk.external.mirror should not have siblings: ['otk.external.mirror', 'otk.external.other']

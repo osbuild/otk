@@ -20,7 +20,7 @@ def test_op_seq_join():
 
 def test_op_join_unhappy():
     ctx = CommonContext()
-    state = State("")
+    state = State("foo.yaml")
 
     with pytest.raises(TransformDirectiveTypeError):
         op_join(ctx, state, 1)
@@ -28,8 +28,9 @@ def test_op_join_unhappy():
     with pytest.raises(TransformDirectiveArgumentError):
         op_join(ctx, state, {})
 
-    with pytest.raises(TransformDirectiveTypeError):
+    with pytest.raises(TransformDirectiveTypeError) as exc:
         op_join(ctx, state, {"values": 1})
+    assert "foo.yaml: seq join received values of the wrong type, " in str(exc.value)
 
     with pytest.raises(TransformDirectiveTypeError):
         op_join(ctx, state, {"values": [1, {2: 3}]})
@@ -43,8 +44,9 @@ def test_op_join_unhappy():
     with pytest.raises(TransformDirectiveTypeError):
         op_join(ctx, state, {"values": 1})
 
-    with pytest.raises(TransformDirectiveTypeError):
+    with pytest.raises(TransformDirectiveTypeError) as exc:
         op_join(ctx, state, {"values": [1, {2: 3}]})
+    assert "foo.yaml: cannot join " in str(exc.value)
 
 
 def test_op_map_join():

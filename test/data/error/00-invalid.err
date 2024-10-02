@@ -1,1 +1,1 @@
-00-invalid.yaml was not found
+00-invalid.yaml: file notexist was not found
