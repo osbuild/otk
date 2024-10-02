@@ -13,7 +13,12 @@ COPY src /src/src
 RUN pip install --no-dependencies .
 
 # ----
-FROM registry.access.redhat.com/ubi9/go-toolset:latest AS build_go
+FROM registry.fedoraproject.org/fedora:latest AS build_go
+
+WORKDIR /src
+
+RUN dnf install -y \
+        golang
 
 COPY Makefile .
 
@@ -33,7 +38,7 @@ COPY --from=build_python /usr/local/bin/otk /usr/local/bin/
 COPY --from=build_python /usr/local/bin/osbuild* /usr/libexec/otk/external/
 COPY --from=build_python /usr/local/lib/ /usr/local/lib/
 
-COPY --from=build_go /opt/app-root/src/external/* /usr/local/libexec/otk/external/
+COPY --from=build_go /src/external/* /usr/local/libexec/otk/external/
 
 WORKDIR /app
 
