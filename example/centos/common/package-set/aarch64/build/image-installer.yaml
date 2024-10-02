@@ -1,0 +1,23 @@
+include:
+  - coreutils
+  - efibootmgr
+  - glibc
+  - grub2-efi-aa64
+  - grub2-efi-aa64-cdboot
+  - grub2-tools
+  - grub2-tools-extra
+  - grub2-tools-minimal
+  - isomd5sum
+  - lorax-templates-generic
+  - platform-python
+  - policycoreutils
+  - python3
+  - rpm
+  - selinux-policy-targeted
+  - shim-aa64
+  - squashfs-tools
+  - systemd
+  - tar
+  - xorriso
+  - xz
+exclude: []

@@ -17,19 +17,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - coreutils
-            - dosfstools
-            - glibc
-            - platform-python
-            - policycoreutils
-            - python3
-            - rpm
-            - selinux-policy-targeted
-            - systemd
-            - xfsprogs
-            - xz
-          exclude: []
+          otk.include: "common/package-set/${architecture}/build/minimal-raw.yaml"
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
         architecture: ${architecture}
@@ -38,22 +26,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - "@core"
-            - NetworkManager-wifi
-            - dosfstools
-            - dracut-config-generic
-            - efibootmgr
-            - grub2-efi-x64
-            - initial-setup
-            - iwl3160-firmware
-            - iwl7260-firmware
-            - kernel
-            - libxkbcommon
-            - selinux-policy-targeted
-            - shim-x64
-            - xfsprogs
-          exclude: []
+          otk.include: "common/package-set/${architecture}/os/minimal-raw.yaml"
   files:
     otk.external.osbuild-gen-inline-files:
       inline:

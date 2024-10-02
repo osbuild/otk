@@ -17,21 +17,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - coreutils
-            - dosfstools
-            - glibc
-            - platform-python
-            - policycoreutils
-            - python3
-            - python3-pyyaml
-            - qemu-img
-            - rpm
-            - selinux-policy-targeted
-            - systemd
-            - xfsprogs
-            - xz
-          exclude: []
+          otk.include: "common/package-set/${architecture}/build/vhd.yaml"
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
         architecture: ${architecture}
@@ -40,81 +26,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - "@Server"
-            - NetworkManager
-            - NetworkManager-cloud-setup
-            - WALinuxAgent
-            - bzip2
-            - cloud-init
-            - cloud-utils-growpart
-            - dosfstools
-            - dracut-config-generic
-            - efibootmgr
-            - gdisk
-            - grub2-efi-aa64
-            - grub2-tools
-            - hyperv-daemons
-            - kernel
-            - kernel-core
-            - kernel-modules
-            - langpacks-en
-            - lvm2
-            - nvme-cli
-            - patch
-            - rng-tools
-            - selinux-policy-targeted
-            - shim-aa64
-            - uuid
-            - xfsprogs
-            - yum-utils
-          exclude:
-            - NetworkManager-config-server
-            - aic94xx-firmware
-            - alsa-firmware
-            - alsa-lib
-            - alsa-sof-firmware
-            - alsa-tools-firmware
-            - biosdevname
-            - bolt
-            - buildah
-            - cockpit-podman
-            - containernetworking-plugins
-            - dnf-plugin-spacewalk
-            - dracut-config-rescue
-            - glibc-all-langpacks
-            - iprutils
-            - ivtv-firmware
-            - iwl100-firmware
-            - iwl1000-firmware
-            - iwl105-firmware
-            - iwl135-firmware
-            - iwl2000-firmware
-            - iwl2030-firmware
-            - iwl3160-firmware
-            - iwl3945-firmware
-            - iwl4965-firmware
-            - iwl5000-firmware
-            - iwl5150-firmware
-            - iwl6000-firmware
-            - iwl6000g2a-firmware
-            - iwl6000g2b-firmware
-            - iwl6050-firmware
-            - iwl7260-firmware
-            - libertas-sd8686-firmware
-            - libertas-sd8787-firmware
-            - libertas-usb8388-firmware
-            - plymouth
-            - podman
-            - python3-dnf-plugin-spacewalk
-            - python3-hwdata
-            - python3-rhnlib
-            - rhn-check
-            - rhn-client-tools
-            - rhn-setup
-            - rhnlib
-            - rhnsd
-            - usb_modeswitch
+          otk.include: "common/package-set/${architecture}/os/vhd.yaml"
   kernel:
     cmdline: ro loglevel=3 console=tty1 console=ttyS0 earlyprintk=ttyS0 rootdelay=300
     package:

@@ -17,21 +17,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - coreutils
-            - dosfstools
-            - glibc
-            - grub2-pc
-            - platform-python
-            - policycoreutils
-            - python3
-            - qemu-img
-            - rpm
-            - selinux-policy-targeted
-            - systemd
-            - xfsprogs
-            - xz
-          exclude: []
+          otk.include: "common/package-set/${architecture}/build/qcow2.yaml"
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
         architecture: ${architecture}
@@ -40,72 +26,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - "@core"
-            - authselect-compat
-            - chrony
-            - cloud-init
-            - cloud-utils-growpart
-            - cockpit-system
-            - cockpit-ws
-            - dnf-utils
-            - dosfstools
-            - dracut-config-generic
-            - efibootmgr
-            - grub2-efi-x64
-            - grub2-pc
-            - kernel
-            - nfs-utils
-            - oddjob
-            - oddjob-mkhomedir
-            - psmisc
-            - python3-jsonschema
-            - qemu-guest-agent
-            - redhat-release
-            - redhat-release-eula
-            - rsync
-            - selinux-policy-targeted
-            - shim-x64
-            - tar
-            - tcpdump
-            - tuned
-            - xfsprogs
-          exclude:
-            - aic94xx-firmware
-            - alsa-firmware
-            - alsa-lib
-            - alsa-tools-firmware
-            - biosdevname
-            - dnf-plugin-spacewalk
-            - dracut-config-rescue
-            - fedora-release
-            - fedora-repos
-            - firewalld
-            - iprutils
-            - ivtv-firmware
-            - iwl100-firmware
-            - iwl1000-firmware
-            - iwl105-firmware
-            - iwl135-firmware
-            - iwl2000-firmware
-            - iwl2030-firmware
-            - iwl3160-firmware
-            - iwl3945-firmware
-            - iwl4965-firmware
-            - iwl5000-firmware
-            - iwl5150-firmware
-            - iwl6000-firmware
-            - iwl6000g2a-firmware
-            - iwl6000g2b-firmware
-            - iwl6050-firmware
-            - iwl7260-firmware
-            - langpacks-*
-            - langpacks-en
-            - libertas-sd8787-firmware
-            - nss
-            - plymouth
-            - rng-tools
-            - udisks2
+          otk.include: "common/package-set/${architecture}/os/qcow2.yaml"
   kernel:
     cmdline: console=tty0 console=ttyS0,115200n8 no_timer_check net.ifnames=0
     package:

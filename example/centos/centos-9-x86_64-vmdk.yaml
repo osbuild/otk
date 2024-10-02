@@ -16,21 +16,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - coreutils
-            - dosfstools
-            - glibc
-            - grub2-pc
-            - platform-python
-            - policycoreutils
-            - python3
-            - rpm
-            - selinux-policy-targeted
-            - systemd
-            - qemu-img
-            - xfsprogs
-            - xz
-          exclude: []
+          otk.include: "common/package-set/${architecture}/build/vmdk.yaml"
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
         architecture: ${architecture}
@@ -39,26 +25,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - "@core"
-            - chrony
-            - cloud-init
-            - dosfstools
-            - dracut-config-generic
-            - efibootmgr
-            - firewalld
-            - grub2-efi-x64
-            - grub2-pc
-            - kernel
-            - langpacks-en
-            - open-vm-tools
-            - selinux-policy-targeted
-            - shim-x64
-            - tuned
-            - xfsprogs
-          exclude:
-            - dracut-config-rescue
-            - rng-tools
+          otk.include: "common/package-set/${architecture}/os/vmdk.yaml"
   kernel:
     cmdline: ro net.ifnames=0
     package:
