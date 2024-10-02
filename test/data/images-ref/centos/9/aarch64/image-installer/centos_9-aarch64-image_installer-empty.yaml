@@ -32,8 +32,8 @@ pipelines:
               - id: sha256:90aebae315675cbf04612de4f7d5874850f48e0b8dd82becbeaa47ca93f5ebfb
               - id: sha256:f7b582e05483b8a5ecc5804365d363ae91a5cbb5dd4f38f3f10e79634ebcf70c
               - id: sha256:53938ccf86d0954286625faacd6f86ff09bd5d8c3bfaabc284848c80d014e781
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -288,8 +288,8 @@ pipelines:
               - id: sha256:1a45775633795dff66f531ae980534d4f82b54efa603aaaef0bf1bf9df2ff387
               - id: sha256:f8c34fd44a3d8c1e0bd784f114de3640389336b9886e019ba236126c060c0b6f
               - id: sha256:2c3aeb7c716dc15da1e2b05b2e42ff75eace021594deeed9344216511e27e8bc
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -574,8 +574,8 @@ pipelines:
               - id: sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a
               - id: sha256:1ec523ebf26771bd12d4da16d6e041b9be98c6999ab8ad53afc8d82afb56e75c
               - id: sha256:49e9285da13f2be02b3654b01e74cab5840b8c679f7ad4b528a9cf794d3d3e34
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -792,6 +792,8 @@ sources:
         url: https://example.com/repo/packages/bind-utils
       sha256:12a5913a6155c548dc77da461c37f570a6a5548fa57c798ca26ef4ce581bdcfe:
         url: https://example.com/repo/packages/kbd
+      sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:15a57c569d41dc1cbb4b45354e7f3b53d7df2a829080e6f0c5c31cc95b2deeaa:
         url: https://example.com/repo/packages/anaconda-dracut
       sha256:15c36857db1d6db3a0ed1981e7b3add34d8ba01ae5477653f987f9b8636f1702:
@@ -926,16 +928,12 @@ sources:
         url: https://example.com/repo/packages/kernel
       sha256:6bf7a859ff31dc024d70c2a79af3c9ccb734ddceab91d1853a36e346ca2ac936:
         url: https://example.com/repo/packages/thai-scalable-waree-fonts
-      sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:6da0721ac59243b94c0066d6899218cb9f82ae4539dfd77c844c46ce75074e12:
         url: https://example.com/repo/packages/kacst-qurn-fonts
       sha256:7063dece7cccf374d9fa1ee30ff23300fa42477e064e69be7bb6d01c0cfff682:
         url: https://example.com/repo/packages/hostname
       sha256:72aec6b0d35ecb35b97ca9f0804c8a6ab055855a00ae7e8356276acca976a393:
         url: https://example.com/repo/packages/grub2-tools-minimal
-      sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:761f8a60b54fcf3965300ced84ed9a0db0eb70c89482e61f9e79a1a1ca251f18:
         url: https://example.com/repo/packages/strace
       sha256:7813fd2934106e4936074bd7bf8e05d2ce9afb310b52269868dc06fbee88e980:
@@ -1004,6 +1002,8 @@ sources:
         url: https://example.com/repo/packages/squashfs-tools
       sha256:a9c2cd1e4311be8781e7421119b8cdeb9c0f36f7d8c63144a3fb2fd6c0ad1018:
         url: https://example.com/repo/packages/iwl3160-firmware
+      sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:ab41c5997e31cbfd7ea7c4251f936b7c2eae16613144b9b345711a6aa0014e3d:
         url: https://example.com/repo/packages/usbutils
       sha256:ab70ba971afad989c2b54e7030af4cba9b0cbfe11de95bdc76552c87f529942a:

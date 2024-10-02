@@ -22,8 +22,8 @@ pipelines:
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:ec924965104fcfdffc6c47b1097bcf63a78989606075c98870d56937969b531d
               - id: sha256:90aebae315675cbf04612de4f7d5874850f48e0b8dd82becbeaa47ca93f5ebfb
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -187,8 +187,8 @@ pipelines:
               - id: sha256:557bd0eaadc03a42f7034eaed1acbf4299219213aef48dddee1594d0d0017c37
               - id: sha256:e243470295e7a4ed4c248443bf78f4d827988f58767c47592545f77e76839439
               - id: sha256:ec6b0c3970b59b0ca5532cb3dc4dd7239136602223a2d39e7e20fba18298bc62
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           dbpath: /usr/share/rpm
           gpgkeys:
@@ -336,6 +336,8 @@ sources:
         url: https://example.com/repo/packages/passwd
       sha256:0f75ba9658721aa3a185e6ac18b63b7fa3b709a5ec264be07d1f35408e003a8a:
         url: https://example.com/repo/packages/iptables
+      sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:1a0970a720caab2869fc7eb436e6b7656fc7efbb24cfa72ae5b49e2f6acbd7ca:
         url: https://example.com/repo/packages/redhat-release
       sha256:1a45775633795dff66f531ae980534d4f82b54efa603aaaef0bf1bf9df2ff387:
@@ -396,16 +398,12 @@ sources:
         url: https://example.com/repo/packages/kernel
       sha256:6a406152d00694615f91b8b047dc939d75c834790e521ff3997e3734111518e6:
         url: https://example.com/repo/packages/criu
-      sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:6e5afe9033e4767cc4ccec7ec2d18958a28dcfb7b8982cae4afde231b5bb8fad:
         url: https://example.com/repo/packages/keyutils
       sha256:7063dece7cccf374d9fa1ee30ff23300fa42477e064e69be7bb6d01c0cfff682:
         url: https://example.com/repo/packages/hostname
       sha256:75406d2ab1a318d214d3f17ad722986010c2d69fbac331fb855689191889f812:
         url: https://example.com/repo/packages/fdo-owner-cli
-      sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:772a6043284a6f653b3a220d1a7fa5a482dcd910f81308b3e53e20abbe8acfee:
         url: https://example.com/repo/packages/skopeo
       sha256:7b50bdd407a8c815d221c01203fc9a241648c79805faa36a0dc70e9d3a46c7e5:
@@ -436,6 +434,8 @@ sources:
         url: https://example.com/repo/packages/containernetworking-plugins
       sha256:a45298c4ca08fadc8220c2166c430c8ce2b0cf5add3459ecb12fb9264c0c5943:
         url: https://example.com/repo/packages/ima-evm-utils
+      sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:aa6d4532f128420f4d741f2834cd8d1d146bbbdc9554aef454b7adb8ff66f748:
         url: https://example.com/repo/packages/gnupg2
       sha256:ac31b31649786ed1bb6501121fd43973040b763991a648e673f6853d15627ecd:

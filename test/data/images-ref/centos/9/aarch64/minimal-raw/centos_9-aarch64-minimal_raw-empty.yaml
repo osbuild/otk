@@ -27,8 +27,8 @@ pipelines:
               - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -120,8 +120,8 @@ pipelines:
               - id: sha256:f19322aff95a0dab072e7d976be364f553e46efd51e1a602adae348b7c38af29
               - id: sha256:fc8aa064642e279d6d03beb27074f88fe4e3182c2dfe3a4117f135b9662ae2b7
               - id: sha256:a9c2cd1e4311be8781e7421119b8cdeb9c0f36f7d8c63144a3fb2fd6c0ad1018
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -387,6 +387,8 @@ sources:
     items:
       sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15:
         url: https://example.com/repo/packages/dosfstools
+      sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:1a45775633795dff66f531ae980534d4f82b54efa603aaaef0bf1bf9df2ff387:
         url: https://example.com/repo/packages/grub2-efi-aa64
       sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d:
@@ -403,10 +405,6 @@ sources:
         url: https://example.com/repo/packages/libxkbcommon
       sha256:6923dd1bc0460082c5d55a831908c24a282860b7f1cd6c2b79cf1bc8857c639c:
         url: https://example.com/repo/packages/kernel
-      sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-appstream
-      sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:8a1bf05d306aa663e856f3c450c8b2ddc6800116b818c7d3b65503cd89f7682a:
         url: https://example.com/repo/packages/platform-python
       sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a:
@@ -417,6 +415,8 @@ sources:
         url: https://example.com/repo/packages/rpm
       sha256:a9c2cd1e4311be8781e7421119b8cdeb9c0f36f7d8c63144a3fb2fd6c0ad1018:
         url: https://example.com/repo/packages/iwl3160-firmware
+      sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528:
         url: https://example.com/repo/packages/selinux-policy-targeted
       sha256:c1cc69e61c0f1c7ade8df0f2994e582e7c1f2c57d1ec192a0baf9f96b7739d9d:

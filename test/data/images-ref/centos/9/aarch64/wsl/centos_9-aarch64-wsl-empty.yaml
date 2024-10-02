@@ -19,8 +19,8 @@ pipelines:
               - id: sha256:9e7ab438597fee20e16e8e441bed0ce966bd59e0fb993fa7c94be31fb1384d88
               - id: sha256:55b591a15e8cd772eeaae5d187bcb8c44c12048aca78478e53db0c50ad09c999
               - id: sha256:90aebae315675cbf04612de4f7d5874850f48e0b8dd82becbeaa47ca93f5ebfb
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -141,8 +141,8 @@ pipelines:
               - id: sha256:10d1e54c16c491abf59ec796854ffa14563d54461ebb9092501da34f5a9184bc
               - id: sha256:c06dba625e4dfb0b49cb4013c2a82c8f314143c833c1306da12fa2d77a12e0c4
               - id: sha256:60e3d9a99e40010bb917f75d9ce99530d1f8b322d0b1aea07fe71257a369d943
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -242,6 +242,8 @@ sources:
         url: https://example.com/repo/packages/passwd
       sha256:10d1e54c16c491abf59ec796854ffa14563d54461ebb9092501da34f5a9184bc:
         url: https://example.com/repo/packages/exclude:python-unversioned-command
+      sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:1a0970a720caab2869fc7eb436e6b7656fc7efbb24cfa72ae5b49e2f6acbd7ca:
         url: https://example.com/repo/packages/redhat-release
       sha256:1a36b318995f3383dfa35c283df090bde63776c52415a421ea201a9667f95ab3:
@@ -280,14 +282,10 @@ sources:
         url: https://example.com/repo/packages/exclude:rpm-plugin-systemd-inhibit
       sha256:6449d2f7bae9905add75f6d3e9b03de90743a1cef971f41aedeeb4139a1780d1:
         url: https://example.com/repo/packages/shadow-utils
-      sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:6fd624e2ceb4409a98b06f7f6161a6259cc88a838b6f43454217ed5a0c18a547:
         url: https://example.com/repo/packages/exclude:gawk-all-langpacks
       sha256:7063dece7cccf374d9fa1ee30ff23300fa42477e064e69be7bb6d01c0cfff682:
         url: https://example.com/repo/packages/hostname
-      sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:7cb8f52fafc3465bc88412019948f599fa1217927861c07ac3f90628772efa55:
         url: https://example.com/repo/packages/exclude:openssl-pkcs11
       sha256:809c2fb94fff223e96477a875bbc1b77e5b020262e8f959d4b49455100a7f9f7:
@@ -314,6 +312,8 @@ sources:
         url: https://example.com/repo/packages/rpm
       sha256:a697ff6e769b4f3d7c9b05d77c96d575c5e001ef923a13395decbe00b7e461bb:
         url: https://example.com/repo/packages/exclude:glibc-langpack-en
+      sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:aa6d4532f128420f4d741f2834cd8d1d146bbbdc9554aef454b7adb8ff66f748:
         url: https://example.com/repo/packages/gnupg2
       sha256:ae5e2ad3b86239dbf500c630cf88d33d9775e9ce2e32d596910a07d682d97923:
