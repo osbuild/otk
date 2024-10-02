@@ -1,20 +1,16 @@
 include:
-  - "@core"
-  - chrony
-  - cloud-init
-  - dosfstools
-  - dracut-config-generic
-  - efibootmgr
-  - firewalld
-  - grub2-efi-x64
-  - grub2-pc
-  - kernel
-  - langpacks-en
-  - open-vm-tools
-  - selinux-policy-targeted
-  - shim-x64
-  - tuned
-  - xfsprogs
+  otk.op.join:
+    values:
+      - otk.include: "_include.yaml"
+      - - "@core"
+        - chrony
+        - cloud-init
+        - firewalld
+        - grub2-pc
+        - langpacks-en
+        - open-vm-tools
+        - tuned
+        - xfsprogs
 exclude:
   - dracut-config-rescue
   - rng-tools

@@ -1,14 +1,7 @@
 include:
-  - coreutils
-  - glibc
-  - grub2-pc
-  - platform-python
-  - policycoreutils
-  - python3
-  - rpm
-  - rpm-ostree
-  - selinux-policy-targeted
-  - systemd
-  - tar
-  - xz
+  otk.op.join:
+    values:
+      - otk.include: "_include.yaml"
+      - - rpm-ostree
+        - tar
 exclude: []

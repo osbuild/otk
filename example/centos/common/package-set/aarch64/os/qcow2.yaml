@@ -1,33 +1,28 @@
 include:
-  - "@core"
-  - authselect-compat
-  - chrony
-  - cloud-init
-  - cloud-utils-growpart
-  - cockpit-system
-  - cockpit-ws
-  - dnf-utils
-  - dosfstools
-  - dracut-config-generic
-  - efibootmgr
-  - grub2-efi-aa64
-  - grub2-tools
-  - kernel
-  - nfs-utils
-  - oddjob
-  - oddjob-mkhomedir
-  - psmisc
-  - python3-jsonschema
-  - qemu-guest-agent
-  - redhat-release
-  - redhat-release-eula
-  - rsync
-  - selinux-policy-targeted
-  - shim-aa64
-  - tar
-  - tcpdump
-  - tuned
-  - xfsprogs
+  otk.op.join:
+    values:
+      - otk.include: "_include.yaml"
+      - - "@core"
+        - authselect-compat
+        - chrony
+        - cloud-init
+        - cloud-utils-growpart
+        - cockpit-system
+        - cockpit-ws
+        - dnf-utils
+        - nfs-utils
+        - oddjob
+        - oddjob-mkhomedir
+        - psmisc
+        - python3-jsonschema
+        - qemu-guest-agent
+        - redhat-release
+        - redhat-release-eula
+        - rsync
+        - tar
+        - tcpdump
+        - tuned
+        - xfsprogs
 exclude:
   - aic94xx-firmware
   - alsa-firmware

@@ -1,17 +1,12 @@
 include:
-  - "@core"
-  - NetworkManager-wifi
-  - dosfstools
-  - dracut-config-generic
-  - efibootmgr
-  - grub2-efi-aa64
-  - grub2-tools
-  - initial-setup
-  - iwl3160-firmware
-  - iwl7260-firmware
-  - kernel
-  - libxkbcommon
-  - selinux-policy-targeted
-  - shim-aa64
-  - xfsprogs
+  otk.op.join:
+    values:
+      - otk.include: "_include.yaml"
+      - - "@core"
+        - NetworkManager-wifi
+        - initial-setup
+        - iwl3160-firmware
+        - iwl7260-firmware
+        - libxkbcommon
+        - xfsprogs
 exclude: []
