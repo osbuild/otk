@@ -47,7 +47,7 @@ def test_sub_var_multiple():
 
 
 def test_sub_var_missing_var_in_context():
-    state = State("")
+    state = State("foo.yaml")
     context = CommonContext()
     # toplevel
     expected_err = r"could not resolve 'a' as 'a' is not defined"
@@ -60,7 +60,8 @@ def test_sub_var_missing_var_in_context():
         substitute_vars(context, state, "${a.b}")
     # no subtree
     context.define("a", "foo")
-    expected_err = r"tried to look up 'a.b', but the value of prefix 'a' is not a dictionary but <class 'str'>"
+    expected_err = r"foo.yaml: tried to look up 'a.b', but the value of " \
+        "prefix 'a' is not a dictionary but <class 'str'>"
     with pytest.raises(TransformVariableTypeError, match=expected_err):
         substitute_vars(context, state, "${a.b}")
 
@@ -127,12 +128,16 @@ def test_substitute_vars():
 
 
 def test_substitute_vars_unhappy():
-    state = State("")
+    state = State("foo.yaml")
     ctx = CommonContext()
     ctx.define("dict", {})
 
-    with pytest.raises(TransformDirectiveTypeError):
+    with pytest.raises(TransformDirectiveTypeError) as exc:
         substitute_vars(ctx, state, 1)
+    assert "foo.yaml: otk.define expects a <class 'str'> as its argument but received a `<class 'int'>" in str(
+        exc.value)
 
-    with pytest.raises(TransformDirectiveTypeError):
+    with pytest.raises(TransformDirectiveTypeError) as exc:
         substitute_vars(ctx, state, "a${dict}b")
+    assert "foo.yaml: string 'a${dict}b' resolves to an incorrect type, " \
+        "expected int, float, or str but got dict" in str(exc.value)

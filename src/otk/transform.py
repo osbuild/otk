@@ -24,7 +24,7 @@ from . import tree
 from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET
 from .context import Context, validate_var_name
 from .error import (
-    IncludeNotFoundError,
+    IncludeNotFoundError, OTKError,
     ParseError, ParseTypeError, ParseValueError, ParseDuplicatedYamlKeyError,
     TransformDirectiveTypeError, TransformDirectiveUnknownError,
 )
@@ -287,7 +287,11 @@ def substitute_vars(ctx: Context, state: State, data: str) -> Any:
     # return its value directly.
     if m := re.fullmatch(pattern, data):
         validate_var_name(m.group("name"))
-        return ctx.variable(m.group("name"))
+        try:
+            var = ctx.variable(m.group("name"))
+        except OTKError as exc:
+            raise exc.__class__(str(exc), state)
+        return var
 
     if matches := re.finditer(pattern, data):
         for m in matches:
