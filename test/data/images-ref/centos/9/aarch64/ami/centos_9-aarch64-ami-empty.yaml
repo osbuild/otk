@@ -28,8 +28,8 @@ pipelines:
               - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:48af68b2888775d102da39bebbe05cf07bca2f2ab9f1103dd19359d64083c70b
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -164,8 +164,8 @@ pipelines:
               - id: sha256:49e9285da13f2be02b3654b01e74cab5840b8c679f7ad4b528a9cf794d3d3e34
               - id: sha256:e0d9946d02c44f153131552ca5afa5cd0902d0446b0295a329964e78a345327c
               - id: sha256:f2b81e75c964a01a845829b272d95e864a2e271e4fcd409c5e7cf5a83de1f127
-              - id: sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca
-              - id: sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c
+              - id: sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02
+              - id: sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -478,6 +478,8 @@ sources:
         url: https://example.com/repo/packages/exclude:ivtv-firmware
       sha256:0dc67f06d4a10e86af05f9a118375a3509880de5c947f9eab6476900b50d0a39:
         url: https://example.com/repo/packages/exclude:iwl6000g2a-firmware
+      sha256:1346b27a6e2f7d7b7e20a980c43a4388d6c46e11a067ff563319e1445649ac02:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-appstream
       sha256:19ba1894b231183f6dcfffd0adf9b657eb00ea33f1e002cfb04d1f1fc8e79b71:
         url: https://example.com/repo/packages/exclude:iwl135-firmware
       sha256:1a0970a720caab2869fc7eb436e6b7656fc7efbb24cfa72ae5b49e2f6acbd7ca:
@@ -528,10 +530,6 @@ sources:
         url: https://example.com/repo/packages/chrony
       sha256:6923dd1bc0460082c5d55a831908c24a282860b7f1cd6c2b79cf1bc8857c639c:
         url: https://example.com/repo/packages/kernel
-      sha256:6cc4d58608021ccaa0166ec7629107ba866e35f289607a6c69dafcfb3c369fca:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-appstream
-      sha256:75426b0ba4cd44b349db0533e5d59eb207a273f0b2a4cc7326613317ed39158c:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:782c4bb3c7a9beb41e451bceb3f4db6de6a331eb31ca76e6a64296251ba2fdb1:
         url: https://example.com/repo/packages/exclude:iwl4965-firmware
       sha256:7a5bd1ed08002bc08013ea55c7fffc61047042b3d0979471b6e34d5e5089d334:
@@ -562,6 +560,8 @@ sources:
         url: https://example.com/repo/packages/cloud-utils-growpart
       sha256:a918a8d5a29ea7c5834c6d46725660eb441653074ab4d9d8876029abce79bfb7:
         url: https://example.com/repo/packages/exclude:iwl2030-firmware
+      sha256:aa112e5fa7d230f8d00a0233b80d2bd35ee8debeccde198da1d13214f2136acb:
+        url: https://example.com/passed-arch:aarch64/passed-repo:/v2/mirror/public/el9/cs9-aarch64-baseos
       sha256:aba407b81ed016841ea552feadaf0663c7804a64554ba55d3109b3dc8198cdcb:
         url: https://example.com/repo/packages/tuned
       sha256:bd0add6fdee6e6ac62a4ff6bc722f2324a918d8ccc4eda21e043252a10481f0c:

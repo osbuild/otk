@@ -29,9 +29,9 @@ pipelines:
               - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:360688270679b1c512513cfab6d931c8c715318582a9974caa3c0f88a0ee053c
-              - id: sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d
-              - id: sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15
-              - id: sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2
+              - id: sha256:3467780239fa16c778e73eaec177e764de52871964adf7f23b0b03c4b6384da6
+              - id: sha256:c71d1835b4ce161bb982d7bdefd5e082a6653e15c8b6e1bb684c989052212545
+              - id: sha256:2c7fca95dbf12d65ab1b751c38e674a8003a18f288817d3f81081a13c7079d2a
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -127,9 +127,9 @@ pipelines:
               - id: sha256:aba407b81ed016841ea552feadaf0663c7804a64554ba55d3109b3dc8198cdcb
               - id: sha256:49e9285da13f2be02b3654b01e74cab5840b8c679f7ad4b528a9cf794d3d3e34
               - id: sha256:ec6b0c3970b59b0ca5532cb3dc4dd7239136602223a2d39e7e20fba18298bc62
-              - id: sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d
-              - id: sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15
-              - id: sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2
+              - id: sha256:3467780239fa16c778e73eaec177e764de52871964adf7f23b0b03c4b6384da6
+              - id: sha256:c71d1835b4ce161bb982d7bdefd5e082a6653e15c8b6e1bb684c989052212545
+              - id: sha256:2c7fca95dbf12d65ab1b751c38e674a8003a18f288817d3f81081a13c7079d2a
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -385,22 +385,22 @@ sources:
     items:
       sha256:02b2f585447caaaef59cc58cda1cbf6db27530690fdb13f747f3fdeb762c4b15:
         url: https://example.com/repo/packages/dosfstools
-      sha256:02eee243dc7e0c9589002cab187f57a444a8bfee4c469eee412c833580ba529d:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-appstream
       sha256:1b11757d33424678ba2d9d6fbd9eb6293a7bfa196dca15a29af179af778c235d:
         url: https://example.com/repo/packages/glibc
       sha256:21fb8eaa1cfa55dbc0ed009dc98fbbbc9de4ecaef53d51dc41ab1b0ae867ed49:
         url: https://example.com/repo/packages/xfsprogs
       sha256:2c19d6424bd57628cc917ad414752d0135eb9c333b6671568cca9f6c95b8a053:
         url: https://example.com/repo/packages/langpacks-en
+      sha256:2c7fca95dbf12d65ab1b751c38e674a8003a18f288817d3f81081a13c7079d2a:
+        url: https://example.com/passed-arch:x86_64/passed-repo:/v2/mirror/public/el9/cs9-x86_64-rt
       sha256:2ec46eb16ef55156c58b6348c9552f739a616fb6b4e22367486fe62442e3a9c4:
         url: https://example.com/repo/packages/open-vm-tools
+      sha256:3467780239fa16c778e73eaec177e764de52871964adf7f23b0b03c4b6384da6:
+        url: https://example.com/passed-arch:x86_64/passed-repo:/v2/mirror/public/el9/cs9-x86_64-appstream
       sha256:360688270679b1c512513cfab6d931c8c715318582a9974caa3c0f88a0ee053c:
         url: https://example.com/repo/packages/qemu-img
       sha256:3993c379c029014a9c4b2adf5d23397b3c7421467a0cb3575ff925bb6f6329b0:
         url: https://example.com/repo/packages/coreutils
-      sha256:3cf1c35ad9bcc0ba055e1902a393c4b51cee4294b7d5e17bb20b7a5989054c15:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-baseos
       sha256:3fc8516922a52d754083308fc413432652da40490b0a336294a5d765757be942:
         url: https://example.com/repo/packages/cloud-init
       sha256:443ad85c108c8acb279fc373255ff3444e54cc07c0af87a62962f0adcedd152a:
@@ -415,8 +415,6 @@ sources:
         url: https://example.com/repo/packages/kernel
       sha256:7b50bdd407a8c815d221c01203fc9a241648c79805faa36a0dc70e9d3a46c7e5:
         url: https://example.com/repo/packages/firewalld
-      sha256:7bffc576857b3a9e4a5f3059efeb5b8986118301ff15b5e92f6cc30d566c50e2:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-x86_64-rt
       sha256:8a1bf05d306aa663e856f3c450c8b2ddc6800116b818c7d3b65503cd89f7682a:
         url: https://example.com/repo/packages/platform-python
       sha256:8ec5e9e6f70bf1a0b5692ef948d1194bdb074342ed14045f9e84820367a98c6a:
@@ -435,6 +433,8 @@ sources:
         url: https://example.com/repo/packages/selinux-policy-targeted
       sha256:c1cc69e61c0f1c7ade8df0f2994e582e7c1f2c57d1ec192a0baf9f96b7739d9d:
         url: https://example.com/repo/packages/python3
+      sha256:c71d1835b4ce161bb982d7bdefd5e082a6653e15c8b6e1bb684c989052212545:
+        url: https://example.com/passed-arch:x86_64/passed-repo:/v2/mirror/public/el9/cs9-x86_64-baseos
       sha256:dbf9956aa9c5ccd4c6d92f0550e959f58bb815fb570c305e9d93645eee2082d4:
         url: https://example.com/repo/packages/grub2-efi-x64
       sha256:e0031c189e34e10d9c202fa8d75f72d3296a239164fe6b07e7dc206c7b723d98:
