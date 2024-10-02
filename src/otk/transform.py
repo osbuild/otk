@@ -16,7 +16,7 @@ import logging
 import os.path
 import pathlib
 import re
-from typing import Any, List
+from typing import Any
 
 import yaml
 
@@ -258,38 +258,13 @@ def op_join(_: Context, state: State, tree: dict[str, Any]) -> Any:
             f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}", state)
 
     if all(isinstance(sl, list) for sl in values):
-        return _op_seq_join(state, values)
+        return list(itertools.chain.from_iterable(values))
     if all(isinstance(sl, dict) for sl in values):
-        return _op_map_join(state, values)
+        result = {}
+        for value in values:
+            result.update(value)
+        return result
     raise TransformDirectiveTypeError(f"cannot join {values}", state)
-
-
-def _op_seq_join(state: State, values: List[list]) -> Any:
-    """Join to sequences by concatenating them together."""
-
-    if not all(isinstance(sl, list) for sl in values):
-        # XXX: untested
-        raise TransformDirectiveTypeError(
-            f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}", state)
-
-    return list(itertools.chain.from_iterable(values))
-
-
-def _op_map_join(state: State, values: List[dict]) -> Any:
-    """Join two dictionaries. Keys from the second dictionary overwrite keys
-    in the first dictionary."""
-
-    if not all(isinstance(sl, dict) for sl in values):
-        # XXX: untested
-        raise TransformDirectiveTypeError(
-            f"map join received values of the wrong type, was expecting a list of dicts but got {values!r}", state)
-
-    result = {}
-
-    for value in values:
-        result.update(value)
-
-    return result
 
 
 @tree.must_be(str)
