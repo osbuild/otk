@@ -16,7 +16,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          otk.include: "common/package-set/${architecture}/build/tar.yaml"
+          otk.include: "common/package-set/noarch/build/tar.yaml"
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
         architecture: ${architecture}
@@ -25,12 +25,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          otk.include: "common/package-set/${architecture}/os/tar.yaml"
-          include:
-            - policycoreutils
-            - selinux-policy-targeted
-          exclude:
-            - rng-tools
+          otk.include: "common/package-set/noarch/os/tar.yaml"
 
 otk.target.osbuild:
   pipelines:

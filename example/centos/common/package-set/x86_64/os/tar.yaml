@@ -1,5 +1,0 @@
-include:
-  - policycoreutils
-  - selinux-policy-targeted
-exclude:
-  - rng-tools
