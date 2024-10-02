@@ -6,6 +6,7 @@ import pytest
 
 import otk.external
 from otk.external import exe_from_directive
+from otk.traversal import State
 
 
 @pytest.mark.parametrize(
@@ -24,7 +25,7 @@ def test_external_not_found():
     fake_directive = "otk.external.not_available"
     fake_tree = {}
     with pytest.raises(RuntimeError) as exc:
-        otk.external.call(fake_directive, fake_tree)
+        otk.external.call(State(""), fake_directive, fake_tree)
     assert "could not find 'not_available' in any search path" in str(exc.value)
 
 
@@ -48,7 +49,7 @@ def test_integration_happy(tmp_path):
         },
     }
 
-    res = otk.external.call(fake_directive, fake_tree)
+    res = otk.external.call(State(""), fake_directive, fake_tree)
     assert res == {"some": "result"}
 
     inp = fake_external_path.with_suffix(".stdin").read_text()

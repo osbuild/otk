@@ -11,11 +11,12 @@ from typing import Any
 
 from .constant import PREFIX_EXTERNAL
 from .error import ExternalFailedError
+from .traversal import State
 
 log = logging.getLogger(__name__)
 
 
-def call(directive: str, tree: Any) -> Any:
+def call(_: State, directive: str, tree: Any) -> Any:
     exe = exe_from_directive(directive)
     exe = path_for(exe)
 
