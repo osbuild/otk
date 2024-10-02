@@ -44,10 +44,15 @@ def test_sub_var_multiple():
 def test_sub_var_missing_var_in_context():
     context = CommonContext()
     # toplevel
-    expected_err = r"could not find \['a'\]"
+    expected_err = r"could not resolve 'a' as 'a' is not defined"
     with pytest.raises(TransformVariableLookupError, match=expected_err):
         substitute_vars(context, "${a}")
-    # subtree
+    # different subtree
+    context.define("a", {"there-is-no-b": True})
+    expected_err = r"could not resolve 'a.b' as 'b' is not defined"
+    with pytest.raises(TransformVariableLookupError, match=expected_err):
+        substitute_vars(context, "${a.b}")
+    # no subtree
     context.define("a", "foo")
     expected_err = r"tried to look up 'a.b', but prefix 'a' value 'foo' is not a dictionary"
     with pytest.raises(TransformVariableTypeError, match=expected_err):

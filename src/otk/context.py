@@ -100,7 +100,7 @@ class CommonContext(Context):
         for i, part in enumerate(parts):
             if isinstance(value, dict):
                 if part not in value:
-                    raise TransformVariableLookupError(f"could not find {parts!r}")
+                    raise TransformVariableLookupError(f"could not resolve '{name}' as '{part}' is not defined")
 
                 # TODO how should we deal with integer keys, convert them
                 # TODO on KeyError? Check for existence of both?
