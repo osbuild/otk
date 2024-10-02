@@ -1,8 +1,0 @@
-include:
-  otk.op.join:
-    values:
-      - otk.include: "_include.yaml"
-      - - dosfstools
-        - qemu-img
-        - xfsprogs
-exclude: []
