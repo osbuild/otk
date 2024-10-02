@@ -1,9 +1,6 @@
 # Omnifest Toolkit
 
-**THIS IS A PROOF OF CONCEPT REPOSITORY. MAIN CAN BE BROKEN AT ANY POINT AND MANY THINGS ARE SUBJECT TO CHANGE. WE'RE DISCUSSING DESIGN IN ISSUES AND PULL REQUESTS**
-
-We are still sketching out this potential approach to generating manifests and
-thus this repository is very much a work in progress.
+**THIS IS A PROOF OF CONCEPT REPOSITORY. WE'RE DISCUSSING DESIGN IN ISSUES AND PULL REQUESTS**
 
 This is the "Omnifest Toolkit", also known as `otk`. A YAML transpiler to
 take omnifest inputs and translate them into [osbuild](https://osbuild.org)
@@ -15,7 +12,7 @@ You can find `otk`'s documentation in the [/doc](./doc) subdirectory. This READM
 
 ## Usage
 
-If you want to quickly run and try out `otk` without installation the easiest is to run our container image:
+If you want to quickly run and try out `otk` without installation you can use our container image:
 
 ```
 podman run -i -v .:/app:z ghcr.io/osbuild/otk compile /app/test/data/base/01-define.yaml
@@ -65,8 +62,7 @@ make test
 
 ### Tests
 
-To run the tests, you have to install the package (see [Usage](#Usage))
-and call `pytest`
+To run the tests, you can run `make test`.
 
 ## Principles
 
