@@ -107,12 +107,12 @@ class CommonContext(Context):
                 value = value[part]
             elif isinstance(value, list):
                 if not part.isnumeric():
-                    raise TransformVariableIndexTypeError()
+                    raise TransformVariableIndexTypeError("part is not numeric")
 
                 try:
                     value = value[int(part)]
                 except IndexError as exc:
-                    raise TransformVariableIndexRangeError() from exc
+                    raise TransformVariableIndexRangeError(f"{part} is out of range") from exc
             else:
                 prefix = ".".join(parts[:i])
                 raise TransformVariableTypeError(

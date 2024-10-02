@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import itertools
 import logging
+import os.path
 import pathlib
 import re
 from typing import Any, List
@@ -22,7 +23,11 @@ import yaml
 from . import tree
 from .constant import NAME_VERSION, PREFIX, PREFIX_DEFINE, PREFIX_INCLUDE, PREFIX_OP, PREFIX_TARGET
 from .context import Context, validate_var_name
-from .error import ParseError, ParseDuplicatedYamlKeyError, TransformDirectiveTypeError, TransformDirectiveUnknownError
+from .error import (
+    IncludeNotFoundError,
+    ParseError, ParseTypeError, ParseValueError, ParseDuplicatedYamlKeyError,
+    TransformDirectiveTypeError, TransformDirectiveUnknownError,
+)
 from .external import call
 from .traversal import State
 
@@ -61,8 +66,7 @@ def resolve(ctx: Context, state: State, data: Any) -> Any:
     if isinstance(data, (int, float, bool, type(None))):
         return data
 
-    log.fatal("could not look up %r in resolvers", type(data))
-    raise TypeError(type(data))
+    raise ParseTypeError(f"could not look up {type(data)} in resolvers", state)
 
 
 # XXX: look into this
@@ -103,7 +107,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                 target = resolve(ctx, state, val)
                 if not isinstance(target, dict):
                     raise ParseError(
-                        f"First level below a 'target' should be a dictionary (not a {type(target).__name__})")
+                        f"First level below a 'target' should be a dictionary (not a {type(target).__name__})", state)
 
                 tree.update(target)
                 continue
@@ -114,7 +118,8 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                 included = process_include(ctx, state, pathlib.Path(val))
                 if not isinstance(included, dict):
                     if len(tree) > 0:
-                        raise ValueError(f"otk.include '{val}' overrides non-empty dict {tree} with '{included}'")
+                        raise ParseValueError(
+                            f"otk.include '{val}' overrides non-empty dict {tree} with '{included}'", state)
                     return included
 
                 tree.update(included)
@@ -123,7 +128,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
             # Other directives do *not* allow siblings
             if len(tree) > 1:
                 keys = list(tree.keys())
-                raise KeyError(f"directive {key} should not have siblings: {keys!r}")
+                raise ParseError(f"directive {key} should not have siblings: {keys!r}", state)
 
             if key.startswith(PREFIX_OP):
                 # return is fine, no siblings allowed
@@ -185,7 +190,7 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
             continue
 
         if key.startswith("otk.include"):
-            raise ParseError(f"otk.include not allowed in an otk.define in {state.path}")
+            raise ParseError(f"otk.include not allowed in an otk.define in {state.path}", state)
 
         if key.startswith("otk.op"):
             del tree[key]
@@ -223,9 +228,11 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
         with path.open(encoding="utf8") as fp:
             data = yaml.load(fp, Loader=SafeUniqueKeyLoader)
     except FileNotFoundError as fnfe:
-        raise FileNotFoundError(f"file {path} referenced from {state.path} was not found") from fnfe
+        cleaned_path = os.fspath(path).removeprefix(
+            os.path.commonprefix([path, state.path]))
+        raise IncludeNotFoundError(f"file {cleaned_path} was not found", state) from fnfe
     except ParseDuplicatedYamlKeyError as err:
-        raise ParseDuplicatedYamlKeyError(f"file {path} has duplicated yaml keys: {err}") from err
+        raise ParseDuplicatedYamlKeyError(f"{err}", state.copy(path=path)) from err
 
     if data is not None:
         return resolve(ctx, state.copy(path=path), data)
@@ -235,10 +242,9 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
 def op(ctx: Context, state: State, tree: Any, key: str) -> Any:
     """Dispatch the various `otk.op` directives while handling unknown
     operations."""
-
     if key == "otk.op.join":
         return op_join(ctx, state, tree)
-    raise TransformDirectiveUnknownError(f"nonexistent op {key!r}")
+    raise TransformDirectiveUnknownError(f"nonexistent op {key!r}", state)
 
 
 @tree.must_be(dict)
@@ -249,32 +255,34 @@ def op_join(_: Context, state: State, tree: dict[str, Any]) -> Any:
     values = tree["values"]
     if not isinstance(values, list):
         raise TransformDirectiveTypeError(
-            f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}")
+            f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}", state)
 
     if all(isinstance(sl, list) for sl in values):
         return _op_seq_join(state, values)
     if all(isinstance(sl, dict) for sl in values):
         return _op_map_join(state, values)
-    raise TransformDirectiveTypeError(f"cannot join {values}")
+    raise TransformDirectiveTypeError(f"cannot join {values}", state)
 
 
-def _op_seq_join(_: State, values: List[list]) -> Any:
+def _op_seq_join(state: State, values: List[list]) -> Any:
     """Join to sequences by concatenating them together."""
 
     if not all(isinstance(sl, list) for sl in values):
+        # XXX: untested
         raise TransformDirectiveTypeError(
-            f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}")
+            f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}", state)
 
     return list(itertools.chain.from_iterable(values))
 
 
-def _op_map_join(_: State, values: List[dict]) -> Any:
+def _op_map_join(state: State, values: List[dict]) -> Any:
     """Join two dictionaries. Keys from the second dictionary overwrite keys
     in the first dictionary."""
 
     if not all(isinstance(sl, dict) for sl in values):
+        # XXX: untested
         raise TransformDirectiveTypeError(
-            f"map join received values of the wrong type, was expecting a list of dicts but got {values!r}")
+            f"map join received values of the wrong type, was expecting a list of dicts but got {values!r}", state)
 
     result = {}
 
@@ -285,7 +293,7 @@ def _op_map_join(_: State, values: List[dict]) -> Any:
 
 
 @tree.must_be(str)
-def substitute_vars(ctx: Context, _: State, data: str) -> Any:
+def substitute_vars(ctx: Context, state: State, data: str) -> Any:
     """Substitute variables in the `data` string.
 
     If `data` consists only of a single `${name}` value then we return the
@@ -320,8 +328,7 @@ def substitute_vars(ctx: Context, _: State, data: str) -> Any:
             if not isinstance(value, str):
                 raise TransformDirectiveTypeError(
                     f"string {data!r} resolves to an incorrect type, "
-                    f"expected int, float, or str but got {type(value).__name__}",
-                )
+                    f"expected int, float, or str but got {type(value).__name__}", state)
 
             # Replace all occurences of this name in the str
             data = re.sub(bracket % re.escape(name), value, data)

@@ -1,1 +1,1 @@
-10-duplicated-key-no-otk.yaml has duplicated yaml keys: duplicated 'foo' key found
+10-duplicated-key-no-otk.yaml: duplicated 'foo' key found

@@ -1,1 +1,1 @@
-otk.include '08-include-scalar-siblings/foo.yaml' overrides non-empty dict {'c': 'd'} with 'foo'
+08-include-scalar-siblings.yaml: otk.include '08-include-scalar-siblings/foo.yaml' overrides non-empty dict {'c': 'd'} with 'foo'

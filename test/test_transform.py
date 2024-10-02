@@ -1,5 +1,6 @@
 import pytest
 from otk import transform
+from otk.error import ParseTypeError
 from otk.context import CommonContext
 from otk.traversal import State
 
@@ -45,3 +46,12 @@ def test_transform_process_defines(data, defines):
 
     transform.process_defines(ctx, state, data)
     assert ctx._variables == defines
+
+
+def test_transform_resolve_unknown_type():
+    ctx = CommonContext()
+    state = State("foo.yaml")
+
+    with pytest.raises(ParseTypeError) as exc:
+        transform.resolve(ctx, state, 1j)
+    assert str(exc.value) == "foo.yaml: could not look up <class 'complex'> in resolvers"

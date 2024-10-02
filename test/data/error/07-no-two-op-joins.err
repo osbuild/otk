@@ -1,1 +1,1 @@
-directive otk.op.join should not have siblings: ['otk.op.join', 'otk.op.noop']
+07-no-two-op-joins.yaml: directive otk.op.join should not have siblings: ['otk.op.join', 'otk.op.noop']

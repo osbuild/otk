@@ -1,8 +1,19 @@
 """Error types used by `otk`."""
 
+from typing import Optional, TYPE_CHECKING
+if TYPE_CHECKING:
+    # required to avoid circular import errors
+    from .traversal import State
+
 
 class OTKError(Exception):
     """Any application raised by `otk` inherits from this."""
+
+    def __init__(self, msg: str, state: Optional['State'] = None) -> None:
+        if state:
+            super().__init__(f"{state.path}: {msg}")
+        else:
+            super().__init__(msg)
 
 
 class ParseError(OTKError):
@@ -72,8 +83,12 @@ class TransformDirectiveUnknownError(TransformError):
     """Unknown directive."""
 
 
-class CircularIncludeError(ParseError):
+class CircularIncludeError(OTKError):
     """Cirtcular include detected."""
+
+
+class IncludeNotFoundError(OTKError):
+    """The requested include was not found."""
 
 
 class NoTargetsError(ParseError):
