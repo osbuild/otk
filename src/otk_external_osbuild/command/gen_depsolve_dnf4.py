@@ -36,7 +36,8 @@ def mockdata(packages, repos, architecture):
     for repo in repos:
         l = list(urlsplit(repo["baseurl"]))
         l[1] = "example.com"
-        l[2] = "pseudo-repo-pkg:" + l[2].rsplit("-", maxsplit=1)[0]
+        repo = l[2].rsplit("-", maxsplit=1)[0]
+        l[2] = f"passed-arch:{architecture}/passed-repo:{repo}"
         base_url = urlunsplit(l)
         pseudo_repo_pkgs.append({
             "name": f"{base_url}",
