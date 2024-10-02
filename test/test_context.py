@@ -111,18 +111,27 @@ def test_context_nonexistent():
 
 def test_context_unhappy():
     ctx = CommonContext()
+
+    with pytest.raises(TransformVariableLookupError) as exc:
+        ctx.variable("foo")
+    assert "could not resolve 'foo' as 'foo' is not defined" in str(exc.value)
+
     ctx.define("foo", "foo")
 
-    with pytest.raises(TransformVariableTypeError):
+    with pytest.raises(TransformVariableTypeError) as exc:
         ctx.variable("foo.bar")
+    assert "tried to look up 'foo.bar', but the value of prefix 'foo' is not a dictionary but <class 'str'>" in str(
+        exc.value)
 
     ctx.define("bar", ["bar"])
 
-    with pytest.raises(TransformVariableIndexTypeError):
+    with pytest.raises(TransformVariableIndexTypeError) as exc:
         ctx.variable("bar.bar")
+    assert "part is not numeric but <class 'str'>" in str(exc.value)
 
-    with pytest.raises(TransformVariableIndexRangeError):
+    with pytest.raises(TransformVariableIndexRangeError) as exc:
         ctx.variable("bar.3")
+    assert "3 is out of range for ['bar']" in str(exc.value)
 
 
 @pytest.mark.parametrize(

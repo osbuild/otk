@@ -107,16 +107,17 @@ class CommonContext(Context):
                 value = value[part]
             elif isinstance(value, list):
                 if not part.isnumeric():
-                    raise TransformVariableIndexTypeError("part is not numeric")
+                    raise TransformVariableIndexTypeError(f"part is not numeric but {type(part)}")
 
                 try:
                     value = value[int(part)]
                 except IndexError as exc:
-                    raise TransformVariableIndexRangeError(f"{part} is out of range") from exc
+                    raise TransformVariableIndexRangeError(f"{part} is out of range for {value}") from exc
             else:
                 prefix = ".".join(parts[:i])
                 raise TransformVariableTypeError(
-                    f"tried to look up '{prefix}.{part}', but prefix '{prefix}' value {value!r} is not a dictionary")
+                    f"tried to look up '{prefix}.{part}', but the value of "
+                    f"prefix '{prefix}' is not a dictionary but {type(value)}")
 
         return value
 
