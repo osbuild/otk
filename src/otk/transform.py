@@ -83,7 +83,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
         # else, so that variables defined in strings are considered in the
         # processing of all directives.
         if isinstance(val, str):
-            val = substitute_vars(ctx, val)
+            val = substitute_vars(ctx, state, val)
         if is_directive(key):
             if key.startswith(PREFIX_DEFINE):
                 del tree[key]  # remove otk.define from the output tree
@@ -127,14 +127,14 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
 
             if key.startswith(PREFIX_OP):
                 # return is fine, no siblings allowed
-                return resolve(ctx, state, op(ctx, resolve(ctx, state, val), key))
+                return resolve(ctx, state, op(ctx, state, resolve(ctx, state, val), key))
 
             if key.startswith("otk.external."):
                 # no target, "dry" run
                 if not ctx.target_requested:
                     continue
                 # return is fine, no siblings allowed
-                return resolve(ctx, state, call(key, resolve(ctx, state, val)))
+                return resolve(ctx, state, call(state, key, resolve(ctx, state, val)))
 
         tree[key] = resolve(ctx, state, val)
     return tree
@@ -149,13 +149,13 @@ def resolve_list(ctx: Context, state: State, tree: list[Any]) -> list[Any]:
     return [resolve(ctx, state, val) for val in tree]
 
 
-def resolve_str(ctx: Context, _: State, tree: str) -> Any:
+def resolve_str(ctx: Context, state: State, tree: str) -> Any:
     """Resolving strings means they are parsed for any variable
     interpolation."""
 
     log.debug("resolving str %r", tree)
 
-    return substitute_vars(ctx, tree)
+    return substitute_vars(ctx, state, tree)
 
 
 def is_directive(needle: Any) -> bool:
@@ -189,12 +189,12 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
 
         if key.startswith("otk.op"):
             del tree[key]
-            value = op(ctx, value, key)
+            value = op(ctx, state, value, key)
             ctx.define(state.define_subkey(), value)
             continue
 
         if key.startswith("otk.external."):
-            new_vars = resolve(ctx, state, call(key, resolve(ctx, state, value)))
+            new_vars = resolve(ctx, state, call(state, key, resolve(ctx, state, value)))
             ctx.merge_defines(state.define_subkey(), new_vars)
             continue
 
@@ -204,7 +204,7 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
 
         elif isinstance(value, str):
             # value is a string: run it through substitute_vars() to resolve any variables and set the define
-            ctx.define(state.define_subkey(key), substitute_vars(ctx, value))
+            ctx.define(state.define_subkey(key), substitute_vars(ctx, state, value))
         else:
             # for any other type, just set the value to the key
             ctx.define(state.define_subkey(key), value)
@@ -232,18 +232,18 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
     return {}
 
 
-def op(ctx: Context, tree: Any, key: str) -> Any:
+def op(ctx: Context, state: State, tree: Any, key: str) -> Any:
     """Dispatch the various `otk.op` directives while handling unknown
     operations."""
 
     if key == "otk.op.join":
-        return op_join(ctx, tree)
+        return op_join(ctx, state, tree)
     raise TransformDirectiveUnknownError(f"nonexistent op {key!r}")
 
 
 @tree.must_be(dict)
 @tree.must_pass(tree.has_keys(["values"]))
-def op_join(_: Context, tree: dict[str, Any]) -> Any:
+def op_join(_: Context, state: State, tree: dict[str, Any]) -> Any:
     """Join a map/seq."""
 
     values = tree["values"]
@@ -252,13 +252,13 @@ def op_join(_: Context, tree: dict[str, Any]) -> Any:
             f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}")
 
     if all(isinstance(sl, list) for sl in values):
-        return _op_seq_join(values)
+        return _op_seq_join(state, values)
     if all(isinstance(sl, dict) for sl in values):
-        return _op_map_join(values)
+        return _op_map_join(state, values)
     raise TransformDirectiveTypeError(f"cannot join {values}")
 
 
-def _op_seq_join(values: List[list]) -> Any:
+def _op_seq_join(_: State, values: List[list]) -> Any:
     """Join to sequences by concatenating them together."""
 
     if not all(isinstance(sl, list) for sl in values):
@@ -268,7 +268,7 @@ def _op_seq_join(values: List[list]) -> Any:
     return list(itertools.chain.from_iterable(values))
 
 
-def _op_map_join(values: List[dict]) -> Any:
+def _op_map_join(_: State, values: List[dict]) -> Any:
     """Join two dictionaries. Keys from the second dictionary overwrite keys
     in the first dictionary."""
 
@@ -285,7 +285,7 @@ def _op_map_join(values: List[dict]) -> Any:
 
 
 @tree.must_be(str)
-def substitute_vars(ctx: Context, data: str) -> Any:
+def substitute_vars(ctx: Context, _: State, data: str) -> Any:
     """Substitute variables in the `data` string.
 
     If `data` consists only of a single `${name}` value then we return the
