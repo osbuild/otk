@@ -60,7 +60,7 @@ def test_sub_var_missing_var_in_context():
         substitute_vars(context, state, "${a.b}")
     # no subtree
     context.define("a", "foo")
-    expected_err = r"tried to look up 'a.b', but prefix 'a' value 'foo' is not a dictionary"
+    expected_err = r"tried to look up 'a.b', but the value of prefix 'a' is not a dictionary but <class 'str'>"
     with pytest.raises(TransformVariableTypeError, match=expected_err):
         substitute_vars(context, state, "${a.b}")
 
