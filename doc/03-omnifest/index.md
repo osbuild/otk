@@ -14,13 +14,13 @@ A minimal entrypoint would look like:
 ```yaml
 otk.version: "1"
 
-otk.target.osbuild.example:
+otk.target.osbuild:
   example: "data"
 ```
 
 ## Targets
 
-The [otk.target.\<consumer\>.\<name\>](./01-directive.md#otktargetconsumername) directives in the omnifest provide the umbrella to put exports under. They are namespaced to a specific consumer (e.g. `osbuild`) and tell `otk` which [external](./02-external.md) directives are available, how to format the export, and how to validate the export.
+The [otk.target.\<consumer\>(.\<name\>)](./01-directive.md#otktargetconsumername) directives in the omnifest provide the umbrella to put exports under. They are namespaced to a specific consumer (e.g. `osbuild`).
 
 An omnifest that contains a single target will use that target by default:
 
@@ -34,9 +34,9 @@ When a file contains multiple targets an error will be shown; you'll have to sel
 
 ```
 € otk compile example.yaml  # contains `osbuild.ami` and `osbuild.iso` targets
-[05/05/24 09:42:20] CRITICAL CRITICAL:otk.command:omnifest contains multiple targets, please select one with `-t`: ['osbuild.foo', 'osbuild.bar']
+CRITICAL:otk.command:INPUT contains multiple targets, `-t` is required
 € otk compile example.yaml -t osbuild.iso
 # ...
 ```
 
-Only a single target can be selected for export.
+Only a single target can be selected for export at a time.
