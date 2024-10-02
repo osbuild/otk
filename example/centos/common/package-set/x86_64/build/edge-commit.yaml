@@ -1,0 +1,14 @@
+include:
+  - coreutils
+  - glibc
+  - grub2-pc
+  - platform-python
+  - policycoreutils
+  - python3
+  - rpm
+  - rpm-ostree
+  - selinux-policy-targeted
+  - systemd
+  - tar
+  - xz
+exclude: []

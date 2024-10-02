@@ -17,19 +17,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - coreutils
-            - glibc
-            - platform-python
-            - policycoreutils
-            - python3
-            - rpm
-            - rpm-ostree
-            - selinux-policy-targeted
-            - systemd
-            - tar
-            - xz
-          exclude: []
+          otk.include: "common/package-set/${architecture}/build/edge-commit.yaml"
     os:
       otk.external.osbuild-gen-depsolve-dnf4:
         architecture: ${architecture}
@@ -38,92 +26,7 @@ otk.define:
         repositories:
           otk.include: "common/repositories/${architecture}.yaml"
         packages:
-          include:
-            - NetworkManager
-            - NetworkManager-wifi
-            - NetworkManager-wwan
-            - attr
-            - audit
-            - basesystem
-            - bash
-            - bash-completion
-            - chrony
-            - clevis
-            - clevis-dracut
-            - clevis-luks
-            - container-selinux
-            - containernetworking-plugins
-            - coreutils
-            - criu
-            - cryptsetup
-            - curl
-            - dnsmasq
-            - dosfstools
-            - dracut-config-generic
-            - dracut-network
-            - e2fsprogs
-            - efibootmgr
-            - fdo-client
-            - fdo-owner-cli
-            - firewalld
-            - fuse-overlayfs
-            - glibc
-            - glibc-minimal-langpack
-            - gnupg2
-            - greenboot
-            - greenboot-default-health-checks
-            - grub2-efi-aa64
-            - grub2-tools
-            - gzip
-            - hostname
-            - ignition
-            - ignition-edge
-            - ima-evm-utils
-            - iproute
-            - iptables
-            - iputils
-            - iwl7260-firmware
-            - kernel
-            - keyutils
-            - less
-            - lvm2
-            - nss-altfiles
-            - openssh-clients
-            - openssh-server
-            - passwd
-            - pinentry
-            - platform-python
-            - podman
-            - policycoreutils
-            - policycoreutils-python-utils
-            - polkit
-            - procps-ng
-            - redhat-release
-            - rootfiles
-            - rpm
-            - rpm-ostree
-            - rsync
-            - selinux-policy-targeted
-            - setools-console
-            - setup
-            - shadow-utils
-            - shim-aa64
-            - skopeo
-            - slirp4netns
-            - sos
-            - ssh-key-dir
-            - sudo
-            - systemd
-            - tar
-            - tmux
-            - traceroute
-            - usbguard
-            - util-linux
-            - vim-minimal
-            - wpa_supplicant
-            - xz
-          exclude:
-            - rng-tools
+          otk.include: "common/package-set/${architecture}/os/edge-commit.yaml"
 
 otk.target.osbuild:
   pipelines:
