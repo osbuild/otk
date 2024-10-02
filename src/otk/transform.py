@@ -134,7 +134,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                 if not ctx.target_requested:
                     continue
                 # return is fine, no siblings allowed
-                return resolve(ctx, state, call(key, resolve(ctx, state, val)))
+                return resolve(ctx, state, call(ctx, key, resolve(ctx, state, val)))
 
         tree[key] = resolve(ctx, state, val)
     return tree
@@ -194,7 +194,7 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
             continue
 
         if key.startswith("otk.external."):
-            new_vars = resolve(ctx, state, call(key, resolve(ctx, state, value)))
+            new_vars = resolve(ctx, state, call(ctx, key, resolve(ctx, state, value)))
             ctx.merge_defines(state.define_subkey(), new_vars)
             continue
 

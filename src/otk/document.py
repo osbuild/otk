@@ -18,9 +18,10 @@ class Omnifest:
     _ctx: CommonContext
     _osbuild_ctx: OSBuildContext
     _target: str
+    _libdir: None
 
-    def __init__(self, path: pathlib.Path, target: str = "", *, warn_duplicated_defs: bool = False) -> None:
-        self._ctx = CommonContext(target_requested=target, warn_duplicated_defs=warn_duplicated_defs)
+    def __init__(self, path: pathlib.Path, target: str = "", *, warn_duplicated_defs: bool = False, libdir: str = "") -> None:
+        self._ctx = CommonContext(target_requested=target, warn_duplicated_defs=warn_duplicated_defs, libdir=libdir)
         self._target = target
         # XXX: redo using a type-safe target registry
         if target:
@@ -66,6 +67,10 @@ class Omnifest:
     def targets(self) -> dict[str, Any]:
         """ Return a dict of target(s) and their subtree(s) """
         return _targets(self._tree)
+
+    @property
+    def libdir(self) -> str:
+        return self._libdir
 
     def as_target_string(self) -> str:
         # XXX: redo using type-safe target registry
