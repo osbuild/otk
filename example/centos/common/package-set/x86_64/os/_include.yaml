@@ -1,0 +1,7 @@
+- dosfstools
+- dracut-config-generic
+- efibootmgr
+- grub2-efi-x64
+- kernel
+- selinux-policy-targeted
+- shim-x64

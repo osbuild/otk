@@ -1,0 +1,9 @@
+- coreutils
+- glibc
+- platform-python
+- policycoreutils
+- python3
+- rpm
+- selinux-policy-targeted
+- systemd
+- xz

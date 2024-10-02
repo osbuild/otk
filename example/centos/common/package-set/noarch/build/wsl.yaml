@@ -1,12 +1,7 @@
 include:
-  - coreutils
-  - glibc
-  - platform-python
-  - python3
-  - python3-iniparse
-  - rpm
-  - selinux-policy-targeted
-  - systemd
-  - tar
-  - xz
+  otk.op.join:
+    values:
+      - otk.include: "_include.yaml"
+      - - python3-iniparse
+        - tar
 exclude: []

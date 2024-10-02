@@ -1,31 +1,26 @@
 include:
-  - "@Server"
-  - NetworkManager
-  - NetworkManager-cloud-setup
-  - WALinuxAgent
-  - bzip2
-  - cloud-init
-  - cloud-utils-growpart
-  - dosfstools
-  - dracut-config-generic
-  - efibootmgr
-  - gdisk
-  - grub2-efi-aa64
-  - grub2-tools
-  - hyperv-daemons
-  - kernel
-  - kernel-core
-  - kernel-modules
-  - langpacks-en
-  - lvm2
-  - nvme-cli
-  - patch
-  - rng-tools
-  - selinux-policy-targeted
-  - shim-aa64
-  - uuid
-  - xfsprogs
-  - yum-utils
+  otk.op.join:
+    values:
+      - otk.include: "_include.yaml"
+      - - "@Server"
+        - NetworkManager
+        - NetworkManager-cloud-setup
+        - WALinuxAgent
+        - bzip2
+        - cloud-init
+        - cloud-utils-growpart
+        - gdisk
+        - hyperv-daemons
+        - kernel-core
+        - kernel-modules
+        - langpacks-en
+        - lvm2
+        - nvme-cli
+        - patch
+        - rng-tools
+        - uuid
+        - xfsprogs
+        - yum-utils
 exclude:
   - NetworkManager-config-server
   - aic94xx-firmware

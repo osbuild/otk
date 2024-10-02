@@ -1,14 +1,9 @@
 include:
-  - coreutils
-  - dosfstools
-  - glibc
-  - platform-python
-  - policycoreutils
-  - python3
-  - python3-pyyaml
-  - rpm
-  - selinux-policy-targeted
-  - systemd
-  - xfsprogs
-  - xz
+  otk.op.join:
+    values:
+      - otk.include: "_include.yaml"
+      - - dosfstools
+        - python3-pyyaml
+        - rpm
+        - xfsprogs
 exclude: []

@@ -1,31 +1,26 @@
 include:
   # https://github.com/osbuild/images/blob/v0.86.0/pkg/distro/rhel/rhel9/ami.go#L189
   # https://github.com/osbuild/images/blob/v0.86.0/pkg/platform/${architecture}.go#L37
-  - "@core"
-  - NetworkManager-cloud-setup
-  - authselect-compat
-  - chrony
-  - cloud-init
-  - cloud-utils-growpart
-  - dhcp-client
-  - dosfstools
-  - dracut-config-generic
-  - efibootmgr
-  - gdisk
-  - grub2
-  - grub2-efi-aa64
-  - grub2-tools
-  - kernel
-  - langpacks-en
-  - redhat-release
-  - redhat-release-eula
-  - rsync
-  - selinux-policy-targeted
-  - shim-aa64
-  - tar
-  - tuned
-  - xfsprogs
-  - yum-utils
+  otk.op.join:
+    values:
+      - otk.include: "_include.yaml"
+      - - "@core"
+        - NetworkManager-cloud-setup
+        - authselect-compat
+        - chrony
+        - cloud-init
+        - cloud-utils-growpart
+        - dhcp-client
+        - gdisk
+        - grub2
+        - langpacks-en
+        - redhat-release
+        - redhat-release-eula
+        - rsync
+        - tar
+        - tuned
+        - xfsprogs
+        - yum-utils
 exclude:
   - aic94xx-firmware
   - alsa-lib
