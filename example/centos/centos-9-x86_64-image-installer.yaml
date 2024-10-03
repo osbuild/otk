@@ -20,7 +20,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/${architecture}.yaml"
+          otk.include: "common/repository/generic.yaml"
         packages:
           include:
             - coreutils
@@ -55,7 +55,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/${architecture}.yaml"
+          otk.include: "common/repository/generic.yaml"
         packages:
           include:
             - "@core"
@@ -123,7 +123,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/${architecture}.yaml"
+          otk.include: "common/repository/generic.yaml"
         packages:
           include:
             - aajohan-comfortaa-fonts

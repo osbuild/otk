@@ -1,4 +1,0 @@
-- id: "AppStream"
-  baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-ppc64le-appstream-20240901"
-- id: "BaseOS"
-  baseurl: "https://rpmrepo.osbuild.org/v2/mirror/public/el9/cs9-ppc64le-baseos-20240901"

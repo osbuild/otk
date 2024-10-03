@@ -15,7 +15,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/${architecture}.yaml"
+          otk.include: "common/repository/generic.yaml"
         packages:
           include:
             - coreutils
@@ -37,7 +37,7 @@ otk.define:
         module_platform_id: c9s
         releasever: "9"
         repositories:
-          otk.include: "common/repositories/${architecture}.yaml"
+          otk.include: "common/repository/generic.yaml"
         packages:
           include:
             # https://github.com/osbuild/images/blob/v0.86.0/pkg/distro/rhel/rhel9/ami.go#L189
