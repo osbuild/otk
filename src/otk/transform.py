@@ -30,6 +30,7 @@ from .error import (
 )
 from .external import call
 from .traversal import State
+from .utils import HiddenAttrDict, HiddenAttrList
 
 log = logging.getLogger(__name__)
 
@@ -51,6 +52,42 @@ class SafeUniqueKeyLoader(yaml.SafeLoader):
                 raise ParseDuplicatedYamlKeyError(f"duplicated {key!r} key found")
             mapping.add(key)
         return super().construct_mapping(node, deep)
+
+
+def _find_data(node_list, key):
+    """ Helper function to find the yaml ScalarNode containing
+    our context information for HiddenAttrList and HiddenAttrDict
+    """
+    for node in node_list:
+        if node[0].value == key:
+            return node[0]
+    raise KeyError(key)
+
+
+def _add_hidden_attributes(obj, key, key_data):
+    line_number = key_data.start_mark.line + 1
+    column = key_data.start_mark.column + 1
+    filename = key_data.start_mark.name
+    obj.set_attribute(key, "src", f"{filename}:{line_number}")
+    obj.set_attribute(key, "filename", filename)
+    obj.set_attribute(key, "linenumber", line_number)
+    obj.set_attribute(key, "column", column)
+
+
+def hidden_attr_dict_constructor(loader, node):
+    data = loader.construct_mapping(node, deep=True)
+    hidden_data_node = HiddenAttrDict(data)
+    for key, _ in hidden_data_node.items():
+        key_data = _find_data(node.value, key)
+        _add_hidden_attributes(hidden_data_node, key, key_data)
+    return hidden_data_node
+
+
+def hidden_attr_list_constructor(loader, node):
+    data = loader.construct_sequence(node, deep=True)
+    hidden_data_node = HiddenAttrList(data)
+    _add_hidden_attributes(hidden_data_node, "self", node)
+    return hidden_data_node
 
 
 def resolve(ctx: Context, state: State, data: Any) -> Any:
@@ -215,7 +252,7 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
             ctx.define(state.define_subkey(key), value)
 
 
-def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
+def process_include(ctx: Context, state: State, path: pathlib.Path) -> HiddenAttrDict:
     """
     Load a yaml file and send it to resolve() for processing.
     """
@@ -224,6 +261,11 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
         cur_path = state.path.parent
         path = (cur_path / pathlib.Path(path)).resolve()
     log.info("resolving %s", path)
+
+    # callbacks to store information about the source of all data in the yaml files
+    yaml.SafeLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, hidden_attr_dict_constructor)
+    yaml.SafeLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_SEQUENCE_TAG, hidden_attr_list_constructor)
+
     try:
         with path.open(encoding="utf8") as fp:
             data = yaml.load(fp, Loader=SafeUniqueKeyLoader)
@@ -236,7 +278,7 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
 
     if data is not None:
         return resolve(ctx, state.copy(path=path), data)
-    return {}
+    return HiddenAttrDict()
 
 
 def op(ctx: Context, state: State, tree: Any, key: str) -> Any:
