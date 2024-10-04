@@ -1,5 +1,7 @@
 # needed for venv
 .ONESHELL:
+SHELL := /bin/bash
+.SHELLFLAGS := -ec -o pipefail
 
 .PHONY: help
 help:
