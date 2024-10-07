@@ -27,8 +27,8 @@ pipelines:
               - id: sha256:93cd8e20fc07f08337cb9d9fa9996274658f6395574e874379c4c4157e922700
               - id: sha256:bf35d0b80342ad44ca298ed07fcc9d3f8d43a2700964586a4a5e2c0a49766528
               - id: sha256:360688270679b1c512513cfab6d931c8c715318582a9974caa3c0f88a0ee053c
-              - id: sha256:b8d091abda67af8480100d621faa0a7648cb9aee4682b0e12606595f0583c639
-              - id: sha256:dabb2041d791bbe2ff130c6b7412f5469083ec6796cd23032bae8eca1d350ac0
+              - id: sha256:2ef3a1f1a9fdba719c2fd4f80df85836c50a7c144aafcb1101aad2f5daae8589
+              - id: sha256:c96a44611625df4b5f7b81f2bed92fbf5990727a2b0b1be4dbed6b4c37462a11
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -167,8 +167,8 @@ pipelines:
               - id: sha256:2de43b323b1e26fd256368050a89e6f1ab3ca1c7d469b67e134db4d5ffc7929d
               - id: sha256:ec6b0c3970b59b0ca5532cb3dc4dd7239136602223a2d39e7e20fba18298bc62
               - id: sha256:241171773fc64efd040332c534e7f67f3f97e75ab0bb61b09bbe33fc81850a9b
-              - id: sha256:b8d091abda67af8480100d621faa0a7648cb9aee4682b0e12606595f0583c639
-              - id: sha256:dabb2041d791bbe2ff130c6b7412f5469083ec6796cd23032bae8eca1d350ac0
+              - id: sha256:2ef3a1f1a9fdba719c2fd4f80df85836c50a7c144aafcb1101aad2f5daae8589
+              - id: sha256:c96a44611625df4b5f7b81f2bed92fbf5990727a2b0b1be4dbed6b4c37462a11
         options:
           gpgkeys:
             - '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -421,6 +421,8 @@ sources:
         url: https://example.com/repo/packages/python3-jsonschema
       sha256:2de43b323b1e26fd256368050a89e6f1ab3ca1c7d469b67e134db4d5ffc7929d:
         url: https://example.com/repo/packages/exclude:plymouth
+      sha256:2ef3a1f1a9fdba719c2fd4f80df85836c50a7c144aafcb1101aad2f5daae8589:
+        url: https://example.com/passed-arch:s390x/passed-repo:/v2/mirror/public/el9/cs9-s390x-appstream
       sha256:3096fd17ccf8ee00173d4d753aa67e476526b800ae6eff06b055d71fc4ce6dff:
         url: https://example.com/repo/packages/tcpdump
       sha256:352db6b0cf337d13b4a9c05b2e4f13bafe02a311cb3dbf756ef2d44d52dca901:
@@ -499,8 +501,6 @@ sources:
         url: https://example.com/repo/packages/exclude:iwl2030-firmware
       sha256:aba407b81ed016841ea552feadaf0663c7804a64554ba55d3109b3dc8198cdcb:
         url: https://example.com/repo/packages/tuned
-      sha256:b8d091abda67af8480100d621faa0a7648cb9aee4682b0e12606595f0583c639:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-s390x-appstream
       sha256:bceee99a4a82cf20ebeb8d0085d57327f62bf0bcf1a4d3c24f430a9366f353c2:
         url: https://example.com/repo/packages/psmisc
       sha256:bd0add6fdee6e6ac62a4ff6bc722f2324a918d8ccc4eda21e043252a10481f0c:
@@ -513,6 +513,8 @@ sources:
         url: https://example.com/repo/packages/cockpit-ws
       sha256:c83c70508d7f2dc81102d86bdad776459f2d9dfd004a2e89ae8f06b7cd8c6280:
         url: https://example.com/repo/packages/exclude:langpacks-*
+      sha256:c96a44611625df4b5f7b81f2bed92fbf5990727a2b0b1be4dbed6b4c37462a11:
+        url: https://example.com/passed-arch:s390x/passed-repo:/v2/mirror/public/el9/cs9-s390x-baseos
       sha256:ce5857e0b504bd3e06f80b27dc88064f0bf214127dd5a2ee1ff849ed78e32c9e:
         url: https://example.com/repo/packages/exclude:iwl5000-firmware
       sha256:cf23a0e72ee5bed7a2cce02a3b6115e97c593554600931c5f348a1f304f93bb6:
@@ -521,8 +523,6 @@ sources:
         url: https://example.com/repo/packages/cockpit-system
       sha256:d8654f2a37c8dd45ed104e5b7c26ec3ee0d74dca488cdd0a400d58a6c4f7875b:
         url: https://example.com/repo/packages/exclude:libertas-sd8787-firmware
-      sha256:dabb2041d791bbe2ff130c6b7412f5469083ec6796cd23032bae8eca1d350ac0:
-        url: https://example.com/pseudo-repo-pkg:/v2/mirror/public/el9/cs9-s390x-baseos
       sha256:dc326a13b89447ad3251f78a5bd784808b85c64bc4fd380d2e9533ffa00428e2:
         url: https://example.com/repo/packages/exclude:iwl1000-firmware
       sha256:dfff1585cd84bf13177a09e93d70be3a39c3bec554f1215a5a4fe5c92bbae8bf:
