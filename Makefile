@@ -124,7 +124,10 @@ $(EXTERNAL_GO_EXECUTABLES_FULLPATH): | $(EXTERNAL_DIR)
 # Note that "external" will most likely in the future build from internal
 # sources instead of pulling of the network
 .PHONY: external
-external: $(EXTERNAL_GO_EXECUTABLES_FULLPATH)
+external: $(EXTERNAL_GO_EXECUTABLES_FULLPATH) pyexternals
+
+pyexternals: $(VENV_DIR)
+	ln -sf $(VENV_DIR)/bin/osbuild-* $(EXTERNAL_DIR)/
 
 clean: ## clean all build artifacts
 	rm -rf $(VENV_DIR)
@@ -135,5 +138,4 @@ $(VENV_DIR): pyproject.toml | $(EXTERNAL_DIR)
 	python3 -m venv $@
 	. $@/bin/activate
 	pip install -e ".[dev]"
-	ln -sf $(VENV_DIR)/bin/osbuild-* $(EXTERNAL_DIR)/
 	touch $@
