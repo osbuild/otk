@@ -19,13 +19,13 @@ SRC_DIR?=$(CURDIR)
 EXTERNAL_DIR?=$(SRC_DIR)/external
 VENV_DIR?=$(SRC_DIR)/venv
 
-EXTERNAL_GO_EXECUTABLES:= otk-gen-partition-table \
-                          otk-make-fstab-stage \
-                          otk-make-grub2-inst-stage \
-                          otk-resolve-containers \
-                          otk-resolve-ostree-commit \
-                          otk-make-partition-mounts-devices \
-                          otk-make-partition-stages
+EXTERNAL_GO_EXECUTABLES:= osbuild-gen-partition-table \
+                          osbuild-make-fstab-stage \
+                          osbuild-make-grub2-inst-stage \
+                          osbuild-resolve-containers \
+                          osbuild-resolve-ostree-commit \
+                          osbuild-make-partition-mounts-devices \
+                          osbuild-make-partition-stages
 
 EXTERNAL_GO_EXECUTABLES_FULLPATH:=$(addprefix $(EXTERNAL_DIR)/, $(EXTERNAL_GO_EXECUTABLES))
 
@@ -119,7 +119,7 @@ $(EXTERNAL_DIR):
 	mkdir -p $@
 
 $(EXTERNAL_GO_EXECUTABLES_FULLPATH): | $(EXTERNAL_DIR)
-	GOBIN=$(dir $@) go install -tags "$(CONTAINERS_STORAGE_THIN_TAGS)" "$(IMAGES_REF)"/cmd/$(notdir $@)@main ;
+	GOBIN=$(dir $@) go install -tags "$(CONTAINERS_STORAGE_THIN_TAGS)" "$(IMAGES_REF)"/cmd/otk/$(notdir $@)@main ;
 
 # Note that "external" will most likely in the future build from internal
 # sources instead of pulling of the network
