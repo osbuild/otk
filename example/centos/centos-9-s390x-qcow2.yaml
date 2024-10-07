@@ -139,7 +139,7 @@ otk.target.osbuild:
             network:
               networking: true
               no_zero_conf: true
-        - otk.external.otk-make-fstab-stage:
+        - otk.external.osbuild-make-fstab-stage:
             ${filesystem}
         - type: org.osbuild.zipl
           options: {}

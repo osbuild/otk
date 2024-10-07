@@ -137,7 +137,7 @@ otk.target.osbuild:
             network:
               networking: true
               no_zero_conf: true
-        - otk.external.otk-make-fstab-stage:
+        - otk.external.osbuild-make-fstab-stage:
             ${filesystem}
         - otk.include: "fragment/grub2/${architecture}.yaml"
         - type: org.osbuild.systemd

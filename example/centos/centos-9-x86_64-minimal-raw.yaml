@@ -102,7 +102,7 @@ otk.target.osbuild:
               Unit:
                 ConditionPathExists: '!/usr/libexec/greenboot/greenboot'
             unit-type: global
-        - otk.external.otk-make-fstab-stage:
+        - otk.external.osbuild-make-fstab-stage:
             ${filesystem}
         - otk.include: fragment/grub2/${architecture}-no-bios.yaml
         - type: org.osbuild.copy

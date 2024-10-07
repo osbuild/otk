@@ -3,7 +3,7 @@ build: name:build
 stages:
   otk.op.join:
     values:
-      - otk.external.otk-make-partition-stages:
+      - otk.external.osbuild-make-partition-stages:
           ${filesystem}
       - - type: org.osbuild.copy
           inputs:
@@ -21,6 +21,6 @@ stages:
           mounts:
             ${fs_options.mounts}
         # XXX conditional
-        - otk.external.otk-make-grub2-inst-stage:
+        - otk.external.osbuild-make-grub2-inst-stage:
             platform: i386-pc
             filesystem: ${filesystem}
