@@ -1,6 +1,6 @@
 otk.define:
   filesystem:
-    otk.external.otk-gen-partition-table:
+    otk.external.osbuild-gen-partition-table:
       modifications:
         ${filesystem.modifications}
       properties:
@@ -26,5 +26,5 @@ otk.define:
   # XXX: it would be nicer if the "fs_options" could be part of their
   # stages directly without this indirection.
   fs_options:
-    otk.external.otk-make-partition-mounts-devices:
+    otk.external.osbuild-make-partition-mounts-devices:
       ${filesystem}

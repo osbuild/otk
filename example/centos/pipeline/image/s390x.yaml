@@ -3,7 +3,7 @@ build: name:build
 stages:
   otk.op.join:
     values:
-      - otk.external.otk-make-partition-stages:
+      - otk.external.osbuild-make-partition-stages:
           ${filesystem}
       - - type: org.osbuild.copy
           inputs:

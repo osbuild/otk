@@ -252,7 +252,7 @@ otk.target.osbuild:
                     arg: NM_UNMANAGED
                   op: '='
                   val: '1'
-        - otk.external.otk-make-fstab-stage:
+        - otk.external.osbuild-make-fstab-stage:
             ${filesystem}
         - type: org.osbuild.grub2
           options:
