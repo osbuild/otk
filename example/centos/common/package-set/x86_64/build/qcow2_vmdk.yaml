@@ -1,7 +1,7 @@
 include:
   otk.op.join:
     values:
-      - otk.include: "_include.yaml"
+      - otk.include: "common.yaml"
       - - dosfstools
         - qemu-img
         - xfsprogs

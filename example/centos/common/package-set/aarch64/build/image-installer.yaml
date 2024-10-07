@@ -1,7 +1,7 @@
 include:
   otk.op.join:
     values:
-      - otk.include: "_include.yaml"
+      - otk.include: "common.yaml"
       - - efibootmgr
         - grub2-efi-aa64
         - grub2-efi-aa64-cdboot
