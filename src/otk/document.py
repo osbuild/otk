@@ -9,12 +9,13 @@ from .error import NoTargetsError, ParseError, ParseVersionError, OTKError
 from .transform import process_include
 from .traversal import State
 from .target import OSBuildTarget
+from .utils import HiddenAttrDict
 
 log = logging.getLogger(__name__)
 
 
 class Omnifest:
-    _tree: dict[str, Any]
+    _tree: HiddenAttrDict[str, Any]
     _ctx: CommonContext
     _osbuild_ctx: OSBuildContext
     _target: str
@@ -39,7 +40,7 @@ class Omnifest:
         self._tree = tree
 
     @classmethod
-    def ensure(cls, deserialized_data: dict[str, Any]) -> None:
+    def ensure(cls, deserialized_data: HiddenAttrDict[str, Any]) -> None:
         """Take a dictionary and ensure that its keys and values would be
         considered an Omnifest."""
 
@@ -49,10 +50,11 @@ class Omnifest:
             raise ParseVersionError(f"omnifest must contain a key by the name of {NAME_VERSION!r}")
 
         # no toplevel keys without a target or an otk directive
-        targetless_keys = [key for key in deserialized_data
+        targetless_keys = [f" * \"{key}\" in {deserialized_data.get_attribute(key, 'src')}" for key in deserialized_data
                            if not key.startswith(PREFIX)]
         if len(targetless_keys):
-            raise ParseError(f"otk file contains top-level keys {targetless_keys} without a target")
+            targetless_keys_str = '\n'.join(targetless_keys)
+            raise ParseError(f"otk file contains top-level keys without a target:\n{targetless_keys_str}")
 
         target_available = _targets(deserialized_data)
         if not target_available:
