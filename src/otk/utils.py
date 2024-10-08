@@ -93,7 +93,8 @@ class HiddenAttrDictJSONEncoder(json.JSONEncoder):
         ret = []
 
         for index, value in enumerate(obj):
-            comment = f"# source of index {index}: {obj.get_attribute("self", "src")}"
+            src = obj.get_attribute("self", "src")
+            comment = f"# source of index {index}: {src}"
             if comment:
                 ret.append(comment)
             ret.append(self._enrich_with_comment(value))

@@ -67,7 +67,7 @@ def _find_data(node_list, key):
 def _add_hidden_attributes(obj, key, key_data):
     line_number = key_data.start_mark.line + 1
     column = key_data.start_mark.column + 1
-    filename = key_data.start_mark.name
+    filename = os.path.relpath(key_data.start_mark.name, os.path.curdir)
     obj.set_attribute(key, "src", f"{filename}:{line_number}")
     obj.set_attribute(key, "filename", filename)
     obj.set_attribute(key, "linenumber", line_number)
