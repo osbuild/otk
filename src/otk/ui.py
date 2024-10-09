@@ -6,7 +6,7 @@ from typing import Optional, Type
 from types import TracebackType
 
 
-class Spinner:
+class _Spinner:
     """Render a spinner with an optional prompt to stderr, if stderr isn't a
     tty this only prints the prompt."""
 
@@ -47,3 +47,7 @@ class Spinner:
         self.thread.join()
 
         return True
+
+
+def spinner(prompt: str) -> _Spinner:
+    return _Spinner(prompt)
