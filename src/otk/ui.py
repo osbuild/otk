@@ -5,6 +5,8 @@ import threading
 from typing import Optional, Type
 from types import TracebackType
 
+from . import __version__
+
 
 class _Spinner:
     """Render a spinner with an optional prompt to stderr, if stderr isn't a
@@ -58,3 +60,8 @@ def print(text: str) -> None:  # pylint: disable=redefined-builtin
     if sys.stderr.isatty():
         sys.stderr.write(text + "\n")
         sys.stderr.flush()
+
+
+def motd() -> None:
+    # Note, this is the local print function
+    print(f"otk {__version__} -- https://www.osbuild.org/")

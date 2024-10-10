@@ -29,6 +29,8 @@ def run(argv: List[str]) -> int:
         print(f"otk {__version__}")
         return 0
 
+    ui.motd()
+
     if arguments.command == "compile":
         return compile(arguments)
     if arguments.command == "validate":
