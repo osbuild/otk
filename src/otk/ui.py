@@ -58,3 +58,15 @@ def print(text: str) -> None:  # pylint: disable=redefined-builtin
     if sys.stderr.isatty():
         sys.stderr.write(text + "\n")
         sys.stderr.flush()
+
+
+def motd() -> None:
+    if sys.stderr.isatty():
+        sys.stderr.write(r"""       _   _
+  ___ | |_| | __
+ / _ \| __| |/ /   version: 0.1
+| (_) | |_|   <    docs:    https://osbuild.org/
+ \___/ \__|_|\_\   repo:    https://github.com/osbuild/otk
+
+""")
+        sys.stderr.flush()

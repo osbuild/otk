@@ -24,6 +24,8 @@ def run(argv: List[str]) -> int:
         handlers=[logging.StreamHandler()],
     )
 
+    ui.motd()
+
     if arguments.command == "compile":
         return compile(arguments)
     if arguments.command == "validate":
