@@ -2,12 +2,22 @@ otk.version: "1"
 
 otk.define:
   architecture: x86_64
+  default:
+    modifications:
+      locale: en_US.UTF-8
+      timezone: UTC
+      filesystem:
+        filename: "image.raw"
+
   modifications:
-    locale: en_US.UTF-8
-    timezone: UTC
+    otk.op.join:
+      values:
+        - ${default.modifications}
+        - ${user.modifications}
+
   filesystem:
     modifications:
-      filename: "image.raw"
+      ${modifications.filesystem}
   packages:
     build:
       otk.external.osbuild-gen-depsolve-dnf4:
