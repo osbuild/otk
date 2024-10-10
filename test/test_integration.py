@@ -60,7 +60,7 @@ def test_otk_define_empty(tmp_path, caplog):
 
 
 def test_verbose_logs_processed_files(tmp_path, caplog):
-    caplog.set_level(logging.INFO)
+    caplog.set_level(logging.DEBUG)
 
     test_otk = tmp_path / "foo.yaml"
     test_otk.write_text(TEST_OTK)
