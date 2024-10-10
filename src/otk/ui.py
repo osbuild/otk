@@ -51,3 +51,10 @@ class _Spinner:
 
 def spinner(prompt: str) -> _Spinner:
     return _Spinner(prompt)
+
+
+def print(text: str) -> None:  # pylint: disable=redefined-builtin
+    """Write a line of text to stderr if it's attached to a tty."""
+    if sys.stderr.isatty():
+        sys.stderr.write(text + "\n")
+        sys.stderr.flush()
