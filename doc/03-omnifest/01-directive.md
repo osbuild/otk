@@ -186,14 +186,9 @@ otk.define:
 
 External directives. Directives starting with `otk.external` are redirected
 to `/usr/libexec/otk/external`-binaries. For example the directive
-`otk.external.osbuild_depsolve_dnf4` will execute `osbuild_depsolve_dnf4`
+`otk.external.osbuild-depsolve-dnf4` will execute `osbuild-depsolve-dnf4`
 with the tree under the directive on stdin and expect a new tree to replace
 the directive with on stdout.
-
-When `otk` processes omnifests initially it performs a "common" translation
-which processes all non-external directives. After this it processes each
-target in the omnifest with a context specific to the target. In this phase
-the `otk.external` directives are resolved.
 
 Read more about [external directives](./02-external.md) in their specific
 documentation section.
