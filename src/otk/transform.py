@@ -223,7 +223,7 @@ def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
     if not path.is_absolute():
         cur_path = state.path.parent
         path = (cur_path / pathlib.Path(path)).resolve()
-    log.info("resolving %s", path)
+    log.debug("resolving %s", path)
     try:
         with path.open(encoding="utf8") as fp:
             data = yaml.load(fp, Loader=SafeUniqueKeyLoader)
