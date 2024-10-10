@@ -5,6 +5,7 @@ import sys
 from typing import List
 
 from .document import Omnifest
+from . import ui
 
 log = logging.getLogger(__name__)
 
@@ -23,6 +24,8 @@ def run(argv: List[str]) -> int:
         handlers=[logging.StreamHandler()],
     )
 
+    ui.motd()
+
     if arguments.command == "compile":
         return compile(arguments)
     if arguments.command == "validate":
@@ -40,6 +43,8 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         path = pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")
     else:
         path = pathlib.Path(arguments.input)
+
+    ui.print(f"Compiling {path}")
 
     # First pass of resolving the otk file is "shallow", it will not run
     # externals and not resolve anything under otk.target.*
@@ -62,11 +67,15 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         log.fatal("requested target %r does not exist in INPUT", target_requested)
         return 1
 
+    ui.print(f"Selected the {target_requested} target")
+
     # Now do the real resolve that takes the target into account. It needs
     # a full run so that resolving includes works correctly.
     warn_duplicated_defs = any(arg in getattr(arguments, "warn", [])
                                for arg in ["duplicate-definition", "all"])
     doc = Omnifest(path, target=target_requested, warn_duplicated_defs=warn_duplicated_defs)
+
+    ui.print("Done")
 
     # and then output by writing to the output
     if not dry_run:
