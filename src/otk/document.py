@@ -1,5 +1,4 @@
 import logging
-import pathlib
 from copy import deepcopy
 from typing import Any
 
@@ -9,17 +8,18 @@ from .error import NoTargetsError, ParseError, ParseVersionError, OTKError
 from .transform import process_include
 from .traversal import State
 from .target import OSBuildTarget
+from .annotation import AnnotatedDict, AnnotatedPath
 
 log = logging.getLogger(__name__)
 
 
 class Omnifest:
-    _tree: dict[str, Any]
+    _tree: AnnotatedDict[str, Any]
     _ctx: CommonContext
     _osbuild_ctx: OSBuildContext
     _target: str
 
-    def __init__(self, path: pathlib.Path, target: str = "", *, warn_duplicated_defs: bool = False) -> None:
+    def __init__(self, path: AnnotatedPath, target: str = "", *, warn_duplicated_defs: bool = False) -> None:
         self._ctx = CommonContext(target_requested=target, warn_duplicated_defs=warn_duplicated_defs)
         self._target = target
         # XXX: redo using a type-safe target registry
@@ -39,7 +39,7 @@ class Omnifest:
         self._tree = tree
 
     @classmethod
-    def ensure(cls, deserialized_data: dict[str, Any]) -> None:
+    def ensure(cls, deserialized_data: AnnotatedDict[str, Any]) -> None:
         """Take a dictionary and ensure that its keys and values would be
         considered an Omnifest."""
 
@@ -49,10 +49,15 @@ class Omnifest:
             raise ParseVersionError(f"omnifest must contain a key by the name of {NAME_VERSION!r}")
 
         # no toplevel keys without a target or an otk directive
-        targetless_keys = [key for key in deserialized_data
-                           if not key.startswith(PREFIX)]
+        targetless_keys = [
+            f" * \"{key}\" in {deserialized_data[key].get_annotation('src')}"
+            for key in deserialized_data
+            if not key.startswith(PREFIX)
+        ]
+
         if len(targetless_keys):
-            raise ParseError(f"otk file contains top-level keys {targetless_keys} without a target")
+            targetless_keys_str = '\n'.join(targetless_keys)
+            raise ParseError(f"otk file contains top-level keys without a target:\n{targetless_keys_str}")
 
         target_available = _targets(deserialized_data)
         if not target_available:
