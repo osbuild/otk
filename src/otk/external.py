@@ -9,6 +9,7 @@ import subprocess
 import os
 from typing import Any
 
+from .annotation import AnnotatedBase
 from .constant import PREFIX_EXTERNAL
 from .error import ExternalFailedError
 from .traversal import State
@@ -20,9 +21,11 @@ def call(state: State, directive: str, tree: Any) -> Any:
     exe = exe_from_directive(directive)
     exe = path_for(exe)
 
+    tree_dump = AnnotatedBase.deep_dump(tree)
+
     data = json.dumps(
         {
-            "tree": tree,
+            "tree": tree_dump,
         }
     )
 
@@ -33,7 +36,12 @@ def call(state: State, directive: str, tree: Any) -> Any:
         raise ExternalFailedError(msg, state)
 
     res = json.loads(process.stdout)
-    return res["tree"]
+    ret = AnnotatedBase.deep_convert(res["tree"])
+
+    ret.set_annotation("src", f"result of {directive} ({tree.get_annotation('src')})\n"
+                       f"with input from {tree.get_annotation('content_filename')}:"
+                       f"{tree.get_annotation('content_line_number')}-{tree.get_annotation('content_line_number_end')}")
+    return ret
 
 
 def exe_from_directive(directive):

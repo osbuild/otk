@@ -1,24 +1,29 @@
 import copy
 import inspect
-import os
 import pathlib
 from typing import Any, Optional
 
+from .annotation import AnnotatedPath, AnnotatedList
 from .error import CircularIncludeError
 
 
 class State:
 
-    def __init__(self, path: Optional[pathlib.Path] = None) -> None:
+    def __init__(self, path: Optional[AnnotatedPath] = None) -> None:
         if path is None:
-            path = pathlib.Path()
+            path = AnnotatedPath()
+
+        if not isinstance(path, AnnotatedPath):
+            # mainly for edge cases and tests
+            path = AnnotatedPath(path)
+
         self.path = path
         self._define_subkeys: list[str] = []
-        self._includes = []
+        self._includes = AnnotatedList[Any]()
         if path != pathlib.Path():
             self._includes.append(path)
 
-    def copy(self, *, path: Optional[pathlib.Path] = None, subkey_add: Optional[str] = None) -> "State":
+    def copy(self, *, path: Optional[AnnotatedPath] = None, subkey_add: Optional[str] = None) -> "State":
         """
         Return a new State, optionally redefining the path and add a define
         subkey. Properties not defined in the args are (shallow) copied
@@ -28,10 +33,13 @@ class State:
         if subkey_add:
             new_state._define_subkeys.append(subkey_add)
         if path:
+            if not isinstance(path, AnnotatedPath):
+                path = AnnotatedPath(path)
             if path in self._includes:
-                circle = [os.fspath(p) for p in new_state._includes]
-                circle.append(os.fspath(path))
-                raise CircularIncludeError(f"circular include from {'->'.join(circle)}")
+                circle = [p.fspath_with_include() for p in new_state._includes]
+                circle.append(path.fspath_with_include())
+                circle_str = ' ->\n'.join(circle)
+                raise CircularIncludeError(f"circular include detected:\n{circle_str}")
             new_state.path = path
             new_state._includes.append(path)
         return new_state

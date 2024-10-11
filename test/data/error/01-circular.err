@@ -1,1 +1,6 @@
-circular include from
+circular include detected:
+test/data/error/01-circular.yaml ->
+test/data/error/01-circular/a.yaml (included from test/data/error/01-circular.yaml:3) ->
+test/data/error/01-circular/b.yaml (included from test/data/error/01-circular/a.yaml:1) ->
+test/data/error/01-circular/subdir/c.yaml (included from test/data/error/01-circular/b.yaml:1) ->
+test/data/error/01-circular/a.yaml (included from test/data/error/01-circular/subdir/c.yaml:1)

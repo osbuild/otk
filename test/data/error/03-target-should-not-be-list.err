@@ -1,1 +1,1 @@
-03-target-should-not-be-list.yaml: First level below a 'target' should be a dictionary (not a list)
+test/data/error/03-target-should-not-be-list.yaml:3 - First level below a 'target' should be a dictionary (not a AnnotatedList)

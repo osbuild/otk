@@ -5,6 +5,7 @@ import sys
 from typing import List
 
 from . import __version__
+from .annotation import AnnotatedPath
 from .document import Omnifest
 
 log = logging.getLogger(__name__)
@@ -24,17 +25,12 @@ def run(argv: List[str]) -> int:
         handlers=[logging.StreamHandler()],
     )
 
-    if arguments.version:
-        print(f"otk {__version__}")
-        return 0
-
     if arguments.command == "compile":
         return compile(arguments)
     if arguments.command == "validate":
         return validate(arguments)
 
-    parser.print_help()
-    return 2
+    raise RuntimeError("Unknown subcommand")
 
 
 def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
@@ -107,12 +103,6 @@ def parser_create() -> argparse.ArgumentParser:
         help="Sets verbosity. Can be passed multiple times to be more verbose.",
     )
     parser.add_argument(
-        "-V",
-        "--version",
-        action="store_true",
-        help="Print version and exit."
-    )
-    parser.add_argument(
         "-W",
         "--warn",
         action='append',
@@ -121,7 +111,7 @@ def parser_create() -> argparse.ArgumentParser:
     )
 
     # get a subparser action
-    subparsers = parser.add_subparsers(dest="command", required=False, metavar="command")
+    subparsers = parser.add_subparsers(dest="command", required=True, metavar="command")
 
     parser_compile = subparsers.add_parser("compile", help="Compile an omnifest.")
     parser_compile.add_argument(

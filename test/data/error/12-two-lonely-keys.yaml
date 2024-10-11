@@ -1,0 +1,10 @@
+otk.version: 1
+
+otk.target.osbuild.foo:
+  a: 1
+
+targetless:
+  key: value
+
+targetless2:
+  key2: value2

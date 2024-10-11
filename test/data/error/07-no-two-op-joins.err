@@ -1,1 +1,1 @@
-07-no-two-op-joins.yaml: directive otk.op.join should not have siblings: ['otk.op.join', 'otk.op.noop']
+test/data/error/07-no-two-op-joins.yaml:3 - directive otk.op.join should not have siblings: ['otk.op.join', 'otk.op.noop']

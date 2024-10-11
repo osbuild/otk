@@ -9,6 +9,8 @@ import pytest
 from otk.command import run
 
 TEST_DATA_PATH = pathlib.Path(__file__).parent / "data"
+TEST_EXAMPLE_PATH = pathlib.Path(__file__).parent.parent / "example"
+OTK_EXTERNAL_PATH = pathlib.Path(__file__).parent.parent / "external"
 
 
 class _TestCase:
@@ -20,8 +22,8 @@ class _TestCase:
 
     def as_example_yaml(self):
         # keep in sync with our "example" folder
-        p = pathlib.Path(__file__).parent.parent
-        return p / f"example/{self.distro_name}/{self.distro_name}-{self.distro_ver}-{self.arch}-{self.img_type}.yaml"
+        return (f"{TEST_EXAMPLE_PATH}/{self.distro_name}/"
+                f"{self.distro_name}-{self.distro_ver}-{self.arch}-{self.img_type}.yaml")
 
     def __str__(self):
         return f"{self.distro_name}-{self.distro_ver}-{self.arch}-{self.img_type}-{self.customizations}"
@@ -82,7 +84,7 @@ def test_normalize_rpm_refs():
 @pytest.mark.parametrize("tc", reference_manifests("empty"))
 def test_images_ref_no_customizations(tmp_path, monkeypatch, tc):
     monkeypatch.setenv("OSBUILD_TESTING_RNG_SEED", "0")
-    monkeypatch.setenv("OTK_EXTERNAL_PATH", "./external")
+    monkeypatch.setenv("OTK_EXTERNAL_PATH", str(OTK_EXTERNAL_PATH))
     monkeypatch.setenv("OTK_UNDER_TEST", "1")
 
     with tc.ref_yaml_path.open() as fp:

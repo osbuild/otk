@@ -6,6 +6,7 @@ import textwrap
 import pytest
 
 import otk.external
+from otk.annotation import AnnotatedDict
 from otk.error import ExternalFailedError
 from otk.external import exe_from_directive
 from otk.traversal import State
@@ -47,7 +48,7 @@ def run_fake_external_ok(external_path, name):
         },
     }
 
-    res = otk.external.call(State(""), fake_directive, fake_tree)
+    res = otk.external.call(State(""), fake_directive, AnnotatedDict(fake_tree))
     assert res == {"some": "result"}
 
     inp = fake_external_path.with_suffix(".stdin").read_text()
