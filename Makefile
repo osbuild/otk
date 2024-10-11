@@ -46,8 +46,7 @@ SRC_CONTAINER_FILES=$(shell find src 2>/dev/null|| echo "src") \
 container_built.info: Containerfile $(SRC_CONTAINER_FILES) # internal rule to avoid rebuilding if not necessary
 	podman build --build-arg CONTAINERS_STORAGE_THIN_TAGS="$(CONTAINERS_STORAGE_THIN_TAGS)" \
 	             --build-arg IMAGES_REF="$(IMAGES_REF)" \
-	             --tag otk \
-	             --pull=newer . &&
+	             --tag otk . &&
 	echo "Container last built on" > $@ &&
 	date >> $@
 
