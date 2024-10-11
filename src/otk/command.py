@@ -1,10 +1,10 @@
 import argparse
 import logging
-import pathlib
 import sys
 from typing import List
 
 from . import __version__
+from .annotation import AnnotatedPath
 from .document import Omnifest
 
 log = logging.getLogger(__name__)
@@ -43,9 +43,9 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         dst = sys.stdout if arguments.output is None else open(arguments.output, "w", encoding="utf-8")
 
     if arguments.input is None:
-        path = pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")
+        path = AnnotatedPath(f"/proc/self/fd/{sys.stdin.fileno()}")
     else:
-        path = pathlib.Path(arguments.input)
+        path = AnnotatedPath(arguments.input)
 
     # First pass of resolving the otk file is "shallow", it will not run
     # externals and not resolve anything under otk.target.*
@@ -57,12 +57,12 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     target_available = doc.targets
     target_requested = arguments.target
     if not target_requested:
-        if len(target_available) > 1:
+        if len(target_available.value) > 1:
             log.fatal("INPUT contains multiple targets, `-t` is required")
             return 1
         # set the requested target to the default case now that we know that
         # there aren't multiple targets available and none are requested
-        target_requested = list(target_available.keys())[0]
+        target_requested = list(target_available.value.keys())[0]
 
     if target_requested not in target_available:
         log.fatal("requested target %r does not exist in INPUT", target_requested)
@@ -77,6 +77,9 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # and then output by writing to the output
     if not dry_run:
         dst.write(doc.as_target_string())
+
+        if arguments.output is not None:
+            dst.close()
 
     return 0
 

@@ -1,1 +1,1 @@
-00-invalid.yaml: file notexist was not found
+test/data/error/00-invalid.yaml:5 - file 'notexist' was not found

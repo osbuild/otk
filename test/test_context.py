@@ -73,12 +73,12 @@ def test_context_warn_on_override_nested(caplog):
     ctx.define("key.subkey", "newsubval")
     # from dict -> str
     expected_msg1 = ("redefinition of 'key.subkey', previous value was "
-                     "{'subsubkey': 'subsubval'} and new value is 'newsubval'")
+                     "'{'subsubkey': 'subsubval'}' and new value is 'newsubval'")
     assert [expected_msg1] == [r.message for r in caplog.records]
     ctx.define("key.subkey", {"sub": "dict"})
     # from str -> dict
     expected_msg2 = ("redefinition of 'key.subkey', previous value was "
-                     "'newsubval' and new value is {'sub': 'dict'}")
+                     "'newsubval' and new value is '{'sub': 'dict'}'")
     assert [expected_msg1, expected_msg2] == [r.message for r in caplog.records]
 
 
@@ -89,7 +89,7 @@ def test_context_warn_on_override_nested_from_val_to_dict(caplog):
     assert len(caplog.records) == 0
     ctx.define("key.sub.subsub.subsubsub", {"subsubsub": "val2"})
     expected_msg = ("redefinition of 'key.sub', previous value was "
-                    "'subval' and new value is {'subsub.subsubsub': {'subsubsub': 'val2'}}")
+                    "'subval' and new value is '{'subsub.subsubsub': {'subsubsub': 'val2'}}'")
 
     assert [expected_msg] == [r.message for r in caplog.records]
 
@@ -120,8 +120,8 @@ def test_context_unhappy():
 
     with pytest.raises(TransformVariableTypeError) as exc:
         ctx.variable("foo.bar")
-    assert "tried to look up 'foo.bar', but the value of prefix 'foo' is not a dictionary but <class 'str'>" in str(
-        exc.value)
+    assert ("tried to look up 'foo.bar', but the value of prefix 'foo' "
+            "is not a dictionary but <class 'otk.annotation.AnnotatedStr'>") in str(exc.value)
 
     ctx.define("bar", ["bar"])
 

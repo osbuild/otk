@@ -47,7 +47,7 @@ def must_pass(*vs):
 def has_keys(keys):
     def inner(tree):
         for key in keys:
-            if key not in tree:
+            if key not in tree.value:
                 raise TransformDirectiveArgumentError(f"Expected key {key!r}")
 
     return inner

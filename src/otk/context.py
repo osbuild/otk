@@ -8,6 +8,7 @@ import re
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
+from .annotation import AnnotatedDict, AnnotatedNode, AnnotatedList
 from .constant import VALID_VAR_NAME_RE
 from .error import (ParseError,
                     TransformVariableIndexRangeError,
@@ -20,7 +21,7 @@ log = logging.getLogger(__name__)
 def validate_var_name(name):
     for part in name.split("."):
         if not re.fullmatch(VALID_VAR_NAME_RE, part):
-            raise ParseError(f"invalid variable part '{part}' in '{name}', allowed {VALID_VAR_NAME_RE}")
+            raise ParseError(f"invalid variable part '{part}' in '{name}', allowed {VALID_VAR_NAME_RE}", annotated=name)
 
 
 class Context(ABC):
@@ -45,7 +46,7 @@ class CommonContext(Context):
     warn_duplicated_defs: bool
     _target_requested: str
     _version: Optional[int]
-    _variables: dict[str, Any]
+    _variables: AnnotatedDict
 
     def __init__(
         self,
@@ -54,7 +55,7 @@ class CommonContext(Context):
         warn_duplicated_defs: bool = False,
     ) -> None:
         self._version = None
-        self._variables = {}
+        self._variables = AnnotatedDict()
         self._target_requested = target_requested
         self.warn_duplicated_defs = warn_duplicated_defs
 
@@ -76,21 +77,26 @@ class CommonContext(Context):
         if not self.warn_duplicated_defs:
             return
         key = parts[-1]
-        if cur_var_scope.get(key):
-            log.warning("redefinition of %r, previous value was %r and new value is %r",
-                        ".".join(parts), cur_var_scope[parts[-1]], value)
+        if cur_var_scope.value.get(key):
+            log.warning("redefinition of %r, previous value was '%s' and new value is '%s'",
+                        ".".join(parts), cur_var_scope.value[parts[-1]].deep_dump(), value.deep_dump())
 
     def define(self, name: str, value: Any) -> None:
         log.debug("defining %r", name)
+
+        if not isinstance(value, AnnotatedNode):
+            # mainly for edge cases and tests
+            value = AnnotatedNode.get_specific_type(value)
+
         validate_var_name(name)
 
         cur_var_scope = self._variables
         parts = name.split(".")
         for i, part in enumerate(parts[:-1]):
-            if not isinstance(cur_var_scope.get(part), dict):
-                self._maybe_log_var_override(cur_var_scope, parts[:i+1], {".".join(parts[i+1:]): value})
-                cur_var_scope[part] = {}
-            cur_var_scope = cur_var_scope[part]
+            if not isinstance(cur_var_scope.value.get(part), AnnotatedDict):
+                self._maybe_log_var_override(cur_var_scope, parts[:i+1], AnnotatedDict({".".join(parts[i+1:]): value}))
+                cur_var_scope.value[part] = AnnotatedDict()
+            cur_var_scope = cur_var_scope.value[part]
         self._maybe_log_var_override(cur_var_scope, parts, value)
         cur_var_scope[parts[-1]] = value
 
@@ -98,14 +104,14 @@ class CommonContext(Context):
         parts = name.split(".")
         value = self._variables
         for i, part in enumerate(parts):
-            if isinstance(value, dict):
-                if part not in value:
+            if isinstance(value.value, dict):
+                if part not in value.value:
                     raise TransformVariableLookupError(f"could not resolve '{name}' as '{part}' is not defined")
 
                 # TODO how should we deal with integer keys, convert them
                 # TODO on KeyError? Check for existence of both?
-                value = value[part]
-            elif isinstance(value, list):
+                value = value.value[part]
+            elif isinstance(value, AnnotatedList):
                 if not part.isnumeric():
                     raise TransformVariableIndexTypeError(f"part is not numeric but {type(part)}")
 
@@ -121,9 +127,13 @@ class CommonContext(Context):
 
         return value
 
-    def merge_defines(self, name: str, defines: dict[str, Any]) -> None:
+    def merge_defines(self, name: str, defines: dict) -> None:
         if name == "":
-            self._variables.update(defines)
+            if isinstance(defines, AnnotatedDict):
+                # TBD merge annotations
+                self._variables.value.update(defines.value)
+            else:
+                self._variables.value.update(defines)
         else:
             self.define(name, defines)
 

@@ -39,7 +39,7 @@ def test_warn(tmp_path, caplog, cmd, warn_arg, expect_warning):
         prefix = []
     run(prefix + [cmd, os.fspath(test_otk)])
     if expect_warning:
-        expected_msg = "redefinition of 'a', previous value was 1 and new value is 2"
+        expected_msg = "redefinition of 'a', previous value was '1' and new value is '2'"
         assert [expected_msg] == [rec.message for rec in caplog.records]
     else:
         assert [] == [rec.message for rec in caplog.records]

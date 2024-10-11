@@ -9,6 +9,7 @@ import subprocess
 import os
 from typing import Any
 
+from .annotation import AnnotatedNode
 from .constant import PREFIX_EXTERNAL
 from .error import ExternalFailedError
 from .traversal import State
@@ -16,13 +17,15 @@ from .traversal import State
 log = logging.getLogger(__name__)
 
 
-def call(state: State, directive: str, tree: Any) -> Any:
+def call(state: State, directive: str, tree: AnnotatedNode) -> Any:
     exe = exe_from_directive(directive)
     exe = path_for(exe)
 
+    tree_dump = tree.deep_dump()
+
     data = json.dumps(
         {
-            "tree": tree,
+            "tree": tree_dump,
         }
     )
 
@@ -33,7 +36,17 @@ def call(state: State, directive: str, tree: Any) -> Any:
         raise ExternalFailedError(msg, state)
 
     res = json.loads(process.stdout)
-    return res["tree"]
+    ret = AnnotatedNode.get_specific_type(res["tree"])
+
+    if all(attr in tree.annotations for attr in ('src',
+                                                 'content_filename',
+                                                 'content_line_number',
+                                                 'content_line_number_end')):
+        ret.annotations["src"] = (f"result of {directive} ({tree.annotations['src']})\n"
+                                  f"with input from {tree.annotations['content_filename']}:"
+                                  f"{tree.annotations['content_line_number']}-"
+                                  f"{tree.annotations['content_line_number_end']}")
+    return ret
 
 
 def exe_from_directive(directive):
