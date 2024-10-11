@@ -25,7 +25,8 @@ EXTERNAL_GO_EXECUTABLES:= osbuild-gen-partition-table \
                           osbuild-resolve-containers \
                           osbuild-resolve-ostree-commit \
                           osbuild-make-partition-mounts-devices \
-                          osbuild-make-partition-stages
+                          osbuild-make-partition-stages \
+                          osbuild-make-ostree-source
 
 EXTERNAL_GO_EXECUTABLES_FULLPATH:=$(addprefix $(EXTERNAL_DIR)/, $(EXTERNAL_GO_EXECUTABLES))
 
