@@ -28,3 +28,15 @@ jobs:
           pip install .[dev]
       - name: Run unit tests
         run: PYTHONPATH=./src make test
+
+  test-container-build:
+    name: "Assure that Containerfile can be built"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Clone Repository"
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt install -y podman
+      - name: Check if building the container works
+        run: make container
