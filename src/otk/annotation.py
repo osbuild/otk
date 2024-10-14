@@ -1,7 +1,8 @@
 import copy
 import os
 import pathlib
-from typing import TypeVar, Generic, Any
+import sys
+from typing import TypeVar, Generic, Any, Optional
 
 
 class AnnotatedBase:
@@ -21,7 +22,7 @@ class AnnotatedBase:
             for key, value in self.items():
                 self[key] = self.deep_convert(value)
 
-    def get_annotation(self, key: str, default: Any | None = None) -> Any | None:
+    def get_annotation(self, key: str, default: Any = None) -> Any:
         if key in self._otk_annotations:
             return self._otk_annotations[key]
         return default
@@ -176,7 +177,7 @@ AnnotatedListT = TypeVar('AnnotatedListT')
 
 
 class AnnotatedList(Generic[AnnotatedListT], AnnotatedBase, list):
-    def __init__(self, seq: list[Any] | None = None) -> None:
+    def __init__(self, seq: Optional[list[Any]] = None) -> None:
         if seq is None:
             seq = []
         list.__init__(self, seq)
@@ -184,21 +185,17 @@ class AnnotatedList(Generic[AnnotatedListT], AnnotatedBase, list):
 
 
 class AnnotatedDict(Generic[AnnotatedDictKeyT, AnnotatedDictVarT], AnnotatedBase, dict):
-    def __init__(self, seq: dict[Any, Any] | None = None, **kwargs: dict[Any, Any]) -> None:
+    def __init__(self, seq: Optional[dict[Any, Any]] = None, **kwargs: dict[Any, Any]) -> None:
         if seq is None:
             seq = {}
         dict.__init__(self, seq, **kwargs)
         AnnotatedBase.__init__(self)
 
 
-class AnnotatedPath(AnnotatedBase, pathlib.Path):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        pathlib.Path.__init__(self, *args, **kwargs)
-        AnnotatedBase.__init__(self)
-
+class AnnotatedPathBase(AnnotatedBase):
     def fspath_with_include(self) -> str:
         src = None
-        filename = os.path.relpath(os.fspath(self), self._basedir)
+        filename = os.path.relpath(os.fspath(str(self)), self._basedir)
         try:
             src = self.get_annotation("src")
         except KeyError:
@@ -206,6 +203,18 @@ class AnnotatedPath(AnnotatedBase, pathlib.Path):
         if src is not None:
             return f"{filename} (included from {src})"
         return filename
+
+
+if sys.version_info >= (3, 10):
+    class AnnotatedPath(AnnotatedPathBase, pathlib.Path):
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            pathlib.Path.__init__(self, *args, **kwargs)
+            AnnotatedPathBase.__init__(self)
+else:
+    class AnnotatedPath(AnnotatedPathBase, pathlib.PosixPath):  # pylint: disable=abstract-method
+        def __init__(self, *args: Any) -> None:  # pylint: disable=W0613
+            pathlib.PosixPath.__init__(self)
+            AnnotatedPathBase.__init__(self)
 
 
 class AnnotatedStr(AnnotatedBase, str):
