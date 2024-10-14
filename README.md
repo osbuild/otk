@@ -9,6 +9,12 @@ This is the "Omnifest Toolkit", also known as `otk`. A YAML transpiler to
 take omnifest inputs and translate them into [osbuild](https://osbuild.org)
 manifests.
 
+## Project
+
+* **Website**: https://www.osbuild.org
+* **Bug Tracker**: https://github.com/osbuild/otk/issues
+* **Discussions**: https://github.com/orgs/osbuild/discussions
+
 ## Documentation
 
 You can find `otk`'s documentation in the [/doc](./doc) subdirectory. This README contains a small summary of directly useful information.
