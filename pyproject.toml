@@ -1,11 +1,10 @@
 [project]
 name = "otk"
-version = "2024.0.0"
 requires-python = ">= 3.9"
-
 dependencies = [
     "pyyaml >= 6.0",
 ]
+dynamic = ["version"]
 
 [project.scripts]
 otk = "otk.command:root"
@@ -28,7 +27,7 @@ dev = [
 
 
 [build-system]
-requires = ["setuptools >= 61.0"]
+requires = ["setuptools >= 61.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.autopep8]
