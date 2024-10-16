@@ -14,7 +14,6 @@ from __future__ import annotations
 import itertools
 import logging
 import os.path
-import pathlib
 import re
 from typing import Any
 
@@ -30,6 +29,8 @@ from .error import (
 )
 from .external import call
 from .traversal import State
+from .annotation import AnnotatedDict, AnnotatedList, AnnotatedPath, AnnotatedBase, AnnotatedStr, AnnotatedInt, \
+    AnnotatedFloat
 
 log = logging.getLogger(__name__)
 
@@ -53,15 +54,67 @@ class SafeUniqueKeyLoader(yaml.SafeLoader):
         return super().construct_mapping(node, deep)
 
 
+def _find_data(node_list, key):
+    """ Helper function to find the yaml ScalarNode containing
+    our context information for HiddenAttrList and AnnotatedDict
+    """
+    for node in node_list:
+        if node[0].value == key:
+            return node[0]
+    raise KeyError(key)
+
+
+def annotated_dict_constructor(loader, node):
+    data = loader.construct_mapping(node, deep=True)
+    annotated_data_dict = AnnotatedBase.deep_convert(data)
+
+    # content_ really are the lines of the content, not the tag.
+    annotated_data_dict.add_source_attributes(node, prefix="content_")
+
+    # src will be overwritten if this gets a child node
+    annotated_data_dict.add_source_attributes(node)
+    for key, _ in annotated_data_dict.items():
+        key_data = _find_data(node.value, key)
+        if annotated_data_dict[key]:
+            annotated_data_dict[key].add_source_attributes(key_data)
+    return annotated_data_dict
+
+
+def annotated_list_constructor(loader, node):
+    data = loader.construct_sequence(node, deep=True)
+    annotated_data_list = AnnotatedBase.deep_convert(data)
+    # content_ really are the lines of the content, not the tag.
+    annotated_data_list.add_source_attributes(node, prefix="content_")
+
+    # src will be overwritten if this gets a child node
+    annotated_data_list.add_source_attributes(node)
+    for idx, _ in enumerate(node.value):
+        key_data = node.value[idx]
+        if annotated_data_list[idx]:
+            annotated_data_list[idx].add_source_attributes(key_data)
+    return annotated_data_list
+
+
+def annotated_scalar_constructor(loader, node):
+    data = loader.construct_scalar(node)
+    annotated_data = AnnotatedBase.deep_convert(data)
+    # content_ really are the lines of the content, not the tag.
+    annotated_data.add_source_attributes(node, prefix="content_")
+
+    # src will be overwritten if this gets a child node
+    annotated_data.add_source_attributes(node)
+    return annotated_data
+
+
 def resolve(ctx: Context, state: State, data: Any) -> Any:
     """Resolves a value of any supported type into a new value. Each type has
     its own specific handler to replace the data value."""
 
-    if isinstance(data, dict):
+    if isinstance(data, AnnotatedDict):
         return resolve_dict(ctx, state, data)
-    if isinstance(data, list):
+    if isinstance(data, AnnotatedList):
         return resolve_list(ctx, state, data)
-    if isinstance(data, str):
+    if isinstance(data, AnnotatedStr):
         return resolve_str(ctx, state, data)
     if isinstance(data, (int, float, bool, type(None))):
         return data
@@ -71,7 +124,7 @@ def resolve(ctx: Context, state: State, data: Any) -> Any:
 
 # XXX: look into this
 # pylint: disable=too-many-branches
-def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
+def resolve_dict(ctx: Context, state: State, tree: AnnotatedDict[str, Any]) -> Any:
     """
     Dictionaries are iterated through and both the keys and values are processed.
     Keys define how a value is interpreted:
@@ -107,15 +160,20 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
                 target = resolve(ctx, state, val)
                 if not isinstance(target, dict):
                     raise ParseError(
-                        f"First level below a 'target' should be a dictionary (not a {type(target).__name__})", state)
+                        f"First level below a 'target' should be a dictionary "
+                        f"(not a {type(target).__name__})", state, target)
 
                 tree.update(target)
                 continue
 
             if key.startswith(PREFIX_INCLUDE):
+                include_src = val.get_annotations()
                 del tree[key]  # replace "otk.include" with resolved included data
 
-                included = process_include(ctx, state, pathlib.Path(val))
+                path = AnnotatedPath(val)
+                path.set_annotations(include_src)
+                included = process_include(ctx, state, path)
+
                 if not isinstance(included, dict):
                     if len(tree) > 0:
                         raise ParseValueError(
@@ -128,7 +186,7 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
             # Other directives do *not* allow siblings
             if len(tree) > 1:
                 keys = list(tree.keys())
-                raise ParseError(f"directive {key} should not have siblings: {keys!r}", state)
+                raise ParseError(f"directive {key} should not have siblings: {keys!r}", state, tree)
 
             if key.startswith(PREFIX_OP):
                 # return is fine, no siblings allowed
@@ -145,13 +203,17 @@ def resolve_dict(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
     return tree
 
 
-def resolve_list(ctx: Context, state: State, tree: list[Any]) -> list[Any]:
+def resolve_list(ctx: Context, state: State, tree: AnnotatedList[Any]) -> AnnotatedList[Any]:
     """Resolving a list means applying the resolve function to each element in
     the list."""
 
     log.debug("resolving list %r", tree)
+    new_state = AnnotatedList[Any]([resolve(ctx, state, val) for val in tree])
 
-    return [resolve(ctx, state, val) for val in tree]
+    # list comprehension need a separate copy of all annotations
+    new_state.set_annotations(tree.get_annotations())
+
+    return new_state
 
 
 def resolve_str(ctx: Context, state: State, tree: str) -> Any:
@@ -179,7 +241,7 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
         log.warning("empty otk.define in %s", state.path)
         return
     if tree == {}:
-        ctx.define(state.define_subkey(), {})
+        ctx.define(state.define_subkey(), AnnotatedDict())
         return
 
     # Iterate over a copy of the tree so that we can modify it in-place.
@@ -215,28 +277,67 @@ def process_defines(ctx: Context, state: State, tree: Any) -> None:
             ctx.define(state.define_subkey(key), value)
 
 
-def process_include(ctx: Context, state: State, path: pathlib.Path) -> dict:
+overridden_constructors = [
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+    yaml.resolver.BaseResolver.DEFAULT_SEQUENCE_TAG,
+    yaml.resolver.BaseResolver.DEFAULT_SCALAR_TAG
+]
+
+
+def save_yaml_constructors():
+    """ Mainly for testcases, save our constructors not to
+        pollute other yaml imports
+    """
+    return {k: yaml.SafeLoader.yaml_constructors[k] for k in overridden_constructors}
+
+
+def restore_yaml_constructors(data):
+    """ Mainly for testcases, remove our constructors not to
+        pollute other yaml imports
+    """
+    for k, v in data.items():
+        yaml.SafeLoader.yaml_constructors[k] = v
+
+
+def process_include(ctx: Context, state: State, path: AnnotatedPath) -> AnnotatedDict:
     """
     Load a yaml file and send it to resolve() for processing.
     """
     # resolve 'path' relative to 'state.path'
     if not path.is_absolute():
         cur_path = state.path.parent
-        path = (cur_path / pathlib.Path(path)).resolve()
+        try:
+            origin = path.get_annotations()
+        except KeyError:
+            origin = None
+        path = AnnotatedPath((cur_path / AnnotatedPath(path)).resolve())
+        if origin:
+            path.set_annotations(origin)
     log.info("resolving %s", path)
+
+    # callbacks to store information about the source of all data in the yaml files
+    saved_constructors = save_yaml_constructors()
+    yaml.SafeLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, annotated_dict_constructor)
+    yaml.SafeLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_SEQUENCE_TAG, annotated_list_constructor)
+    yaml.SafeLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_SCALAR_TAG, annotated_scalar_constructor)
+
     try:
         with path.open(encoding="utf8") as fp:
             data = yaml.load(fp, Loader=SafeUniqueKeyLoader)
     except FileNotFoundError as fnfe:
         cleaned_path = os.fspath(path).removeprefix(
             os.path.commonprefix([path, state.path]))
+        restore_yaml_constructors(saved_constructors)
         raise IncludeNotFoundError(f"file {cleaned_path} was not found", state) from fnfe
     except ParseDuplicatedYamlKeyError as err:
+        restore_yaml_constructors(saved_constructors)
         raise ParseDuplicatedYamlKeyError(f"{err}", state.copy(path=path)) from err
+
+    restore_yaml_constructors(saved_constructors)
 
     if data is not None:
         return resolve(ctx, state.copy(path=path), data)
-    return {}
+    return AnnotatedDict()
 
 
 def op(ctx: Context, state: State, tree: Any, key: str) -> Any:
@@ -247,9 +348,9 @@ def op(ctx: Context, state: State, tree: Any, key: str) -> Any:
     raise TransformDirectiveUnknownError(f"nonexistent op {key!r}", state)
 
 
-@tree.must_be(dict)
+@tree.must_be(AnnotatedDict)
 @tree.must_pass(tree.has_keys(["values"]))
-def op_join(_: Context, state: State, tree: dict[str, Any]) -> Any:
+def op_join(_: Context, state: State, tree: AnnotatedDict[str, Any]) -> Any:
     """Join a map/seq."""
 
     values = tree["values"]
@@ -258,9 +359,12 @@ def op_join(_: Context, state: State, tree: dict[str, Any]) -> Any:
             f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}", state)
 
     if all(isinstance(sl, list) for sl in values):
-        return list(itertools.chain.from_iterable(values))
+        ret: AnnotatedList = AnnotatedList(list(itertools.chain.from_iterable(values)))
+        ret.set_annotations(ret.squash_annotations(values))
+        return ret
+
     if all(isinstance(sl, dict) for sl in values):
-        result = {}
+        result: AnnotatedDict = AnnotatedDict()
         for value in values:
             result.update(value)
         return result
@@ -268,7 +372,7 @@ def op_join(_: Context, state: State, tree: dict[str, Any]) -> Any:
 
 
 @tree.must_be(str)
-def substitute_vars(ctx: Context, state: State, data: str) -> Any:
+def substitute_vars(ctx: Context, state: State, data: AnnotatedStr) -> Any:
     """Substitute variables in the `data` string.
 
     If `data` consists only of a single `${name}` value then we return the
@@ -300,17 +404,23 @@ def substitute_vars(ctx: Context, state: State, data: str) -> Any:
 
             value = ctx.variable(name)
             # We know how to turn ints and floats into str's
-            if isinstance(value, (int, float)):
-                value = str(value)
+            if isinstance(value, (AnnotatedInt, AnnotatedFloat)):
+                # TBD find out why the __str__() implementation of AnnotatedInt doesn't work
+                # so "origin" is not necessary
+                origin = value.get_annotations()
+                value = AnnotatedStr(str(value))
+                value.set_annotations(origin)
 
             # Any other type we do not
-            if not isinstance(value, str):
+            if not isinstance(value, AnnotatedStr):
                 raise TransformDirectiveTypeError(
-                    f"string {data!r} resolves to an incorrect type, "
-                    f"expected int, float, or str but got {type(value).__name__}", state)
+                    f"expected int, float, or str. Can not use {type(value).__name__} "
+                    f"to resolve string {data!r} ({data.get_annotation('src')})", state, value)
 
             # Replace all occurences of this name in the str
-            data = re.sub(bracket % re.escape(name), value, data)
+            data_origin = f"variable from {value.get_annotation('src')} applied to {data.get_annotation('src')}"
+            data = AnnotatedStr(re.sub(bracket % re.escape(name), value, data))
+            data.set_annotation("src", data_origin)
             log.debug("substituting %r as substring to %r", name, data)
 
     return data
