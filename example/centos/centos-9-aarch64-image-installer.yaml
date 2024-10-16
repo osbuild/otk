@@ -3,6 +3,7 @@ otk.version: "1"
 otk.define:
   architecture: aarch64
   modifications:
+    locale: C.UTF-8
     timezone: America/New_York
   # XXX these sizes are currently hardcoded in `images` in the future they
   # XXX might come from an external or elsewhere?
@@ -68,6 +69,8 @@ otk.target.osbuild:
             bugurl: ''
         - type: org.osbuild.locale
           options:
+            # # anaconda tree is always using en_US.UTF-8 currently, see
+            # https://github.com/osbuild/images/blob/v0.90.0/pkg/manifest/anaconda_installer.go#L239
             language: en_US.UTF-8
         - type: org.osbuild.users
           options:
@@ -226,7 +229,7 @@ otk.target.osbuild:
         - otk.include: "fragment/fix-bls/default.yaml"
         - type: org.osbuild.locale
           options:
-            language: C.UTF-8
+            language: ${modifications.locale}
         - otk.include: "fragment/timezone.yaml"
         - type: org.osbuild.sysconfig
           options:
