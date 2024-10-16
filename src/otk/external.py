@@ -9,9 +9,12 @@ import subprocess
 import os
 from typing import Any
 
+from . import ui
+
 from .constant import PREFIX_EXTERNAL
 from .error import ExternalFailedError
 from .traversal import State
+
 
 log = logging.getLogger(__name__)
 
@@ -26,7 +29,9 @@ def call(state: State, directive: str, tree: Any) -> Any:
         }
     )
 
-    process = subprocess.run([exe], input=data, encoding="utf8", capture_output=True, check=False)
+    with ui.spinner(f"Executing external {os.path.basename(exe)}"):
+        process = subprocess.run([exe], input=data, encoding="utf8", capture_output=True, check=False)
+
     if process.returncode != 0:
         msg = f"call {exe} {directive!r} failed: stdout={process.stdout!r}, stderr={process.stderr!r}"
         log.error(msg)

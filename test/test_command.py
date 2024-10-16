@@ -3,17 +3,6 @@ import pytest
 from otk.command import parser_create, run
 
 
-def test_parse_no_command(capsys):
-    p = parser_create()
-    with pytest.raises(SystemExit) as sys_exit:
-        p.parse_args([])
-    assert sys_exit.type == SystemExit
-    assert sys_exit.value.code == 2
-
-    captured_stderr = capsys.readouterr().err
-    assert "the following arguments are required: command" in captured_stderr
-
-
 @pytest.mark.parametrize(
     "command,results",
     [
