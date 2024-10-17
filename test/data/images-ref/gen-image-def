@@ -11,6 +11,20 @@ import tempfile
 import yaml
 
 
+# XXX: keep in syncwith "test_against_images_ref.py"
+# note that the names of customizations/modifications may not fully match
+full_customizations = {
+    "name": "full",
+    "blueprint": {
+        "customizations": {
+            "locale": {
+                "languages": ["nl_NL.UTF-8"],
+            },
+        },
+    },
+}
+
+
 # see https://github.com/yaml/pyyaml/issues/234#issuecomment-765894586
 class Dumper(yaml.Dumper):  # pylint: disable=too-many-ancestors
     def increase_indent(self, flow: bool = False, indentless: bool = False) -> None:
@@ -27,10 +41,23 @@ def uuid_for_path(path, osbuild_manifest):
     return ""
 
 
-def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver: str, arch: str, img_type: str) -> None:
+def make_buildconfig(customizations: str) -> dict:
+    match customizations:
+        case "empty":
+            return {"name": "empty"}
+        case "full":
+            return full_customizations
+        case _:
+            raise ValueError(f"unknown customization {customizations}")
+
+
+# pylint: disable=too-many-arguments
+def generate_reference_image(images_base_dir: str, distro_name: str,
+                             distro_ver: str, arch: str, img_type: str,
+                             customizations: str) -> None:
     # pylint: disable=consider-using-with
     empty_config = tempfile.NamedTemporaryFile()
-    empty_config.write(b'{"name": "empty"}')
+    empty_config.write(json.dumps(make_buildconfig(customizations)).encode())
     empty_config.flush()
 
     # ideally we would just generate all manifests on the fly but today
@@ -40,7 +67,7 @@ def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver:
     env = os.environ.copy()
     env["OSBUILD_TESTING_RNG_SEED"] = "0"
     distro = f"{distro_name}-{distro_ver}"
-    manifest_path = pathlib.Path.cwd() / distro_name / distro_ver / arch / img_type
+    manifest_path = pathlib.Path.cwd() / distro_name / distro_ver / arch / img_type / customizations
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     subprocess.check_call([
         "cmd/gen-manifests/gen-manifests",
@@ -52,7 +79,7 @@ def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver:
         "-types", img_type,
         "-config", empty_config.name,
     ], cwd=images_base_dir, env=env)
-    generated = list(manifest_path.glob("*.json"))
+    generated = list(manifest_path.glob(f"*-{customizations}.json"))
     if len(generated) != 1:
         raise ValueError(f"unexpected number of generated manifests: {generated}")
     with open(generated[0], encoding="utf8") as fp:
@@ -78,13 +105,13 @@ def generate_reference_image(images_base_dir: str, distro_name: str, distro_ver:
 
 def run():
     # TODO: add argparse
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 6:
         # TODO: remove images-git-checkout parameter and use something
         # like "go run github.com/osbuild/images/cmd/build@latest" but
         # this needs something like https://github.com/osbuild/images/pull/902
-        print("need <image-git-checkout> <distoname> <distrover> <arch> <img_type> argument", file=sys.stderr)
+        print("need <image-git-checkout> <distoname> <distrover> <arch> <img_type> <customizations>", file=sys.stderr)
         sys.exit(1)
-    generate_reference_image(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+    generate_reference_image(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
 
 
 if __name__ == "__main__":
