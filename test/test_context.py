@@ -120,8 +120,8 @@ def test_context_unhappy():
 
     with pytest.raises(TransformVariableTypeError) as exc:
         ctx.variable("foo.bar")
-    assert "tried to look up 'foo.bar', but the value of prefix 'foo' is not a dictionary but <class 'str'>" in str(
-        exc.value)
+    assert ("tried to look up 'foo.bar', but the value of prefix 'foo' "
+            "is not a dictionary but <class 'otk.annotation.AnnotatedStr'>") in str(exc.value)
 
     ctx.define("bar", ["bar"])
 

@@ -8,6 +8,7 @@ import re
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
+from .annotation import AnnotatedDict, AnnotatedBase
 from .constant import VALID_VAR_NAME_RE
 from .error import (ParseError,
                     TransformVariableIndexRangeError,
@@ -20,7 +21,7 @@ log = logging.getLogger(__name__)
 def validate_var_name(name):
     for part in name.split("."):
         if not re.fullmatch(VALID_VAR_NAME_RE, part):
-            raise ParseError(f"invalid variable part '{part}' in '{name}', allowed {VALID_VAR_NAME_RE}")
+            raise ParseError(f"invalid variable part '{part}' in '{name}', allowed {VALID_VAR_NAME_RE}", annotated=name)
 
 
 class Context(ABC):
@@ -45,7 +46,7 @@ class CommonContext(Context):
     warn_duplicated_defs: bool
     _target_requested: str
     _version: Optional[int]
-    _variables: dict[str, Any]
+    _variables: AnnotatedDict[str, Any]
 
     def __init__(
         self,
@@ -54,7 +55,7 @@ class CommonContext(Context):
         warn_duplicated_defs: bool = False,
     ) -> None:
         self._version = None
-        self._variables = {}
+        self._variables = AnnotatedDict()
         self._target_requested = target_requested
         self.warn_duplicated_defs = warn_duplicated_defs
 
@@ -82,6 +83,11 @@ class CommonContext(Context):
 
     def define(self, name: str, value: Any) -> None:
         log.debug("defining %r", name)
+
+        if not isinstance(value, AnnotatedBase):
+            # mainly for edge cases and tests
+            value = AnnotatedBase.deep_convert(value)
+
         validate_var_name(name)
 
         cur_var_scope = self._variables
@@ -89,7 +95,7 @@ class CommonContext(Context):
         for i, part in enumerate(parts[:-1]):
             if not isinstance(cur_var_scope.get(part), dict):
                 self._maybe_log_var_override(cur_var_scope, parts[:i+1], {".".join(parts[i+1:]): value})
-                cur_var_scope[part] = {}
+                cur_var_scope[part] = AnnotatedDict()
             cur_var_scope = cur_var_scope[part]
         self._maybe_log_var_override(cur_var_scope, parts, value)
         cur_var_scope[parts[-1]] = value
@@ -121,7 +127,7 @@ class CommonContext(Context):
 
         return value
 
-    def merge_defines(self, name: str, defines: dict[str, Any]) -> None:
+    def merge_defines(self, name: str, defines: Any) -> None:
         if name == "":
             self._variables.update(defines)
         else:

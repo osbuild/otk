@@ -1,1 +1,1 @@
-First level below a 'target' should be a dictionary (not a str)
+First level below a 'target' should be a dictionary (not a AnnotatedStr)
