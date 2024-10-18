@@ -1,6 +1,7 @@
 import json
 import os
 import pathlib
+import textwrap
 import yaml
 
 import pytest
@@ -14,21 +15,22 @@ class _TestCase:
     def __init__(self, base, ref_yaml_path):
         self.ref_yaml_path = ref_yaml_path
         rel = self.ref_yaml_path.relative_to(base)
-        # dir structure is <distro_name>/<disro_ver>/<arch>/<type>
-        self.distro_name, self.distro_ver, self.arch, self.img_type, _ = rel.as_posix().split("/")
+        # dir structure is <distro_name>/<disro_ver>/<arch>/<type>/<customizations>
+        self.distro_name, self.distro_ver, self.arch, self.img_type, self.customizations, _ = rel.as_posix().split("/")
 
     def as_example_yaml(self):
         # keep in sync with our "example" folder
-        return f"example/{self.distro_name}/{self}.yaml"
+        p = pathlib.Path(__file__).parent.parent
+        return p / f"example/{self.distro_name}/{self.distro_name}-{self.distro_ver}-{self.arch}-{self.img_type}.yaml"
 
     def __str__(self):
-        return f"{self.distro_name}-{self.distro_ver}-{self.arch}-{self.img_type}"
+        return f"{self.distro_name}-{self.distro_ver}-{self.arch}-{self.img_type}-{self.customizations}"
 
 
-def reference_manifests():
+def reference_manifests(customizations: str) -> list:
     tc = []
     base = TEST_DATA_PATH / "images-ref"
-    for path in base.glob("*/*/*/*/*.yaml"):
+    for path in base.glob(f"*/*/*/*/{customizations}/*.yaml"):
         tc.append(_TestCase(base, path))
     return tc
 
@@ -77,8 +79,8 @@ def test_normalize_rpm_refs():
         {"id": "sha256:111"}, {"id": "sha256:222"}]
 
 
-@pytest.mark.parametrize("tc", reference_manifests())
-def test_images_ref(tmp_path, monkeypatch, tc):
+@pytest.mark.parametrize("tc", reference_manifests("empty"))
+def test_images_ref_no_customizations(tmp_path, monkeypatch, tc):
     monkeypatch.setenv("OSBUILD_TESTING_RNG_SEED", "0")
     monkeypatch.setenv("OTK_EXTERNAL_PATH", "./external")
     monkeypatch.setenv("OTK_UNDER_TEST", "1")
@@ -90,7 +92,40 @@ def test_images_ref(tmp_path, monkeypatch, tc):
     otk_json = tmp_path / "manifest-otk.json"
     run(["compile",
          "-o", os.fspath(otk_json),
-         tc.as_example_yaml(),
+         os.fspath(tc.as_example_yaml()),
+         ])
+    with otk_json.open() as fp:
+        manifest = json.load(fp)
+        normalize_rpm_refs(manifest)
+
+    assert manifest == ref_manifest
+
+
+@pytest.mark.parametrize("tc", reference_manifests("full"))
+def test_images_ref_full_customizations(tmp_path, monkeypatch, tc):
+    monkeypatch.setenv("OSBUILD_TESTING_RNG_SEED", "0")
+    monkeypatch.setenv("OTK_EXTERNAL_PATH", "./external")
+    monkeypatch.setenv("OTK_UNDER_TEST", "1")
+
+    input_otk_path = tmp_path / "input.otk"
+    # keep in sync with "gen-images-ref"
+    with input_otk_path.open("w") as fp:
+        fp.write(textwrap.dedent(f"""
+        otk.define:
+          user:
+           modifications:
+            locale: nl_NL.UTF-8
+        otk.include: {tc.as_example_yaml()}
+        """))
+
+    with tc.ref_yaml_path.open() as fp:
+        ref_manifest = yaml.safe_load(fp)
+        normalize_rpm_refs(ref_manifest)
+
+    otk_json = tmp_path / "manifest-otk.json"
+    run(["compile",
+         "-o", os.fspath(otk_json),
+         os.fspath(input_otk_path),
          ])
     with otk_json.open() as fp:
         manifest = json.load(fp)

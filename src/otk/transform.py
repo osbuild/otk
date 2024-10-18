@@ -249,7 +249,7 @@ def op(ctx: Context, state: State, tree: Any, key: str) -> Any:
 
 @tree.must_be(dict)
 @tree.must_pass(tree.has_keys(["values"]))
-def op_join(_: Context, state: State, tree: dict[str, Any]) -> Any:
+def op_join(ctx: Context, state: State, tree: dict[str, Any]) -> Any:
     """Join a map/seq."""
 
     values = tree["values"]
@@ -257,10 +257,16 @@ def op_join(_: Context, state: State, tree: dict[str, Any]) -> Any:
         raise TransformDirectiveTypeError(
             f"seq join received values of the wrong type, was expecting a list of lists but got {values!r}", state)
 
+    for i, val in enumerate(values):
+        if isinstance(val, str):
+            values[i] = substitute_vars(ctx, state, val)
+
     if all(isinstance(sl, list) for sl in values):
         return list(itertools.chain.from_iterable(values))
     if all(isinstance(sl, dict) for sl in values):
         result = {}
+        # XXX: this will probably need to become recursive *or* we
+        # need something like a "merge_strategy" in "otk.op.join"
         for value in values:
             result.update(value)
         return result
