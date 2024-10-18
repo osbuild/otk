@@ -1,6 +1,9 @@
 """Error types used by `otk`."""
 
 from typing import Optional, TYPE_CHECKING
+
+from .annotation import AnnotatedNode, AnnotatedPath
+
 if TYPE_CHECKING:
     # required to avoid circular import errors
     from .traversal import State
@@ -9,9 +12,11 @@ if TYPE_CHECKING:
 class OTKError(Exception):
     """Any application raised by `otk` inherits from this."""
 
-    def __init__(self, msg: str, state: Optional['State'] = None) -> None:
-        if state:
-            super().__init__(f"{state.path}: {msg}")
+    def __init__(self, msg: str, state: Optional['State'] = None, annotated: Optional['AnnotatedNode'] = None) -> None:
+        if annotated and isinstance(annotated, AnnotatedNode) and annotated.annotations.get("src"):
+            super().__init__(f"{annotated.annotations['src']} - {msg}")
+        elif state and isinstance(state.path, AnnotatedPath):
+            super().__init__(f"{state.path.fspath_with_include()}: {msg}")
         else:
             super().__init__(msg)
 

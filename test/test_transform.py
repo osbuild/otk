@@ -1,5 +1,6 @@
 import pytest
 from otk import transform
+from otk.annotation import AnnotatedDict
 from otk.error import ParseTypeError
 from otk.context import CommonContext
 from otk.traversal import State
@@ -44,8 +45,8 @@ def test_transform_process_defines(data, defines):
     ctx = CommonContext()
     state = State("")
 
-    transform.process_defines(ctx, state, data)
-    assert ctx._variables == defines
+    transform.process_defines(ctx, state, AnnotatedDict(data))
+    assert ctx._variables.deep_dump() == defines
 
 
 def test_transform_resolve_unknown_type():
