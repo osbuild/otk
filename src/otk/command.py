@@ -1,6 +1,5 @@
 import argparse
 import logging
-import pathlib
 import sys
 from typing import List
 
@@ -39,9 +38,9 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         dst = sys.stdout if arguments.output is None else open(arguments.output, "w", encoding="utf-8")
 
     if arguments.input is None:
-        path = pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")
+        path = AnnotatedPath(f"/proc/self/fd/{sys.stdin.fileno()}")
     else:
-        path = pathlib.Path(arguments.input)
+        path = AnnotatedPath(arguments.input)
 
     # First pass of resolving the otk file is "shallow", it will not run
     # externals and not resolve anything under otk.target.*
