@@ -77,6 +77,8 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # and then output by writing to the output
     if not dry_run:
         dst.write(doc.as_target_string())
+        if arguments.output is not None:
+            dst.close()
 
     return 0
 
