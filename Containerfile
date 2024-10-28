@@ -26,10 +26,14 @@ RUN dnf install -y \
     && dnf clean all
 
 COPY --from=build /usr/local/bin/otk /usr/local/bin/
-COPY --from=build /usr/local/bin/osbuild* /usr/libexec/otk/external/
 COPY --from=build /usr/local/lib/ /usr/local/lib/
 
-COPY --from=build /src/external/* /usr/local/libexec/otk/external/
+# Since the `src/external` path here includes the Python externals with
+# wrong shebangs we copy those again from the installed version with
+# correct shebangs after the initial copy.
+COPY --from=build /src/external/* /usr/libexec/otk/external/
+COPY --from=build /usr/local/bin/osbuild* /usr/libexec/otk/external/
+
 
 WORKDIR /app
 
