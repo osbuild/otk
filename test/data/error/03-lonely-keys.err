@@ -1,1 +1,2 @@
-otk file contains top-level keys ['targetless'] without a target
+otk file contains top-level keys without a target:
+ * "targetless" in test/data/error/03-lonely-keys.yaml:6
