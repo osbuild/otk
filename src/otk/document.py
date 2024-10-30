@@ -1,4 +1,3 @@
-import logging
 import pathlib
 from copy import deepcopy
 from typing import Any
@@ -9,8 +8,6 @@ from .error import NoTargetsError, ParseError, ParseVersionError, OTKError
 from .transform import process_include
 from .traversal import State
 from .target import OSBuildTarget
-
-log = logging.getLogger(__name__)
 
 
 class Omnifest:
