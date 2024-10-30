@@ -16,7 +16,7 @@ from .error import ExternalFailedError
 from .traversal import State
 
 
-log = logging.getLogger(__name__)
+log = ui.Terminal(logging.getLogger(__name__))
 
 
 def call(state: State, directive: str, tree: Any) -> Any:
@@ -29,7 +29,7 @@ def call(state: State, directive: str, tree: Any) -> Any:
         }
     )
 
-    with ui.spinner(f"Executing external {os.path.basename(exe)}"):
+    with log.spinner(f"Executing external {os.path.basename(exe)}"):
         process = subprocess.run([exe], input=data, encoding="utf8", capture_output=True, check=False)
 
     if process.returncode != 0:

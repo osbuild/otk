@@ -1,8 +1,9 @@
+import logging
 import sys
 import time
 import threading
 
-from typing import Optional, Type
+from typing import Optional, Type, Any
 from types import TracebackType
 
 from . import __version__
@@ -51,17 +52,18 @@ class _Spinner:
         return True
 
 
-def spinner(prompt: str) -> _Spinner:
-    return _Spinner(prompt)
+class Terminal:
+    def __init__(self, log: logging.Logger):
+        self.log = log
 
+    def motd(self) -> None:
+        # Note, this is the local print function
+        self.log.info(f"otk {__version__} -- https://www.osbuild.org/")
 
-def print(text: str) -> None:  # pylint: disable=redefined-builtin
-    """Write a line of text to stderr if it's attached to a tty."""
-    if sys.stderr.isatty():
-        sys.stderr.write(text + "\n")
-        sys.stderr.flush()
+    def spinner(self, prompt: str) -> _Spinner:
+        return _Spinner(prompt)
 
-
-def motd() -> None:
-    # Note, this is the local print function
-    print(f"otk {__version__} -- https://www.osbuild.org/")
+    # Everything not defined is delegated to our underlying `Logger` instance,
+    # this allows `Terminal` to be used as a `Logger` wrapper.
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self.log, name)

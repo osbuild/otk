@@ -30,8 +30,9 @@ from .error import (
 )
 from .external import call
 from .traversal import State
+from . import ui
 
-log = logging.getLogger(__name__)
+log = ui.Terminal(logging.getLogger(__name__))
 
 
 # from https://gist.github.com/pypt/94d747fe5180851196eb?permalink_comment_id=4653474#gistcomment-4653474

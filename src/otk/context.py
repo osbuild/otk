@@ -13,8 +13,9 @@ from .error import (ParseError,
                     TransformVariableIndexRangeError,
                     TransformVariableIndexTypeError,
                     TransformVariableLookupError, TransformVariableTypeError)
+from . import ui
 
-log = logging.getLogger(__name__)
+log = ui.Terminal(logging.getLogger(__name__))
 
 
 def validate_var_name(name):
