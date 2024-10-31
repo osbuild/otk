@@ -19,8 +19,9 @@ class Omnifest:
     _osbuild_ctx: OSBuildContext
     _target: str
 
-    def __init__(self, path: pathlib.Path, target: str = "", *, warn_duplicated_defs: bool = False) -> None:
+    def __init__(self, paths: list[pathlib.Path], target: str = "", *, warn_duplicated_defs: bool = False) -> None:
         self._ctx = CommonContext(target_requested=target, warn_duplicated_defs=warn_duplicated_defs)
+
         # XXX: this can be removed once we find a way to deal with unset variables
         self._ctx.define("user.modifications", {})
         self._target = target
@@ -30,7 +31,10 @@ class Omnifest:
                 raise OTKError("only target osbuild supported right now")
             self._osbuild_ctx = OSBuildContext(self._ctx)
         state = State()
-        tree = process_include(self._ctx, state, path)
+
+        for path in paths:
+            tree = process_include(self._ctx, state, path)
+
         # XXX: review this code, the idea is to find top-level keys that
         # have no targets but that of course only works if there are
         # no targets in the resolving. this means we are currently forced
