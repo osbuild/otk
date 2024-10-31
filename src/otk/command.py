@@ -43,16 +43,16 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         dst = sys.stdout if arguments.output is None else open(arguments.output, "w", encoding="utf-8")
 
     if arguments.input is None:
-        path = pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")
+        paths = [pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")]
     else:
-        path = pathlib.Path(arguments.input)
+        paths = [pathlib.Path(p) for p in arguments.input]
 
     # First pass of resolving the otk file is "shallow", it will not run
     # externals and not resolve anything under otk.target.*
     #
     # It only exists as convenience for the user so that they do not need
     # to use "-t"
-    doc = Omnifest(path)
+    doc = Omnifest(paths)
 
     target_available = doc.targets
     target_requested = arguments.target
@@ -72,7 +72,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     # a full run so that resolving includes works correctly.
     warn_duplicated_defs = any(arg in getattr(arguments, "warn", [])
                                for arg in ["duplicate-definition", "all"])
-    doc = Omnifest(path, target=target_requested, warn_duplicated_defs=warn_duplicated_defs)
+    doc = Omnifest(paths, target=target_requested, warn_duplicated_defs=warn_duplicated_defs)
 
     # and then output by writing to the output
     if not dry_run:
@@ -127,7 +127,7 @@ def parser_create() -> argparse.ArgumentParser:
     parser_compile.add_argument(
         "input",
         metavar="INPUT",
-        nargs="?",
+        nargs="*",
         default=None,
         help="Omnifest to compile to or none for STDIN.",
     )
@@ -148,7 +148,7 @@ def parser_create() -> argparse.ArgumentParser:
     parser_validate.add_argument(
         "input",
         metavar="INPUT",
-        nargs="?",
+        nargs="*",
         default=None,
         help="Omnifest to validate to or none for STDIN.",
     )

@@ -39,9 +39,10 @@ otk.target.osbuild.ami: { test: 2 }
 def test_validate(tmp_path, caplog, arguments, input_data, sys_exit_code, log_message):  # pylint: disable=too-many-arguments
     if arguments.input == "GENERATE":
         input_filename = "input.yaml"
-        arguments.input = os.path.join(tmp_path, input_filename)
-        with open(arguments.input, "w", encoding="utf8") as f:
+        input_path = os.path.join(tmp_path, input_filename)
+        with open(input_path, "w", encoding="utf8") as f:
             f.write(input_data)
+        arguments.input = [input_path]
 
     if arguments.output == "GENERATE":
         # fix path so we only write to tmp_path

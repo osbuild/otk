@@ -23,7 +23,7 @@ def test_compile_integration_file(tmp_path):
     input_path.write_text(FAKE_OTK_YAML)
     output_path = tmp_path / "output.txt"
 
-    arguments = argparse.Namespace(input=input_path, output=output_path, target="osbuild.qcow2")
+    arguments = argparse.Namespace(input=[input_path], output=output_path, target="osbuild.qcow2")
     ret = compile(arguments)
     assert ret == 0
 

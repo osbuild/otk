@@ -13,7 +13,7 @@ def test_command_compile_on_base_examples(tmp_path, src_yaml, _mirror):
     src_yaml = pathlib.Path(src_yaml)
     dst = tmp_path / "out.json"
 
-    ns = argparse.Namespace(input=src_yaml, output=dst, target="osbuild")
+    ns = argparse.Namespace(input=[src_yaml], output=dst, target="osbuild")
 
     command.compile(ns)
 
@@ -28,7 +28,7 @@ def test_command_compile_on_base_examples(tmp_path, src_yaml, _mirror):
 def test_errors(src_yaml, _mirror):
     src_yaml = pathlib.Path(src_yaml)
     expected = src_yaml.with_suffix(".err").read_text(encoding="utf8").strip()
-    ns = argparse.Namespace(input=src_yaml, output="/dev/null", target="osbuild")
+    ns = argparse.Namespace(input=[src_yaml], output="/dev/null", target="osbuild")
     with pytest.raises(Exception) as exception:
         command.compile(ns)
     assert expected in str(exception.value)
