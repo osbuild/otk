@@ -33,3 +33,4 @@ repos:
     hooks:
       - id: pylint
         additional_dependencies: ["PyYAML", "types-PyYAML", "pytest"]
+        args: ["--init-hook", "import sys; sys.path.insert(0, './src')"]

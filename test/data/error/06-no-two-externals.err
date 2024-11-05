@@ -1,1 +1,1 @@
-06-no-two-externals.yaml: directive otk.external.mirror should not have siblings: ['otk.external.mirror', 'otk.external.other']
+test/data/error/06-no-two-externals.yaml:4 - directive otk.external.mirror should not have siblings: ['otk.external.mirror', 'otk.external.other']

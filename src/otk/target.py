@@ -3,6 +3,7 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any
 
+from .annotation import AnnotatedBase
 from .context import CommonContext, OSBuildContext
 from .constant import PREFIX_TARGET
 from .error import ParseError
@@ -36,7 +37,7 @@ class OSBuildTarget(Target):
                 "The key 'version' is added by otk internally.")
 
     def as_string(self, context: OSBuildContext, tree: Any, pretty: bool = True) -> str:
-        osbuild_tree = tree[PREFIX_TARGET + context.target_requested]
+        osbuild_tree = AnnotatedBase.deep_dump(tree[PREFIX_TARGET + context.target_requested])
         osbuild_tree["version"] = "2"
 
         return json.dumps(osbuild_tree, indent=2 if pretty else None)
