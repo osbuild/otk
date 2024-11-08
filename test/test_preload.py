@@ -34,5 +34,5 @@ def test_otk_preload_works(tmp_path):
       lang: ${modifications.language}
     """))
     result_otk = tmp_path / "output.yaml"
-    run(["compile", os.fspath(preload_otk), os.fspath(test_otk), "-o", result_otk.as_posix()])
+    run(["compile", "-e", os.fspath(preload_otk), os.fspath(test_otk), "-o", result_otk.as_posix()])
     assert expected_json == result_otk.read_text()

@@ -10,7 +10,7 @@ from otk.command import validate
     [
         # "GENERATE" is a placeholder to append "tmp_path" from pytest
         (
-            argparse.Namespace(input="GENERATE", output="GENERATE", target=None),
+            argparse.Namespace(input="GENERATE", output="GENERATE", target=None, extra=None),
             """otk.version: 1
 otk.target.osbuild.qcow2: { test: 1 }
 """,
@@ -18,7 +18,7 @@ otk.target.osbuild.qcow2: { test: 1 }
             None,
         ),
         (
-            argparse.Namespace(input="GENERATE", output=None, target=None),
+            argparse.Namespace(input="GENERATE", output=None, target=None, extra=None),
             """otk.version: 1
 otk.target.osbuild.qcow2: { test: 1 }
 """,
@@ -26,7 +26,7 @@ otk.target.osbuild.qcow2: { test: 1 }
             None,
         ),
         (
-            argparse.Namespace(input="GENERATE", output="GENERATE", target=None),
+            argparse.Namespace(input="GENERATE", output="GENERATE", target=None, extra=None),
             """otk.version: 1
 otk.target.osbuild.qcow2: { test: 1 }
 otk.target.osbuild.ami: { test: 2 }
@@ -42,7 +42,7 @@ def test_validate(tmp_path, caplog, arguments, input_data, sys_exit_code, log_me
         input_path = os.path.join(tmp_path, input_filename)
         with open(input_path, "w", encoding="utf8") as f:
             f.write(input_data)
-        arguments.input = [input_path]
+        arguments.input = input_path
 
     if arguments.output == "GENERATE":
         # fix path so we only write to tmp_path
