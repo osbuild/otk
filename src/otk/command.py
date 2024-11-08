@@ -42,10 +42,12 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
         # pylint: disable=R1732
         dst = sys.stdout if arguments.output is None else open(arguments.output, "w", encoding="utf-8")
 
+    extra = [pathlib.Path(p) for p in arguments.extra] if arguments.extra else []
+
     if arguments.input is None:
-        paths = [pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")]
+        paths = extra + [pathlib.Path(f"/proc/self/fd/{sys.stdin.fileno()}")]
     else:
-        paths = [pathlib.Path(p) for p in arguments.input]
+        paths = extra + [pathlib.Path(arguments.input)]
 
     # First pass of resolving the otk file is "shallow", it will not run
     # externals and not resolve anything under otk.target.*
@@ -127,9 +129,16 @@ def parser_create() -> argparse.ArgumentParser:
     parser_compile.add_argument(
         "input",
         metavar="INPUT",
-        nargs="*",
+        nargs="?",
         default=None,
         help="Omnifest to compile to or none for STDIN.",
+    )
+    parser_compile.add_argument(
+        "-e",
+        dest="extra",
+        nargs=1,
+        action="extend",
+        help="Extra files to compile.",
     )
     parser_compile.add_argument(
         "-o",
@@ -148,9 +157,16 @@ def parser_create() -> argparse.ArgumentParser:
     parser_validate.add_argument(
         "input",
         metavar="INPUT",
-        nargs="*",
+        nargs="?",
         default=None,
         help="Omnifest to validate to or none for STDIN.",
+    )
+    parser_validate.add_argument(
+        "-e",
+        dest="extra",
+        nargs=1,
+        action="extend",
+        help="Extra files to compile.",
     )
     parser_validate.add_argument(
         "-t",

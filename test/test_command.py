@@ -6,21 +6,21 @@ from otk.command import parser_create, run
 @pytest.mark.parametrize(
     "command,results",
     [
-        (["compile"], {"command": "compile", "output": None, "input": []}),
-        (["compile", "foo"], {"command": "compile", "output": None, "input": ["foo"]}),
+        (["compile"], {"command": "compile", "output": None, "input": None}),
+        (["compile", "foo"], {"command": "compile", "output": None, "input": "foo"}),
         (
             ["compile", "-o", "output_manifest.yaml"],
-            {"command": "compile", "output": "output_manifest.yaml", "input": []},
+            {"command": "compile", "output": "output_manifest.yaml", "input": None},
         ),
         (
             ["compile", "-o", "output_manifest.yaml", "input_omifest.yaml"],
             {
                 "command": "compile",
                 "output": "output_manifest.yaml",
-                "input": ["input_omifest.yaml"],
+                "input": "input_omifest.yaml",
             },
         ),
-        (["validate", "foo.yaml"], {"command": "validate", "input": ["foo.yaml"]}),
+        (["validate", "foo.yaml"], {"command": "validate", "input": "foo.yaml"}),
     ],
 )
 def test_parse_commands_success(command, results):
