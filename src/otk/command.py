@@ -52,7 +52,7 @@ def _process(arguments: argparse.Namespace, dry_run: bool) -> int:
     else:
         paths = extra + [pathlib.Path(arguments.input)]
 
-    log.info(f"Compiling {path}")
+    log.info(f"Compiling {paths}")
 
     # First pass of resolving the otk file is "shallow", it will not run
     # externals and not resolve anything under otk.target.*
