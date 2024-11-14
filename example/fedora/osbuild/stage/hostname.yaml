@@ -1,7 +1,0 @@
-type: org.osbuild.hostname
-options:
-  otk.modfication.hostname:
-    default:
-      hostname: localhost.localdomain
-    if-set:
-      language: localhost.localdomain
