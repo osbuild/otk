@@ -23,6 +23,10 @@ otk.define:
           otk.include: "common/package-set/noarch/os/wsl.yaml"
 
 otk.target.osbuild:
+  metadata:
+    generator:
+      - otk.external.osbuild-make-generator-metadata:
+
   pipelines:
     - otk.include: pipeline/build/tar.yaml
     - name: os
