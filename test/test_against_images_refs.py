@@ -35,6 +35,26 @@ def reference_manifests(customizations: str) -> list:
     return tc
 
 
+def remove_metadata(manifest):
+    """Remove any metadata if present. The metadata between the
+       reference and otk are different by expectation."""
+
+    if "metadata" in manifest:
+        del manifest["metadata"]
+
+
+def test_remove_metadata():
+    fake_manifest = {
+        "metadata": {
+            "generators": ["testcase",],
+        }
+    }
+
+    remove_metadata(fake_manifest)
+
+    assert "metadata" not in fake_manifest
+
+
 def normalize_rpm_refs(manifest):
     """Normalize the rpm references, i.e. sort and remove duplicationed
     hashes.
@@ -88,6 +108,7 @@ def test_images_ref_no_customizations(tmp_path, monkeypatch, tc):
     with tc.ref_yaml_path.open() as fp:
         ref_manifest = yaml.safe_load(fp)
         normalize_rpm_refs(ref_manifest)
+        remove_metadata(ref_manifest)
 
     otk_json = tmp_path / "manifest-otk.json"
     run(["compile",
@@ -97,6 +118,7 @@ def test_images_ref_no_customizations(tmp_path, monkeypatch, tc):
     with otk_json.open() as fp:
         manifest = json.load(fp)
         normalize_rpm_refs(manifest)
+        remove_metadata(manifest)
 
     assert manifest == ref_manifest
 
@@ -121,6 +143,7 @@ def test_images_ref_full_customizations(tmp_path, monkeypatch, tc):
     with tc.ref_yaml_path.open() as fp:
         ref_manifest = yaml.safe_load(fp)
         normalize_rpm_refs(ref_manifest)
+        remove_metadata(ref_manifest)
 
     otk_json = tmp_path / "manifest-otk.json"
     run(["compile",
@@ -130,5 +153,6 @@ def test_images_ref_full_customizations(tmp_path, monkeypatch, tc):
     with otk_json.open() as fp:
         manifest = json.load(fp)
         normalize_rpm_refs(manifest)
+        remove_metadata(manifest)
 
     assert manifest == ref_manifest
