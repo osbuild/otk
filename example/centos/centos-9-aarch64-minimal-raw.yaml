@@ -46,6 +46,10 @@ otk.define:
 otk.include: "common/partition-table/${architecture}/minimal-raw.yaml"
 
 otk.target.osbuild:
+  metadata:
+    generator:
+      - otk.external.osbuild-make-generator-metadata:
+
   pipelines:
     - otk.include: "pipeline/build/generic.yaml"
     - name: os

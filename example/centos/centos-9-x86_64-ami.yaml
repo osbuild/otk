@@ -47,6 +47,10 @@ otk.define:
 otk.include: "common/partition-table/${architecture}/default.yaml"
 
 otk.target.osbuild:
+  metadata:
+    generator:
+      - otk.external.osbuild-make-generator-metadata:
+
   pipelines:
     - name: build
       runner: org.osbuild.centos9
