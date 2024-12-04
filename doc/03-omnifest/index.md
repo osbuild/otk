@@ -7,7 +7,7 @@ An omnifest is the name for the YAML-based format that is used by `otk` as its i
 As omnifests can include other omnifests it is important to note that `otk` treats the entrypoint omnifest differently from included omnifests. The entrypoint omnifest is the file that is passed to `otk compile [file]`. This entrypoint is required to have:
 
 1. An [otk.version](./01-directive.md#otkversion) directive.
-1. An [otk.target](./01-directive.md#otktarget) directive.
+1. An [otk.target](./01-directive.md#otktargetconsumername) directive.
 
 A minimal entrypoint would look like:
 
