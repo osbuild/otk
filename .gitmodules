@@ -1,0 +1,3 @@
+[submodule "example/fedora"]
+	path = example/fedora
+	url = https://pagure.io/fedora-omnifests
