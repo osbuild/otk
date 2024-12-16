@@ -1,6 +1,7 @@
 # Omnifest Toolkit
 
-**THIS IS A PROOF OF CONCEPT REPOSITORY. WE'RE DISCUSSING DESIGN IN ISSUES AND PULL REQUESTS**
+> [!CAUTION]
+> This project is currently discontinued. After working on it for a while we've decided to start off with adding declarative formats to our [image definitions](https://github.com/osbuild/images) first; instead of reinventing how to define images.
 
 This is the "Omnifest Toolkit", also known as `otk`. A YAML transpiler to
 take omnifest inputs and translate them into [osbuild](https://osbuild.org)
